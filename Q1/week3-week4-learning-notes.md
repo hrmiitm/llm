@@ -227,7 +227,7 @@ y_t=\arg\max_wP(w\mid y_{<t}).
 
 Greedy search is fast and deterministic but can choose repetitive or locally attractive continuations.
 
-### 9.2 Top-$k$ sampling
+### 9.2 Top-k sampling
 
 Keep only the $k$ tokens with highest probability and renormalize them. If $S_k$ is that set:
 
@@ -243,9 +243,9 @@ Example: top-3 probabilities $0.41,0.14,0.09$ sum to $0.64$. The renormalized pr
 
 The denominator is the **sum of the retained probabilities**, not the number $k$.
 
-### 9.3 Top-$p$ or nucleus sampling
+### 9.3 Top-p or nucleus sampling
 
-Top-$p$ keeps the smallest ranked set whose cumulative probability reaches a threshold $p$. The candidate count adapts to the model's uncertainty.
+Top-p keeps the smallest ranked set whose cumulative probability reaches a threshold $p$. The candidate count adapts to the model's uncertainty.
 
 ### 9.4 Degeneration
 
@@ -328,7 +328,7 @@ Other pooling methods—mean pooling or task-specific attention pooling—are te
 3. Multiply conditional probabilities or sum log probabilities.
 4. Do not use a row conditioned on a different history.
 
-### For top-$k$
+### For top-k
 
 1. Sort or identify the $k$ largest probabilities.
 2. Add those $k$ values to obtain $Z$.
@@ -351,7 +351,7 @@ Other pooling methods—mean pooling or task-specific attention pooling—are te
 - Randomly reinitializing pre-trained weights during ordinary fine-tuning.
 - Assuming absent input words cannot receive a tied output-layer gradient.
 - Treating $d_k$ as the causal-mask dimension.
-- Dividing a top-$k$ probability by $k$ instead of renormalizing by retained mass.
+- Dividing a top-k probability by $k$ instead of renormalizing by retained mass.
 - Adding MLM loss for every input position.
 - Treating [SEP] as the standard sentence-classification representation.
 
@@ -361,7 +361,7 @@ Other pooling methods—mean pooling or task-specific attention pooling—are te
 - Why a causal mask is $T\times T$ and independent of writing direction.
 - How pre-training differs from fine-tuning.
 - How tied embeddings let absent input words receive output gradients.
-- How greedy, top-$k$, and top-$p$ decoding differ.
+- How greedy, top-k, and top-p decoding differ.
 - How to factor a sequence probability.
 - Why BERT computes MLM loss only at selected positions.
 - Why [CLS] is used for standard sentence-level classification.
