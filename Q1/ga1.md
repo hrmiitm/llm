@@ -32,8 +32,7 @@ Let the embedding dimension of each word be $\mathbb{R}^{1 \times 256}$.
 - ( ) 8
 - ( ) 24
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $T=8$
 
@@ -75,8 +74,6 @@ The minimum context length must be $T = 8$ so that Sequence 4 can be fully proce
 \boxed{T = 8}
 ```
 
-</details>
-
 ---
 
 ### Q2 — Dimension of the Encoder Input Tensor
@@ -88,8 +85,7 @@ The minimum context length must be $T = 8$ so that Sequence 4 can be fully proce
 - ( ) $8 \times 256 \times 64$
 - ( ) $4 \times 256 \times 64$
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $4 \times 8 \times 256$
 
@@ -129,8 +125,6 @@ In PyTorch and most deep learning frameworks, tensors are ordered as:
 \boxed{4 \times 8 \times 256}
 ```
 
-</details>
-
 ---
 
 ### Q3 — Parameters in the Multi-Head Attention Sub-Layer
@@ -139,8 +133,7 @@ In PyTorch and most deep learning frameworks, tensors are ordered as:
 
 *(Numeric input)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{262144}$
 
@@ -189,8 +182,6 @@ W_O \in \mathbb{R}^{256 \times 256} \quad \Rightarrow \quad 256 \times 256 = 65{
 
 > **Key insight:** $W_O$ maps from the concatenated head outputs back to $d_{\text{model}}$. Since each head produces a 64-dimensional output and there are 4 heads, the input to $W_O$ is $4 \times 64 = 256$, matching $\mathbb{R}^{256 \times 256}$.
 
-</details>
-
 ---
 
 ## Context for Q4 – Q6
@@ -215,8 +206,7 @@ The sentence being attended to is: *"The\_ animal\_ didn\_ '\_ t\_ cross\_ the\_
 
 *(Numeric input)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{15}$
 
@@ -251,8 +241,6 @@ m = 15
 \boxed{m = 15}
 ```
 
-</details>
-
 ---
 
 ### Q5 — Value of $n$
@@ -261,8 +249,7 @@ m = 15
 
 *(Numeric input)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{15}$
 
@@ -292,8 +279,6 @@ n = \text{number of key tokens} = 15
 A_i \in \mathbb{R}^{15 \times 15}, \quad \boxed{n = 15}
 ```
 
-</details>
-
 ---
 
 ### Q6 — Which Head Captures the "it\_" → "animal\_" Relation?
@@ -304,8 +289,7 @@ A_i \in \mathbb{R}^{15 \times 15}, \quad \boxed{n = 15}
 - ( ) $h_2$
 - ( ) $h_3$
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $h_3$
 
@@ -334,8 +318,6 @@ This makes sense: in the sentence *"The animal didn't cross the street because i
 \boxed{h_3 \text{ captures the strong relation between "it\_" and "animal\_"}}
 ```
 
-</details>
-
 ---
 
 ## Context for Q7 – Q8
@@ -363,8 +345,7 @@ Let $z_j$ denote the **linear combination of value vectors** for the $j$-th word
 - ( ) True
 - ( ) False
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** True
 
@@ -462,8 +443,6 @@ The word "learning" receives **67.2%** of the attention weight, which is clearly
 \boxed{\text{True — more attention is given to "learning" while constructing } z_1}
 ```
 
-</details>
-
 ---
 
 ### Q8 — Equal Attention to All Words While Constructing $z_2$?
@@ -473,8 +452,7 @@ The word "learning" receives **67.2%** of the attention weight, which is clearly
 - ( ) True
 - ( ) False
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** False
 
@@ -525,5 +503,3 @@ The attention weights $(0.405,\ 0.248,\ 0.347)$ are clearly **not equal**. Equal
 ```math
 \boxed{\text{False — words do NOT receive equal attention while constructing } z_2}
 ```
-
-</details>

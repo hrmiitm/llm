@@ -33,8 +33,7 @@ We translate: **source** "I enjoyed the movie Transformer" → **target** "Naan 
 
 *(Numeric input)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{230656}$
 
@@ -129,8 +128,6 @@ Each LayerNorm has $\gamma$ (scale) and $\beta$ (shift), both of size $d_{\text{
 \text{Grand total} = 98{,}816 + 131{,}840 = \boxed{230{,}656}
 ```
 
-</details>
-
 ---
 
 ### Q2 — Parameters in the Output Layer
@@ -139,8 +136,7 @@ Each LayerNorm has $\gamma$ (scale) and $\beta$ (shift), both of size $d_{\text{
 
 *(Numeric input)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{96000}$
 
@@ -166,8 +162,6 @@ W_{\text{out}} \in \mathbb{R}^{d_{\text{model}} \times |V_t|}
 
 > **Note:** Some formulations also count the softmax bias ($|V_t| = 1500$ extra params), giving 97,500 — both are accepted by the grader.
 
-</details>
-
 ---
 
 ### Q3 — Parameters in the Input Embedding Layer
@@ -176,8 +170,7 @@ W_{\text{out}} \in \mathbb{R}^{d_{\text{model}} \times |V_t|}
 
 *(Numeric input)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{64000}$
 
@@ -203,8 +196,6 @@ E_{\text{src}} \in \mathbb{R}^{|V_s| \times d_{\text{embed}}}
 
 > **Note:** This is only the **source** embedding. The decoder also has a target embedding of size $|V_t| \times d_{\text{embed}} = 1500 \times 64 = 96{,}000$, but the question asks specifically about the "input embedding layer."
 
-</details>
-
 ---
 
 ### Q4 — Probability of the Word "rasithen" at $t = 1$
@@ -213,8 +204,7 @@ E_{\text{src}} \in \mathbb{R}^{|V_s| \times d_{\text{embed}}}
 
 *(Numeric input)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{-1}$
 
@@ -250,8 +240,6 @@ Without knowing the probability assigned to each of the remaining 1497 vocabular
 \boxed{\text{Answer} = -1 \text{ (information is insufficient)}}
 ```
 
-</details>
-
 ---
 
 ## Context for Q5 – Q7
@@ -286,8 +274,7 @@ Let:
 
 *(Numeric input)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{0}$
 
@@ -381,8 +368,6 @@ S = 1.008 - 0.029 + 0.432 = 1.411
 
 > **Key insight:** The sum of gradients flowing back through softmax **always equals zero**. This is a mathematical property: $\sum_i \frac{\partial L}{\partial e_i} = a_i \cdot (\text{something}) - a_i \cdot S$, and the $a_i$ terms always cancel, giving a zero sum. This is why the gradient vector $\frac{\partial L}{\partial e}$ has zero mean.
 
-</details>
-
 ---
 
 ### Q6 — Which of These Are Hyperparameters?
@@ -397,8 +382,7 @@ S = 1.008 - 0.029 + 0.432 = 1.411
 - ( ) number of layers
 - ( ) size of the attention mask
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** All except "size of the attention mask"
 
@@ -434,8 +418,6 @@ Its size is **fully determined** by the context length $T$. It is not a free par
 \boxed{\text{Hyperparameters: vocabulary size, } d_k/d_v/d_q, \text{ number of heads, warm-up step, } d_{\text{model}}, \text{ number of layers}}
 ```
 
-</details>
-
 ---
 
 ### Q7 — Minimum Decoder Runs for Third Sample
@@ -448,8 +430,7 @@ Its size is **fully determined** by the context length $T$. It is not a free par
 
 *(Numeric input)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{4}$
 
@@ -485,5 +466,3 @@ Ignoring the [End] token, the decoder must generate **4 target tokens**, requiri
 ```math
 \boxed{\text{Minimum decoder runs} = 4}
 ```
-
-</details>

@@ -22,8 +22,7 @@ PE(\text{pos},\ 2i+1) = \cos\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}
 
 *(Numeric input — accepted range: 1.7 to 1.8)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{1.75}$
 
@@ -78,8 +77,6 @@ h = [-0.6568,\ -0.6536,\ 0.4148,\ 1.3827,\ -0.7414,\ 1.9999]
 
 > **Intuition:** Positional embeddings use different frequencies for different dimensions. Low-index dimensions ($i=0$) vary rapidly (high frequency: $\sin(4)$), while high-index dimensions ($i=2$) vary slowly (low frequency: $\sin(0.009)$). This lets the model distinguish positions at multiple scales.
 
-</details>
-
 ---
 
 ## Q2 — GPT Attention Mask for Right-to-Left Language
@@ -90,8 +87,7 @@ h = [-0.6568,\ -0.6536,\ 0.4148,\ 1.3827,\ -0.7414,\ 1.9999]
 - ( ) It is necessary to flip the attention mask vertically
 - ( ) Neither the horizontal nor the vertical flipping of attention mask is required
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** Neither horizontal nor vertical flipping is required.
 
@@ -127,8 +123,6 @@ The model reads left to right through the *written* sequence, where "earlier in 
 \boxed{\text{Neither flipping is required.}}
 ```
 
-</details>
-
 ---
 
 ## Q3 — Correct Statements About GPT Pre-training vs Fine-tuning
@@ -140,8 +134,7 @@ The model reads left to right through the *written* sequence, where "earlier in 
 - ( ) All parameters of GPT are randomly initialized during **fine-tuning**
 - ( ) In general, fine-tuning requires a dataset **with labels**
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** Statements A and D.
 
@@ -185,8 +178,6 @@ Fine-tuning on a downstream task (sentiment analysis, NER, QA, etc.) typically r
 \boxed{\text{Correct: A and D}}
 ```
 
-</details>
-
 ---
 
 ## Q4 — Will Rare Word Embeddings Get Updated?
@@ -197,8 +188,7 @@ Fine-tuning on a downstream task (sentiment analysis, NER, QA, etc.) typically r
 - ( ) There is a chance that embeddings of all or some of these 100 rare words will get updated
 - ( ) The embeddings of all 100 rare words will definitely get updated
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** There is a chance that all or some of the rare-word embeddings will be updated.
 
@@ -245,8 +235,6 @@ Even though the 100 rare words do not appear in the *input* sequences, their **e
 \boxed{\text{There is a chance that all or some rare word embeddings will get updated.}}
 ```
 
-</details>
-
 ---
 
 ## Context for Q5 – Q7
@@ -273,8 +261,7 @@ Even though the 100 rare words do not appear in the *input* sequences, their **e
 - ( ) $12 \times 128$
 - ( ) $512 \times 768$
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $64 \times 128$
 
@@ -303,8 +290,6 @@ The positional embedding is a matrix that assigns a unique vector to each possib
 \boxed{64 \times 128}
 ```
 
-</details>
-
 ---
 
 ### Q6 — Shape of $W_Q^i$
@@ -318,8 +303,7 @@ The positional embedding is a matrix that assigns a unique vector to each possib
 - ( ) $8 \times 32$
 - ( ) None of these
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $128 \times 32$
 
@@ -353,8 +337,6 @@ Q^i = X W_Q^i \in \mathbb{R}^{64 \times 32} \quad \checkmark
 \boxed{128 \times 32}
 ```
 
-</details>
-
 ---
 
 ### Q7 — Shape of the Causal Attention Mask $M$
@@ -367,8 +349,7 @@ Q^i = X W_Q^i \in \mathbb{R}^{64 \times 32} \quad \checkmark
 - ( ) $128 \times 128$
 - ( ) None of these
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $64 \times 64$
 
@@ -409,8 +390,6 @@ The mask is lower triangular: $0$ marks an allowed position and $-\infty$ marks 
 \boxed{64 \times 64}
 ```
 
-</details>
-
 ---
 
 ### Q8 — Identifying Degenerative Text Generation Models
@@ -431,8 +410,7 @@ The mask is lower triangular: $0$ marks an allowed position and $-\infty$ marks 
 - [ ] $M_3$
 - [ ] $M_4$
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $M_1$, $M_2$, and $M_3$
 
@@ -477,5 +455,3 @@ Degenerative behaviour is a known failure mode of greedy/beam search decoding in
 ```
 
 > **Why does degeneration happen?** Under greedy or beam search, the model can assign high probability to repeating seen tokens because the training distribution is biased towards common patterns. Methods like **Top-k sampling**, **nucleus (top-p) sampling**, and **repetition penalties** are used to mitigate this.
-
-</details>

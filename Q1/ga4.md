@@ -46,8 +46,7 @@ The prediction table $\hat{Y}$ is below. Each row $r$ gives the distribution ove
 
 *(Numeric input)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{0.41}$
 
@@ -77,8 +76,6 @@ Under greedy search, the token with the highest probability is selected:
 
 "Astronomy" is indeed the greedily chosen first token.
 
-</details>
-
 ---
 
 ### Q2 — Probability of the Sequence "Astronomy is a character building experience"
@@ -87,8 +84,7 @@ Under greedy search, the token with the highest probability is selected:
 
 *(Numeric input — enter correct up to 4 decimal places; accepted range: 0.001 to 0.002)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{0.0016}$
 
@@ -150,8 +146,6 @@ P = 0.41 \times 0.43 \times 0.29 \times 0.48 \times 0.29 \times 0.23
 = 0.0071169 \times 0.23 = \boxed{0.0016}
 ```
 
-</details>
-
 ---
 
 ### Q3 — Probability of "Astronomy is a natural science"
@@ -160,8 +154,7 @@ P = 0.41 \times 0.43 \times 0.29 \times 0.48 \times 0.29 \times 0.23
 
 *(Numeric input)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{0}$
 
@@ -193,8 +186,6 @@ P(\text{"Astronomy is a natural science"}) = \boxed{0}
 
 > **Key insight:** The rows of $\hat{Y}$ represent *conditional* distributions only along the greedy path. Any deviation makes the sequence impossible (probability 0) within this matrix's conditioning.
 
-</details>
-
 ---
 
 ### Q4 — $P(y_1 = \text{Astronomy} \mid y_0 = \text{[Start]})$ with Top-$k$ Sampling ($k = 3$)
@@ -203,8 +194,7 @@ P(\text{"Astronomy is a natural science"}) = \boxed{0}
 
 *(Numeric input — accepted range: 0.63 to 0.65)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{0.64}$
 
@@ -253,8 +243,6 @@ P_{\text{top-3}}(y_1 = \text{astronomy}) = \frac{0.41}{Z} = \frac{0.41}{0.64} = 
 
 > **Interpretation:** Top-$k$ sampling *boosts* the probability of "astronomy" from 0.41 to 0.64 (relative to the shortlisted candidates), because we have removed the probability mass from the 7 lower-ranked tokens.
 
-</details>
-
 ---
 
 ### Q5 — BERT Masked Language Modelling Loss
@@ -278,8 +266,7 @@ The BERT prediction table $\hat{Y}_{\text{BERT}}$ for this input is:
 
 *(Numeric input — accepted range: 3.3 to 3.5)*
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** $\boxed{3.44}$
 
@@ -338,8 +325,6 @@ Input: "Astronomy is a [Mask] building [Mask]"
 
 > **Why only masked positions?** BERT's design principle is that loss is only computed at masked positions. This is intentional — if loss were computed everywhere, the model could simply copy the unmasked input tokens (which are visible), defeating the purpose of learning contextual representations.
 
-</details>
-
 ---
 
 ### Q6 — Using Pre-trained BERT for Sentiment Classification
@@ -350,8 +335,7 @@ Input: "Astronomy is a [Mask] building [Mask]"
 - ( ) We can also use the representation of the [SEP] token as input to the classifier
 - ( ) We can take the representation of any word in the input sequence as input to the classifier
 
-<details>
-<summary><b>Answer & Solution</b></summary>
+**Answer & Solution**
 
 **Answer:** Use the final hidden representation of the [CLS] token as the classifier input.
 
@@ -397,5 +381,3 @@ While technically you *could* take any token's representation, the correct answe
 > - Attends to all other tokens via bidirectional self-attention.
 > - Its final-layer representation encodes a holistic sentence summary.
 > - Used for sentence-level tasks: classification, entailment, similarity.
-
-</details>
