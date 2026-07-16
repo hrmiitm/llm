@@ -19,7 +19,9 @@ Self-attention alone compares token content. Without positional information, it 
 
 Transformers therefore combine a word embedding $x_{\text{pos}}$ with a positional vector $p_{\text{pos}}$:
 
-$\displaystyle h_{\text{pos}}=x_{\text{pos}}+p_{\text{pos}}.$
+$$
+h_{\text{pos}}=x_{\text{pos}}+p_{\text{pos}}.
+$$
 
 The two vectors must have the same dimension $d_{\text{model}}$.
 
@@ -27,9 +29,13 @@ The two vectors must have the same dimension $d_{\text{model}}$.
 
 The original transformer uses fixed sine and cosine waves:
 
-$\displaystyle PE(\text{pos},2i)=\sin\!\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}\right),$
+$$
+PE(\text{pos},2i)=\sin\!\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}\right),
+$$
 
-$\displaystyle PE(\text{pos},2i+1)=\cos\!\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}\right).$
+$$
+PE(\text{pos},2i+1)=\cos\!\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}\right).
+$$
 
 ### 2.1 How to calculate it
 
@@ -41,7 +47,9 @@ For $d_{\text{model}}=6$, the dimensions form three sine/cosine pairs:
 
 For position 4:
 
-$\displaystyle p=[\sin(4),\cos(4),\sin(4/10000^{1/3}),\cos(4/10000^{1/3}),\sin(4/10000^{2/3}),\cos(4/10000^{2/3})].$
+$$
+p=[\sin(4),\cos(4),\sin(4/10000^{1/3}),\cos(4/10000^{1/3}),\sin(4/10000^{2/3}),\cos(4/10000^{2/3})].
+$$
 
 ### 2.2 Intuition
 
@@ -64,7 +72,9 @@ Together they create a unique, smooth positional signature. Relative position in
 
 Some models learn a table instead of using sine and cosine:
 
-$\displaystyle P\in\mathbb{R}^{T\times d_{\text{model}}}.$
+$$
+P\in\mathbb{R}^{T\times d_{\text{model}}}.
+$$
 
 There is one row for each possible position and one column for each hidden feature. If $T=64$ and $d_{\text{model}}=128$, the shape is $64\times128$.
 
@@ -78,11 +88,15 @@ Do not confuse this with:
 
 GPT must not see future tokens while predicting the next token. Before softmax, it adds a causal mask $M$ to the attention scores:
 
-$\displaystyle \operatorname{Attention}(Q,K,V)=\operatorname{softmax}\!\left(\frac{QK^{\top}}{\sqrt{d_k}}+M\right)V.$
+$$
+\text{Attention}(Q,K,V)=\text{softmax}\!\left(\frac{QK^{\top}}{\sqrt{d_k}}+M\right)V.
+$$
 
 For positions indexed from 0:
 
-$\displaystyle M_{ij}=\begin{cases}0,&j\le i,\\-\infty,&j>i.\end{cases}$
+$$
+M_{ij}=\begin{cases}0,&j\le i,\\-\infty,&j>i.\end{cases}
+$$
 
 The $-\infty$ entries become zero probability after softmax.
 
@@ -90,11 +104,15 @@ The $-\infty$ entries become zero probability after softmax.
 
 For one head,
 
-$\displaystyle Q\in\mathbb{R}^{T\times d_k},\qquad K^{\top}\in\mathbb{R}^{d_k\times T}.$
+$$
+Q\in\mathbb{R}^{T\times d_k},\qquad K^{\top}\in\mathbb{R}^{d_k\times T}.
+$$
 
 Therefore,
 
-$\displaystyle QK^{\top}\in\mathbb{R}^{T\times T},$
+$$
+QK^{\top}\in\mathbb{R}^{T\times T},
+$$
 
 so the mask must also be $T\times T$. Batch and head dimensions may be added in implementations and broadcast over this base mask.
 
@@ -110,7 +128,9 @@ Therefore, the ordinary causal mask does not need horizontal or vertical flippin
 
 GPT pre-training minimizes next-token negative log-likelihood:
 
-$\displaystyle \mathcal{L}_{\text{CLM}}=-\sum_{t=1}^{T}\log P(x_t\mid x_0,\ldots,x_{t-1}).$
+$$
+\mathcal{L}_{\text{CLM}}=-\sum_{t=1}^{T}\log P(x_t\mid x_0,\ldots,x_{t-1}).
+$$
 
 Training text supplies its own targets: the next token is the label. This makes large-scale pre-training possible without manually labelled examples.
 
@@ -132,13 +152,17 @@ In modern practice, some fine-tuning is also generative or self-supervised. For 
 
 With weight tying, the input embedding and output projection share a matrix $E$:
 
-$\displaystyle \text{logits}=hE^{\top}.$
+$$
+\text{logits}=hE^{\top}.
+$$
 
 An absent word receives no gradient through an input lookup because its row was not selected. However, the same row participates in the output softmax as a candidate vocabulary word.
 
 For vocabulary word $w$:
 
-$\displaystyle \frac{\partial L}{\partial E_w}\supseteq (P(w)-\mathbf{1}[w=y])h.$
+$$
+\frac{\partial L}{\partial E_w}\supseteq (P(w)-\mathbf{1}[w=y])h.
+$$
 
 Because full softmax assigns positive probability to every finite logit, the output-projection gradient is generally dense. Thus a rare word can be updated even when it never appears as an input token in the current batch.
 
@@ -148,15 +172,21 @@ Because full softmax assigns positive probability to every finite logit, the out
 
 If $d_{\text{model}}=128$ and there are 4 equal heads, then
 
-$\displaystyle d_k=d_v=\frac{128}{4}=32.$
+$$
+d_k=d_v=\frac{128}{4}=32.
+$$
 
 Each per-head query projection maps the full model vector to one head:
 
-$\displaystyle W_Q^i\in\mathbb{R}^{128\times32}.$
+$$
+W_Q^i\in\mathbb{R}^{128\times32}.
+$$
 
 Shape verification:
 
-$\displaystyle X_{64\times128}W_{Q,128\times32}^i=Q_{64\times32}^i.$
+$$
+X_{64\times128}W_{Q,128\times32}^i=Q_{64\times32}^i.
+$$
 
 The middle dimensions match, and the output has one 32-dimensional query per position.
 
@@ -164,7 +194,9 @@ The middle dimensions match, and the output has one 32-dimensional query per pos
 
 The chain rule factors a token sequence probability as
 
-$\displaystyle P(y_1,\ldots,y_T\mid y_0)=\prod_{t=1}^{T}P(y_t\mid y_0,\ldots,y_{t-1}).$
+$$
+P(y_1,\ldots,y_T\mid y_0)=\prod_{t=1}^{T}P(y_t\mid y_0,\ldots,y_{t-1}).
+$$
 
 To calculate it from a probability table:
 
@@ -175,7 +207,9 @@ To calculate it from a probability table:
 
 Long sequences have small raw probabilities because many numbers below 1 are multiplied. In real systems, log probabilities are preferred:
 
-$\displaystyle \log P(\text{sequence})=\sum_t\log P(y_t\mid y_{<t}).$
+$$
+\log P(\text{sequence})=\sum_t\log P(y_t\mid y_{<t}).
+$$
 
 ### 8.1 Greedy-path tables
 
@@ -187,7 +221,9 @@ Follow the question's convention: it may treat a non-greedy path as impossible u
 
 ### 9.1 Greedy search
 
-$\displaystyle y_t=\arg\max_wP(w\mid y_{<t}).$
+$$
+y_t=\arg\max_wP(w\mid y_{<t}).
+$$
 
 Greedy search is fast and deterministic but can choose repetitive or locally attractive continuations.
 
@@ -195,11 +231,15 @@ Greedy search is fast and deterministic but can choose repetitive or locally att
 
 Keep only the $k$ tokens with highest probability and renormalize them. If $S_k$ is that set:
 
-$\displaystyle P_k(w)=\begin{cases}\dfrac{P(w)}{\sum_{u\in S_k}P(u)},&w\in S_k,\\0,&w\notin S_k.\end{cases}$
+$$
+P_k(w)=\begin{cases}\dfrac{P(w)}{\sum_{u\in S_k}P(u)},&w\in S_k,\\0,&w\notin S_k.\end{cases}
+$$
 
 Example: top-3 probabilities $0.41,0.14,0.09$ sum to $0.64$. The renormalized probability of the first token is
 
-$\displaystyle 0.41/0.64=0.640625.$
+$$
+0.41/0.64=0.640625.
+$$
 
 The denominator is the **sum of the retained probabilities**, not the number $k$.
 
@@ -226,7 +266,9 @@ BERT uses bidirectional self-attention. A masked position can use context on bot
 
 Selected tokens are replaced or otherwise corrupted, and BERT predicts their original identities. Only selected prediction positions contribute to the MLM loss:
 
-$\displaystyle \mathcal{L}_{\text{MLM}}=-\sum_{m\in\mathcal{M}}\log P(x_m\mid x_{\setminus\mathcal{M}}).$
+$$
+\mathcal{L}_{\text{MLM}}=-\sum_{m\in\mathcal{M}}\log P(x_m\mid x_{\setminus\mathcal{M}}).
+$$
 
 Here $\mathcal{M}$ is the set of masked positions.
 
@@ -234,9 +276,13 @@ Here $\mathcal{M}$ is the set of masked positions.
 
 If the true-token probabilities at two masked positions are $0.14$ and $0.23$:
 
-$\displaystyle \mathcal{L}=-\ln(0.14)-\ln(0.23).$
+$$
+\mathcal{L}=-\ln(0.14)-\ln(0.23).
+$$
 
-$\displaystyle \mathcal{L}\approx1.9661+1.4697=3.4358\approx3.44.$
+$$
+\mathcal{L}\approx1.9661+1.4697=3.4358\approx3.44.
+$$
 
 Do not include loss from visible, unmasked tokens unless the question explicitly defines a different objective. Also check whether the requested loss is a **sum** or an **average**.
 

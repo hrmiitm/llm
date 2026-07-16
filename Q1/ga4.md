@@ -8,15 +8,33 @@
 
 ## Context for Q1 – Q6
 
-Consider the vocabulary:
+Use this vocabulary index throughout Questions 1–6:
 
-$\displaystyle \mathcal{V} = (\underbrace{\text{[start]}}_{0},\ \underbrace{\text{building}}_{1},\ \underbrace{\text{character}}_{2},\ \underbrace{\text{a}}_{3},\ \underbrace{\text{is}}_{4},\ \underbrace{\text{astronomy}}_{5},\ \underbrace{\text{science}}_{6},\ \underbrace{\text{experience}}_{7},\ \underbrace{\text{natural}}_{8},\ \underbrace{\text{[end]}}_{9})$
+| Index | Token |
+|:---:|---|
+| 0 | [start] |
+| 1 | building |
+| 2 | character |
+| 3 | a |
+| 4 | is |
+| 5 | astronomy |
+| 6 | science |
+| 7 | experience |
+| 8 | natural |
+| 9 | [end] |
 
 A pre-trained GPT model for text generation always takes **[start]** as the first input token.
 
-The prediction probability matrix $\hat{Y}$ is given below. Each row $r$ gives the probability distribution over the vocabulary **given the greedy-decoded tokens up to row $r-1$** as context:
+The prediction table $\hat{Y}$ is below. Each row $r$ gives the distribution over the vocabulary **given the greedy-decoded tokens up to row $r-1$** as context. Use the vocabulary index as the column key.
 
-$\displaystyle \hat{Y} = \begin{bmatrix} \underbrace{0.05}_{[\text{st}]} & \underbrace{0.02}_{\text{bld}} & \underbrace{0.14}_{\text{chr}} & \underbrace{0.07}_{a} & \underbrace{0.09}_{\text{is}} & \underbrace{0.41}_{\text{ast}} & \underbrace{0.08}_{\text{sci}} & \underbrace{0.05}_{\text{exp}} & \underbrace{0.08}_{\text{nat}} & \underbrace{0.01}_{[\text{en}]} \\ 0.10 & 0.04 & 0.06 & 0.16 & 0.43 & 0.01 & 0.06 & 0.09 & 0.01 & 0.04 \\ 0.05 & 0.07 & 0.28 & 0.29 & 0.03 & 0.08 & 0.04 & 0.08 & 0.04 & 0.04 \\ 0.10 & 0.02 & 0.48 & 0.02 & 0.01 & 0.07 & 0.06 & 0.14 & 0.07 & 0.01 \\ 0.08 & 0.29 & 0.04 & 0.01 & 0.04 & 0.03 & 0.25 & 0.05 & 0.15 & 0.06 \\ 0.14 & 0.22 & 0.13 & 0.08 & 0.01 & 0.03 & 0.06 & 0.23 & 0.08 & 0.03 \end{bmatrix}$
+| Row / index | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 0.05 | 0.02 | 0.14 | 0.07 | 0.09 | 0.41 | 0.08 | 0.05 | 0.08 | 0.01 |
+| 1 | 0.10 | 0.04 | 0.06 | 0.16 | 0.43 | 0.01 | 0.06 | 0.09 | 0.01 | 0.04 |
+| 2 | 0.05 | 0.07 | 0.28 | 0.29 | 0.03 | 0.08 | 0.04 | 0.08 | 0.04 | 0.04 |
+| 3 | 0.10 | 0.02 | 0.48 | 0.02 | 0.01 | 0.07 | 0.06 | 0.14 | 0.07 | 0.01 |
+| 4 | 0.08 | 0.29 | 0.04 | 0.01 | 0.04 | 0.03 | 0.25 | 0.05 | 0.15 | 0.06 |
+| 5 | 0.14 | 0.22 | 0.13 | 0.08 | 0.01 | 0.03 | 0.06 | 0.23 | 0.08 | 0.03 |
 
 **Greedy Search** is used as the decoding strategy (unless stated otherwise). If information is insufficient for any sub-question, enter **−1**.
 
@@ -32,6 +50,7 @@ $\displaystyle \hat{Y} = \begin{bmatrix} \underbrace{0.05}_{[\text{st}]} & \unde
 <summary><b>Answer & Solution</b></summary>
 
 **Answer:** $\boxed{0.41}$
+
 #### ✏️ Step-by-Step Solution
 
 **Step 1 — Understand the matrix structure.**
@@ -44,13 +63,17 @@ From the vocabulary index: **astronomy = index 5**.
 
 **Step 3 — Read the probability from Row 0.**
 
-$\displaystyle P(y_1 = \text{astronomy} \mid y_0 = \text{[Start]}) = \hat{Y}[0][5] = \boxed{0.41}$
+$$
+P(y_1 = \text{astronomy} \mid y_0 = \text{[Start]}) = \hat{Y}[0][5] = \boxed{0.41}
+$$
 
 **Step 4 — Verify with Greedy Search.**
 
 Under greedy search, the token with the highest probability is selected:
 
-$\displaystyle \arg\max_w \hat{Y}[0][w] = \arg\max(0.05, 0.02, 0.14, 0.07, 0.09, \mathbf{0.41}, 0.08, 0.05, 0.08, 0.01) = \text{astronomy}$
+$$
+\arg\max_w \hat{Y}[0][w] = \arg\max(0.05, 0.02, 0.14, 0.07, 0.09, \mathbf{0.41}, 0.08, 0.05, 0.08, 0.01) = \text{astronomy}
+$$
 
 "Astronomy" is indeed the greedily chosen first token.
 
@@ -68,13 +91,16 @@ $\displaystyle \arg\max_w \hat{Y}[0][w] = \arg\max(0.05, 0.02, 0.14, 0.07, 0.09,
 <summary><b>Answer & Solution</b></summary>
 
 **Answer:** $\boxed{0.0016}$
+
 #### ✏️ Step-by-Step Solution
 
 **Step 1 — Understand conditional probability of a sequence.**
 
 The probability of a sequence under the greedy-decoded conditional distribution is:
 
-$\displaystyle P(\text{sequence}) = \prod_{t=1}^{T} P(y_t \mid y_0, y_1, \ldots, y_{t-1})$
+$$
+P(\text{sequence}) = \prod_{t=1}^{T} P(y_t \mid y_0, y_1, \ldots, y_{t-1})
+$$
 
 Each factor is read from the corresponding row of $\hat{Y}$.
 
@@ -104,15 +130,25 @@ Under greedy search, each row gives the distribution conditioned on the *greedil
 
 **Step 4 — Compute the product.**
 
-$\displaystyle P = 0.41 \times 0.43 \times 0.29 \times 0.48 \times 0.29 \times 0.23$
+$$
+P = 0.41 \times 0.43 \times 0.29 \times 0.48 \times 0.29 \times 0.23
+$$
 
-$\displaystyle = 0.1763 \times 0.29 \times 0.48 \times 0.29 \times 0.23$
+$$
+= 0.1763 \times 0.29 \times 0.48 \times 0.29 \times 0.23
+$$
 
-$\displaystyle = 0.051127 \times 0.48 \times 0.29 \times 0.23$
+$$
+= 0.051127 \times 0.48 \times 0.29 \times 0.23
+$$
 
-$\displaystyle = 0.024541 \times 0.29 \times 0.23$
+$$
+= 0.024541 \times 0.29 \times 0.23
+$$
 
-$\displaystyle = 0.0071169 \times 0.23 = \boxed{0.0016}$
+$$
+= 0.0071169 \times 0.23 = \boxed{0.0016}
+$$
 
 </details>
 
@@ -128,6 +164,7 @@ $\displaystyle = 0.0071169 \times 0.23 = \boxed{0.0016}$
 <summary><b>Answer & Solution</b></summary>
 
 **Answer:** $\boxed{0}$
+
 #### ✏️ Step-by-Step Solution
 
 **Step 1 — Recall how rows of $\hat{Y}$ are conditioned.**
@@ -149,7 +186,9 @@ The sequence "Astronomy is a **natural** science" requires:
 
 Row 4 of $\hat{Y}$ is **only valid if Row 3's greedy choice was made** (i.e., "character" was generated). Since the sequence asks for "natural" at position 4, it falls **outside the greedy decoding path**. $\hat{Y}$ does not provide a distribution conditioned on a non-greedy path.
 
-$\displaystyle P(\text{"Astronomy is a natural science"}) = \boxed{0}$
+$$
+P(\text{"Astronomy is a natural science"}) = \boxed{0}
+$$
 
 > **Key insight:** The rows of $\hat{Y}$ represent *conditional* distributions only along the greedy path. Any deviation makes the sequence impossible (probability 0) within this matrix's conditioning.
 
@@ -167,6 +206,7 @@ $\displaystyle P(\text{"Astronomy is a natural science"}) = \boxed{0}$
 <summary><b>Answer & Solution</b></summary>
 
 **Answer:** $\boxed{0.64}$
+
 #### ✏️ Step-by-Step Solution
 
 **Step 1 — Recall how Top-$k$ sampling works.**
@@ -199,11 +239,15 @@ Top-3: **astronomy (0.41), character (0.14), is (0.09)**.
 
 **Step 3 — Compute the re-normalization constant.**
 
-$\displaystyle Z = 0.41 + 0.14 + 0.09 = 0.64$
+$$
+Z = 0.41 + 0.14 + 0.09 = 0.64
+$$
 
 **Step 4 — Compute the re-normalized probability for "astronomy".**
 
-$\displaystyle P_{\text{top-3}}(y_1 = \text{astronomy}) = \frac{0.41}{Z} = \frac{0.41}{0.64} = 0.640625 \approx \boxed{0.64}$
+$$
+P_{\text{top-3}}(y_1 = \text{astronomy}) = \frac{0.41}{Z} = \frac{0.41}{0.64} = 0.640625 \approx \boxed{0.64}
+$$
 
 > **Interpretation:** Top-$k$ sampling *boosts* the probability of "astronomy" from 0.41 to 0.64 (relative to the shortlisted candidates), because we have removed the probability mass from the 7 lower-ranked tokens.
 
@@ -213,15 +257,20 @@ $\displaystyle P_{\text{top-3}}(y_1 = \text{astronomy}) = \frac{0.41}{Z} = \frac
 
 ### Q5 — BERT Masked Language Modelling Loss
 
-**Now consider BERT with the same vocabulary (with [CLS] and [SEP] in place of [start] and [end]):**
-
-$\displaystyle \mathcal{V} = (\text{[CLS]}, \text{building}, \text{character}, \text{a}, \text{is}, \text{astronomy}, \text{science}, \text{experience}, \text{natural}, \text{[SEP]})$
+**Now consider BERT with the same vocabulary.** Here, index 0 is **[CLS]** and index 9 is **[SEP]**; indexes 1–8 keep the meanings in the vocabulary table above.
 
 Input: **"Astronomy is a [Mask] building [Mask]"** (replaced "character" and "experience" with [Mask])
 
-The BERT prediction probability matrix $\hat{Y}$ for this input:
+The BERT prediction table $\hat{Y}_{\text{BERT}}$ for this input is:
 
-$\displaystyle \hat{Y}_{\text{BERT}} = \begin{bmatrix} \underbrace{0.05}_{[\text{CLS}]} & \underbrace{0.02}_{\text{bld}} & \underbrace{0.41}_{\text{chr}} & \underbrace{0.07}_{a} & \underbrace{0.09}_{\text{is}} & \underbrace{0.14}_{\text{ast}} & \underbrace{0.08}_{\text{sci}} & \underbrace{0.05}_{\text{exp}} & \underbrace{0.08}_{\text{nat}} & \underbrace{0.01}_{[\text{SEP}]} \\ 0.10 & 0.04 & 0.06 & 0.16 & 0.04 & 0.01 & 0.06 & 0.09 & 0.01 & 0.43 \\ 0.05 & 0.07 & 0.28 & 0.03 & 0.29 & 0.08 & 0.04 & 0.08 & 0.04 & 0.04 \\ 0.10 & 0.02 & 0.14 & 0.02 & 0.01 & 0.07 & 0.06 & 0.48 & 0.07 & 0.01 \\ 0.08 & 0.29 & 0.04 & 0.01 & 0.04 & 0.03 & 0.25 & 0.05 & 0.15 & 0.06 \\ 0.14 & 0.13 & 0.22 & 0.08 & 0.01 & 0.03 & 0.06 & 0.23 & 0.08 & 0.03 \end{bmatrix}$
+| Row / index | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 0.05 | 0.02 | 0.41 | 0.07 | 0.09 | 0.14 | 0.08 | 0.05 | 0.08 | 0.01 |
+| 1 | 0.10 | 0.04 | 0.06 | 0.16 | 0.04 | 0.01 | 0.06 | 0.09 | 0.01 | 0.43 |
+| 2 | 0.05 | 0.07 | 0.28 | 0.03 | 0.29 | 0.08 | 0.04 | 0.08 | 0.04 | 0.04 |
+| 3 | 0.10 | 0.02 | 0.14 | 0.02 | 0.01 | 0.07 | 0.06 | 0.48 | 0.07 | 0.01 |
+| 4 | 0.08 | 0.29 | 0.04 | 0.01 | 0.04 | 0.03 | 0.25 | 0.05 | 0.15 | 0.06 |
+| 5 | 0.14 | 0.13 | 0.22 | 0.08 | 0.01 | 0.03 | 0.06 | 0.23 | 0.08 | 0.03 |
 
 **What is the total MLM loss for this input? Use natural logarithm.**
 
@@ -231,13 +280,16 @@ $\displaystyle \hat{Y}_{\text{BERT}} = \begin{bmatrix} \underbrace{0.05}_{[\text
 <summary><b>Answer & Solution</b></summary>
 
 **Answer:** $\boxed{3.44}$
+
 #### ✏️ Step-by-Step Solution
 
 **Step 1 — Recall how BERT's MLM loss works.**
 
 In Masked Language Modelling (MLM), **only the masked positions** contribute to the loss:
 
-$\displaystyle \mathcal{L}_{\text{MLM}} = -\sum_{m \in \text{masked positions}} \log P(\text{true token}_m \mid \text{masked input})$
+$$
+\mathcal{L}_{\text{MLM}} = -\sum_{m \in \text{masked positions}} \log P(\text{true token}_m \mid \text{masked input})
+$$
 
 **Step 2 — Map the input sequence to positions.**
 
@@ -256,21 +308,31 @@ Input: "Astronomy is a [Mask] building [Mask]"
 
 **For position 3 (true label = character, index 2):**
 
-$\displaystyle \hat{p}_3 = \hat{Y}_{\text{BERT}}[3][2] = 0.14$
+$$
+\hat{p}_3 = \hat{Y}_{\text{BERT}}[3][2] = 0.14
+$$
 
 **For position 5 (true label = experience, index 7):**
 
-$\displaystyle \hat{p}_5 = \hat{Y}_{\text{BERT}}[5][7] = 0.23$
+$$
+\hat{p}_5 = \hat{Y}_{\text{BERT}}[5][7] = 0.23
+$$
 
 **Step 4 — Compute the cross-entropy loss for each masked token.**
 
-$\displaystyle \mathcal{L}_3 = -\ln(0.14) = -(-1.9661) = 1.9661$
+$$
+\mathcal{L}_3 = -\ln(0.14) = -(-1.9661) = 1.9661
+$$
 
-$\displaystyle \mathcal{L}_5 = -\ln(0.23) = -(-1.4697) = 1.4697$
+$$
+\mathcal{L}_5 = -\ln(0.23) = -(-1.4697) = 1.4697
+$$
 
 **Step 5 — Sum to get total loss.**
 
-$\displaystyle \mathcal{L}_{\text{MLM}} = \mathcal{L}_3 + \mathcal{L}_5 = 1.9661 + 1.4697 = \boxed{3.4358 \approx 3.44}$
+$$
+\mathcal{L}_{\text{MLM}} = \mathcal{L}_3 + \mathcal{L}_5 = 1.9661 + 1.4697 = \boxed{3.4358 \approx 3.44}
+$$
 
 > **Why only masked positions?** BERT's design principle is that loss is only computed at masked positions. This is intentional — if loss were computed everywhere, the model could simply copy the unmasked input tokens (which are visible), defeating the purpose of learning contextual representations.
 
@@ -297,7 +359,9 @@ $\displaystyle \mathcal{L}_{\text{MLM}} = \mathcal{L}_3 + \mathcal{L}_5 = 1.9661
 
 BERT was specifically designed with the **[CLS] token** (Classification token) prepended to every input sequence:
 
-$\displaystyle \text{Input: } [\text{CLS}],\ w_1,\ w_2,\ \ldots,\ w_n,\ [\text{SEP}]$
+$$
+\text{Input: } [\text{CLS}],\ w_1,\ w_2,\ \ldots,\ w_n,\ [\text{SEP}]
+$$
 
 During **pre-training with NSP (Next Sentence Prediction)**, the final hidden state of [CLS] was used to classify whether two sentences are consecutive or not. This means BERT's [CLS] representation is trained to encode a **sentence-level summary**.
 
@@ -321,7 +385,9 @@ By design and convention, [CLS] aggregates the bidirectional context of the enti
 
 While technically you *could* take any token's representation, the correct answer in the context of this question — and the standard practice in feature extraction — is to use [CLS]. Individual word representations encode **local, word-level** context, not the whole sentence.
 
-$\displaystyle \boxed{\text{We can only take the representation of [CLS] as input to the classifier.}}$
+$$
+\boxed{\text{We can only take the representation of [CLS] as input to the classifier.}}
+$$
 
 > **Summary of BERT's [CLS] token:**
 > - Prepended to every input sequence.
