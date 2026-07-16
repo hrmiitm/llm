@@ -35,7 +35,9 @@ The context length $T$ is the maximum number of token positions processed togeth
 
 If a batch contains sequences of lengths $5,6,5,$ and $8$, then the minimum context length that avoids truncation is
 
-$\displaystyle T=\max(5,6,5,8)=8.$
+```math
+T=\max(5,6,5,8)=8.
+```
 
 Shorter sequences are normally padded to length 8. Padding creates equal tensor sizes; an attention mask prevents padding tokens from affecting useful tokens.
 
@@ -43,7 +45,9 @@ Shorter sequences are normally padded to length 8. Padding creates equal tensor 
 
 An embedding matrix stores one learned vector for every vocabulary item:
 
-$\displaystyle E\in\mathbb{R}^{|V|\times d_{\text{model}}}.$
+```math
+E\in\mathbb{R}^{|V|\times d_{\text{model}}}.
+```
 
 Here:
 
@@ -53,7 +57,9 @@ Here:
 
 For a vocabulary of 1000 words and embedding dimension 64, the source embedding contains
 
-$\displaystyle 1000\times64=64{,}000$
+```math
+1000\times64=64{,}000
+```
 
 trainable parameters.
 
@@ -61,11 +67,15 @@ trainable parameters.
 
 The usual batch-first encoder input shape is
 
-$\displaystyle (B,T,d_{\text{model}}),$
+```math
+(B,T,d_{\text{model}}),
+```
 
 where $B$ is batch size. With 4 sequences, context length 8, and embeddings of dimension 256, the shape is
 
-$\displaystyle (4,8,256).$
+```math
+(4,8,256).
+```
 
 > **Shape habit:** say the meaning of every axis before inserting numbers. This prevents mixing up sequence length, embedding size, and head size.
 
@@ -79,15 +89,21 @@ Every token creates three different representations:
 
 For input matrix $H\in\mathbb{R}^{T\times d_{\text{model}}}$:
 
-$\displaystyle Q=HW_Q,\qquad K=HW_K,\qquad V=HW_V.$
+```math
+Q=HW_Q,\qquad K=HW_K,\qquad V=HW_V.
+```
 
 For one head, the projection shapes are commonly
 
-$\displaystyle W_Q,W_K\in\mathbb{R}^{d_{\text{model}}\times d_k},\qquad W_V\in\mathbb{R}^{d_{\text{model}}\times d_v}.$
+```math
+W_Q,W_K\in\mathbb{R}^{d_{\text{model}}\times d_k},\qquad W_V\in\mathbb{R}^{d_{\text{model}}\times d_v}.
+```
 
 Therefore,
 
-$\displaystyle Q,K\in\mathbb{R}^{T\times d_k},\qquad V\in\mathbb{R}^{T\times d_v}.$
+```math
+Q,K\in\mathbb{R}^{T\times d_k},\qquad V\in\mathbb{R}^{T\times d_v}.
+```
 
 ## 3. Self-attention calculation, step by step
 
@@ -95,7 +111,9 @@ $\displaystyle Q,K\in\mathbb{R}^{T\times d_k},\qquad V\in\mathbb{R}^{T\times d_v
 
 Token $i$ compares its query $q_i$ with every key $k_j$ using a dot product:
 
-$\displaystyle e_{ij}=\frac{q_i k_j^{\top}}{\sqrt{d_k}}.$
+```math
+e_{ij}=\frac{q_i k_j^{\top}}{\sqrt{d_k}}.
+```
 
 A larger score means key $j$ is more relevant to query $i$. Some assignment questions explicitly say to ignore the $\sqrt{d_k}$ scaling; follow the question.
 
@@ -103,11 +121,15 @@ A larger score means key $j$ is more relevant to query $i$. Some assignment ques
 
 For a fixed query $i$:
 
-$\displaystyle a_{ij}=\frac{e^{e_{ij}}}{\sum_{r=1}^{T}e^{e_{ir}}}.$
+```math
+a_{ij}=\frac{e^{e_{ij}}}{\sum_{r=1}^{T}e^{e_{ir}}}.
+```
 
 The weights satisfy
 
-$\displaystyle a_{ij}>0,\qquad \sum_j a_{ij}=1.$
+```math
+a_{ij}>0,\qquad \sum_j a_{ij}=1.
+```
 
 Softmax preserves score order: if $e_{i1}>e_{i3}>e_{i2}$, then $a_{i1}>a_{i3}>a_{i2}$. Therefore, if a question asks only which token receives the most attention, comparing raw scores is enough.
 
@@ -115,7 +137,9 @@ Softmax preserves score order: if $e_{i1}>e_{i3}>e_{i2}$, then $a_{i1}>a_{i3}>a_
 
 The output for query position $i$ is
 
-$\displaystyle z_i=\sum_{j=1}^{T}a_{ij}v_j.$
+```math
+z_i=\sum_{j=1}^{T}a_{ij}v_j.
+```
 
 This is a weighted average of information from all value vectors. A token with a high attention weight contributes more strongly to $z_i$.
 
@@ -123,11 +147,15 @@ This is a weighted average of information from all value vectors. A token with a
 
 Suppose the scores for a query are
 
-$\displaystyle e_i=[2.6875,0.2375,1.775].$
+```math
+e_i=[2.6875,0.2375,1.775].
+```
 
 Softmax gives approximately
 
-$\displaystyle a_i=[0.672,0.058,0.270].$
+```math
+a_i=[0.672,0.058,0.270].
+```
 
 The first token receives the greatest attention because it has the largest score and weight. Equal attention would require equal scores, which would produce $[1/3,1/3,1/3]$.
 
@@ -137,15 +165,21 @@ A single attention head learns one pattern. Multiple heads let the model learn s
 
 For $n_h$ heads:
 
-$\displaystyle \operatorname{head}_i=\operatorname{Attention}(Q_i,K_i,V_i).$
+```math
+\text{head}_i=\text{Attention}(Q_i,K_i,V_i).
+```
 
 The heads are concatenated and projected:
 
-$\displaystyle \operatorname{MHA}(H)=\operatorname{Concat}(\operatorname{head}_1,\ldots,\operatorname{head}_{n_h})W_O.$
+```math
+\text{MHA}(H)=\text{Concat}(\text{head}_1,\ldots,\text{head}_{n_h})W_O.
+```
 
 Usually $n_h d_v=d_{\text{model}}$, so
 
-$\displaystyle W_O\in\mathbb{R}^{(n_h d_v)\times d_{\text{model}}}.$
+```math
+W_O\in\mathbb{R}^{(n_h d_v)\times d_{\text{model}}}.
+```
 
 If $d_{\text{model}}=256$, $n_h=4$, and each head has $d_k=d_v=64$, concatenation returns $4\times64=256$ features.
 
@@ -182,7 +216,9 @@ In cross-attention:
 
 If the target length is $T_t$ and source length is $T_s$, the score matrix has shape
 
-$\displaystyle T_t\times T_s.$
+```math
+T_t\times T_s.
+```
 
 It need not be square. A self-attention matrix is square only because queries and keys come from the same sequence length.
 
@@ -194,39 +230,55 @@ Parameter questions become easy when every matrix is listed once.
 
 If each head has separate projections and biases are excluded:
 
-$\displaystyle P_{QKV}=n_h\bigl(d_{\text{model}}d_q+d_{\text{model}}d_k+d_{\text{model}}d_v\bigr).$
+```math
+P_{QKV}=n_h\bigl(d_{\text{model}}d_q+d_{\text{model}}d_k+d_{\text{model}}d_v\bigr).
+```
 
 The output projection contributes
 
-$\displaystyle P_O=(n_h d_v)d_{\text{model}}.$
+```math
+P_O=(n_h d_v)d_{\text{model}}.
+```
 
 When $d_q=d_k=d_v=d_h$:
 
-$\displaystyle P_{\text{MHA}}=3n_hd_{\text{model}}d_h+n_hd_hd_{\text{model}}.$
+```math
+P_{\text{MHA}}=3n_hd_{\text{model}}d_h+n_hd_hd_{\text{model}}.
+```
 
 With $d_{\text{model}}=64$, $n_h=4$, and $d_h=16$:
 
-$\displaystyle P_{\text{MHA}}=3(4)(64)(16)+(64)(64)=16{,}384.$
+```math
+P_{\text{MHA}}=3(4)(64)(16)+(64)(64)=16{,}384.
+```
 
 ### 6.2 Feed-forward network
 
 The transformer FFN expands and then contracts each token independently:
 
-$\displaystyle d_{\text{model}}\rightarrow d_{ff}\rightarrow d_{\text{model}}.$
+```math
+d_{\text{model}}\rightarrow d_{ff}\rightarrow d_{\text{model}}.
+```
 
 Without biases:
 
-$\displaystyle P_{\text{FFN}}=d_{\text{model}}d_{ff}+d_{ff}d_{\text{model}}=2d_{\text{model}}d_{ff}.$
+```math
+P_{\text{FFN}}=d_{\text{model}}d_{ff}+d_{ff}d_{\text{model}}=2d_{\text{model}}d_{ff}.
+```
 
 For $64\rightarrow256\rightarrow64$:
 
-$\displaystyle P_{\text{FFN}}=2(64)(256)=32{,}768.$
+```math
+P_{\text{FFN}}=2(64)(256)=32{,}768.
+```
 
 ### 6.3 LayerNorm
 
 LayerNorm usually has a learned scale $\gamma$ and shift $\beta$, each with $d_{\text{model}}$ elements:
 
-$\displaystyle P_{\text{LN}}=2d_{\text{model}}.$
+```math
+P_{\text{LN}}=2d_{\text{model}}.
+```
 
 For $d_{\text{model}}=64$, one LayerNorm has 128 parameters.
 
@@ -234,9 +286,13 @@ For $d_{\text{model}}=64$, one LayerNorm has 128 parameters.
 
 Without projection or FFN biases:
 
-$\displaystyle P_{\text{encoder layer}}=P_{\text{MHA}}+P_{\text{FFN}}+2P_{\text{LN}},$
+```math
+P_{\text{encoder layer}}=P_{\text{MHA}}+P_{\text{FFN}}+2P_{\text{LN}},
+```
 
-$\displaystyle P_{\text{decoder layer}}=2P_{\text{MHA}}+P_{\text{FFN}}+3P_{\text{LN}}.$
+```math
+P_{\text{decoder layer}}=2P_{\text{MHA}}+P_{\text{FFN}}+3P_{\text{LN}}.
+```
 
 Multiply each by the number of corresponding layers only after finding the one-layer total.
 
@@ -244,11 +300,15 @@ Multiply each by the number of corresponding layers only after finding the one-l
 
 Source embedding:
 
-$\displaystyle P_{\text{src embed}}=|V_s|d_{\text{model}}.$
+```math
+P_{\text{src embed}}=|V_s|d_{\text{model}}.
+```
 
 Target output projection without bias:
 
-$\displaystyle P_{\text{output}}=d_{\text{model}}|V_t|.$
+```math
+P_{\text{output}}=d_{\text{model}}|V_t|.
+```
 
 Read the question carefully: it may exclude embeddings, output layers, or biases.
 
@@ -256,7 +316,9 @@ Read the question carefully: it may exclude embeddings, output layers, or biases
 
 A softmax distribution over the entire vocabulary sums to 1:
 
-$\displaystyle \sum_{w\in V}P(w)=1.$
+```math
+\sum_{w\in V}P(w)=1.
+```
 
 Suppose three named words have probabilities $0.55$, $0.15$, and $0.20$. Their sum is $0.90$, leaving $0.10$ for every other vocabulary item together.
 
@@ -270,7 +332,9 @@ You cannot assign that entire $0.10$ to one particular missing word unless the q
 
 At inference time, the decoder produces one new token per run:
 
-$\displaystyle P(y_t\mid y_0,y_1,\ldots,y_{t-1}).$
+```math
+P(y_t\mid y_0,y_1,\ldots,y_{t-1}).
+```
 
 To generate 4 target tokens while ignoring the end token, at least 4 decoder runs are required.
 
@@ -284,29 +348,39 @@ At inference time, the true future target is unavailable, so the decoder feeds b
 
 Greedy decoding chooses
 
-$\displaystyle y_t=\arg\max_w P(w\mid y_{<t}).$
+```math
+y_t=\arg\max_w P(w\mid y_{<t}).
+```
 
 It is fast and deterministic, but a locally best token is not guaranteed to produce the globally best sequence.
 
 ## 9. Gradients through softmax attention
 
-For $a=\operatorname{softmax}(e)$, the Jacobian is
+For $a=\text{softmax}(e)$, the Jacobian is
 
-$\displaystyle \frac{\partial a_j}{\partial e_i}=a_j(\delta_{ij}-a_i).$
+```math
+\frac{\partial a_j}{\partial e_i}=a_j(\delta_{ij}-a_i).
+```
 
 If $g_j=\partial L/\partial a_j$, then
 
-$\displaystyle \frac{\partial L}{\partial e_i}=a_i\left(g_i-\sum_j a_jg_j\right).$
+```math
+\frac{\partial L}{\partial e_i}=a_i\left(g_i-\sum_j a_jg_j\right).
+```
 
 An important property is
 
-$\displaystyle \sum_i\frac{\partial L}{\partial e_i}=0.$
+```math
+\sum_i\frac{\partial L}{\partial e_i}=0.
+```
 
 Why? Adding the same constant to every logit does not change softmax. Therefore, the loss has no gradient in the all-ones direction.
 
 For attention output $z_i=\sum_j a_{ij}v_j$ and upstream gradient $\partial L/\partial z_i$:
 
-$\displaystyle \frac{\partial L}{\partial a_{ij}}=\frac{\partial L}{\partial z_i}\cdot v_j^{\top}.$
+```math
+\frac{\partial L}{\partial a_{ij}}=\frac{\partial L}{\partial z_i}\cdot v_j^{\top}.
+```
 
 The reliable chain is:
 
