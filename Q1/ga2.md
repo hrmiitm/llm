@@ -2,6 +2,8 @@
 
 > **Score: 100 / 100** | Submitted: Sun, 28 Jun 2026
 
+> New to these topics? Read the [Weeks 1–2 learning notes](week1-week2-learning-notes.md) before attempting the questions.
+
 ---
 
 ## Context for Q1 – Q4
@@ -31,8 +33,10 @@ We translate: **source** "I enjoyed the movie Transformer" → **target** "Naan 
 
 *(Numeric input)*
 
-**Answer: $\boxed{230656}$**
+<details>
+<summary><b>Answer & Solution</b></summary>
 
+**Answer:** $\boxed{230656}$
 #### ✏️ Step-by-Step Solution
 
 **Step 1 — Compute parameters in one Multi-Head Attention (MHA) block.**
@@ -41,87 +45,55 @@ Each MHA has:
 - $n_h = 4$ heads, each with $W_Q^{(i)}, W_K^{(i)}, W_V^{(i)} \in \mathbb{R}^{d_{\text{model}} \times d_k} = \mathbb{R}^{64 \times 16}$
 - One output projection $W_O \in \mathbb{R}^{(n_h \cdot d_v) \times d_{\text{model}}} = \mathbb{R}^{64 \times 64}$
 
-$$
-\text{Params in } W_Q, W_K, W_V \text{ per head} = 3 \times (64 \times 16) = 3072
-$$
+$\displaystyle \text{Params in } W_Q, W_K, W_V \text{ per head} = 3 \times (64 \times 16) = 3072$
 
-$$
-\text{Params for all 4 heads} = 4 \times 3072 = 12{,}288
-$$
+$\displaystyle \text{Params for all 4 heads} = 4 \times 3072 = 12{,}288$
 
-$$
-\text{Params in } W_O = 64 \times 64 = 4{,}096
-$$
+$\displaystyle \text{Params in } W_O = 64 \times 64 = 4{,}096$
 
-$$
-\text{Total MHA params} = 12{,}288 + 4{,}096 = \mathbf{16{,}384}
-$$
+$\displaystyle \text{Total MHA params} = 12{,}288 + 4{,}096 = \mathbf{16{,}384}$
 
 **Step 2 — Compute parameters in one Feed-Forward Network (FFN).**
 
 No bias, so:
 
-$$
-\text{Layer 1: } d_{\text{model}} \times d_{ff} = 64 \times 256 = 16{,}384
-$$
+$\displaystyle \text{Layer 1: } d_{\text{model}} \times d_{ff} = 64 \times 256 = 16{,}384$
 
-$$
-\text{Layer 2: } d_{ff} \times d_{\text{model}} = 256 \times 64 = 16{,}384
-$$
+$\displaystyle \text{Layer 2: } d_{ff} \times d_{\text{model}} = 256 \times 64 = 16{,}384$
 
-$$
-\text{Total FFN params} = 16{,}384 + 16{,}384 = \mathbf{32{,}768}
-$$
+$\displaystyle \text{Total FFN params} = 16{,}384 + 16{,}384 = \mathbf{32{,}768}$
 
 **Step 3 — Layer Norm parameters.**
 
 Each LayerNorm has $\gamma$ (scale) and $\beta$ (shift), both of size $d_{\text{model}} = 64$:
 
-$$
-\text{Params per LayerNorm} = 2 \times 64 = 128
-$$
+$\displaystyle \text{Params per LayerNorm} = 2 \times 64 = 128$
 
 **Step 4 — Parameters per Encoder Layer** (has **2 LayerNorms**: after MHA and after FFN).
 
-$$
-\text{Encoder layer} = \underbrace{16{,}384}_{\text{MHA}} + \underbrace{32{,}768}_{\text{FFN}} + \underbrace{2 \times 128}_{\text{LayerNorms}} = 49{,}408
-$$
+$\displaystyle \text{Encoder layer} = \underbrace{16{,}384}_{\text{MHA}} + \underbrace{32{,}768}_{\text{FFN}} + \underbrace{2 \times 128}_{\text{LayerNorms}} = 49{,}408$
 
 **Step 5 — Parameters per Decoder Layer** (has **3 LayerNorms**: after masked MHA, after cross-attention MHA, after FFN; plus **2 MHA blocks**).
 
-$$
-\text{Masked self-attn MHA} = 16{,}384
-$$
+$\displaystyle \text{Masked self-attn MHA} = 16{,}384$
 
-$$
-\text{Cross-attention MHA} = 16{,}384
-$$
+$\displaystyle \text{Cross-attention MHA} = 16{,}384$
 
-$$
-\text{FFN} = 32{,}768
-$$
+$\displaystyle \text{FFN} = 32{,}768$
 
-$$
-\text{3 LayerNorms} = 3 \times 128 = 384
-$$
+$\displaystyle \text{3 LayerNorms} = 3 \times 128 = 384$
 
-$$
-\text{Decoder layer} = 16{,}384 + 16{,}384 + 32{,}768 + 384 = \mathbf{65{,}920}
-$$
+$\displaystyle \text{Decoder layer} = 16{,}384 + 16{,}384 + 32{,}768 + 384 = \mathbf{65{,}920}$
 
 **Step 6 — Scale to $N = 2$ layers for both encoder and decoder.**
 
-$$
-\text{Total encoder} = 2 \times 49{,}408 = 98{,}816
-$$
+$\displaystyle \text{Total encoder} = 2 \times 49{,}408 = 98{,}816$
 
-$$
-\text{Total decoder} = 2 \times 65{,}920 = 131{,}840
-$$
+$\displaystyle \text{Total decoder} = 2 \times 65{,}920 = 131{,}840$
 
-$$
-\text{Grand total} = 98{,}816 + 131{,}840 = \boxed{230{,}656}
-$$
+$\displaystyle \text{Grand total} = 98{,}816 + 131{,}840 = \boxed{230{,}656}$
+
+</details>
 
 ---
 
@@ -131,29 +103,27 @@ $$
 
 *(Numeric input)*
 
-**Answer: $\boxed{96000}$**
+<details>
+<summary><b>Answer & Solution</b></summary>
 
+**Answer:** $\boxed{96000}$
 #### ✏️ Step-by-Step Solution
 
 **Step 1 — Understand the output layer.**
 
 The output layer is a **linear projection** that maps the decoder's final hidden state to a probability distribution over the **target vocabulary**. It has no bias.
 
-$$
-W_{\text{out}} \in \mathbb{R}^{d_{\text{model}} \times |V_t|}
-$$
+$\displaystyle W_{\text{out}} \in \mathbb{R}^{d_{\text{model}} \times |V_t|}$
 
 **Step 2 — Plug in values.**
 
-$$
-|V_t| = 1500, \quad d_{\text{model}} = 64
-$$
+$\displaystyle |V_t| = 1500, \quad d_{\text{model}} = 64$
 
-$$
-\text{Params} = d_{\text{model}} \times |V_t| = 64 \times 1500 = \boxed{96{,}000}
-$$
+$\displaystyle \text{Params} = d_{\text{model}} \times |V_t| = 64 \times 1500 = \boxed{96{,}000}$
 
 > **Note:** Some formulations also count the softmax bias ($|V_t| = 1500$ extra params), giving 97,500 — both are accepted by the grader.
+
+</details>
 
 ---
 
@@ -163,29 +133,27 @@ $$
 
 *(Numeric input)*
 
-**Answer: $\boxed{64000}$**
+<details>
+<summary><b>Answer & Solution</b></summary>
 
+**Answer:** $\boxed{64000}$
 #### ✏️ Step-by-Step Solution
 
 **Step 1 — Understand the embedding layer.**
 
 The input embedding layer is a **lookup table** that maps each source token to a dense vector. It is parametrised by a matrix:
 
-$$
-E_{\text{src}} \in \mathbb{R}^{|V_s| \times d_{\text{embed}}}
-$$
+$\displaystyle E_{\text{src}} \in \mathbb{R}^{|V_s| \times d_{\text{embed}}}$
 
 **Step 2 — Plug in values.**
 
-$$
-|V_s| = 1000, \quad d_{\text{embed}} = 64
-$$
+$\displaystyle |V_s| = 1000, \quad d_{\text{embed}} = 64$
 
-$$
-\text{Params} = |V_s| \times d_{\text{embed}} = 1000 \times 64 = \boxed{64{,}000}
-$$
+$\displaystyle \text{Params} = |V_s| \times d_{\text{embed}} = 1000 \times 64 = \boxed{64{,}000}$
 
 > **Note:** This is only the **source** embedding. The decoder also has a target embedding of size $|V_t| \times d_{\text{embed}} = 1500 \times 64 = 96{,}000$, but the question asks specifically about the "input embedding layer."
+
+</details>
 
 ---
 
@@ -195,29 +163,25 @@ $$
 
 *(Numeric input)*
 
-**Answer: $\boxed{-1}$**
+<details>
+<summary><b>Answer & Solution</b></summary>
 
+**Answer:** $\boxed{-1}$
 #### ✏️ Step-by-Step Solution
 
 **Step 1 — Check if probabilities are constrained.**
 
 A softmax output must sum to 1 over all vocabulary tokens:
 
-$$
-\sum_{w \in V_t} P(y_1 = w) = 1
-$$
+$\displaystyle \sum_{w \in V_t} P(y_1 = w) = 1$
 
 **Step 2 — Sum the given probabilities.**
 
-$$
-P(\text{Naan}) + P(\text{transformer}) + P(\text{padaththai}) = 0.55 + 0.15 + 0.20 = 0.90
-$$
+$\displaystyle P(\text{Naan}) + P(\text{transformer}) + P(\text{padaththai}) = 0.55 + 0.15 + 0.20 = 0.90$
 
 **Step 3 — Compute remaining probability mass.**
 
-$$
-\text{Remaining} = 1 - 0.90 = 0.10
-$$
+$\displaystyle \text{Remaining} = 1 - 0.90 = 0.10$
 
 This 0.10 is distributed over **all other words in $V_t$** (which has 1500 tokens). We don't know how much of that 0.10 goes to "rasithen" specifically.
 
@@ -225,9 +189,9 @@ This 0.10 is distributed over **all other words in $V_t$** (which has 1500 token
 
 Without knowing the probability assigned to each of the remaining 1497 vocabulary words, we **cannot** determine $P(\text{rasithen})$ uniquely.
 
-$$
-\boxed{\text{Answer} = -1 \text{ (information is insufficient)}}
-$$
+$\displaystyle \boxed{\text{Answer} = -1 \text{ (information is insufficient)}}$
+
+</details>
 
 ---
 
@@ -236,16 +200,10 @@ $$
 **[Continuation from Week 1 — Q7 & Q8]**
 
 The input embeddings are:
-$$
-h_1 = [0.5, 0.25, 1], \quad h_2 = [0.1, 0.25, 0], \quad h_3 = [0.1, 0.1, 0.9]
-$$
+$\displaystyle h_1 = [0.5, 0.25, 1], \quad h_2 = [0.1, 0.25, 0], \quad h_3 = [0.1, 0.1, 0.9]$
 
 The projection matrices:
-$$
-W_Q = \begin{bmatrix} 1 & 1 \\ -1 & 1 \\ 0 & 1 \end{bmatrix}, \quad
-W_K = \begin{bmatrix} 0 & 1 \\ 1 & 0 \\ 0 & 1 \end{bmatrix}, \quad
-W_V = \begin{bmatrix} 0 & 0 \\ -1 & -1 \\ 1 & 1 \end{bmatrix}
-$$
+$\displaystyle W_Q = \begin{bmatrix} 1 & 1 \\ -1 & 1 \\ 0 & 1 \end{bmatrix}, \quad W_K = \begin{bmatrix} 0 & 1 \\ 1 & 0 \\ 0 & 1 \end{bmatrix}, \quad W_V = \begin{bmatrix} 0 & 0 \\ -1 & -1 \\ 1 & 1 \end{bmatrix}$
 
 Computed as: $Q = HW_Q$, $K = HW_K$, $V = HW_V$.
 
@@ -262,8 +220,10 @@ Let:
 
 *(Numeric input)*
 
-**Answer: $\boxed{0}$**
+<details>
+<summary><b>Answer & Solution</b></summary>
 
+**Answer:** $\boxed{0}$
 #### ✏️ Step-by-Step Solution
 
 We computed in Week 1 that $a_1 = [a_{11}, a_{12}, a_{13}] \approx [0.672,\ 0.058,\ 0.270]$.
@@ -272,44 +232,25 @@ We also need $V$:
 
 **Step 1 — Compute the Value matrix $V = H W_V$.**
 
-$$
-V = \begin{bmatrix} 0.5 & 0.25 & 1 \\ 0.1 & 0.25 & 0 \\ 0.1 & 0.1 & 0.9 \end{bmatrix}
-\begin{bmatrix} 0 & 0 \\ -1 & -1 \\ 1 & 1 \end{bmatrix}
-$$
+$\displaystyle V = \begin{bmatrix} 0.5 & 0.25 & 1 \\ 0.1 & 0.25 & 0 \\ 0.1 & 0.1 & 0.9 \end{bmatrix} \begin{bmatrix} 0 & 0 \\ -1 & -1 \\ 1 & 1 \end{bmatrix}$
 
-$$
-v_1 = [0.5(0) + 0.25(-1) + 1(1),\quad 0.5(0) + 0.25(-1) + 1(1)] = [0.75,\ 0.75]
-$$
+$\displaystyle v_1 = [0.5(0) + 0.25(-1) + 1(1),\quad 0.5(0) + 0.25(-1) + 1(1)] = [0.75,\ 0.75]$
 
-$$
-v_2 = [0.1(0) + 0.25(-1) + 0(1),\quad \ldots] = [-0.25,\ -0.25]
-$$
+$\displaystyle v_2 = [0.1(0) + 0.25(-1) + 0(1),\quad \ldots] = [-0.25,\ -0.25]$
 
-$$
-v_3 = [0.1(0) + 0.1(-1) + 0.9(1),\quad \ldots] = [0.8,\ 0.8]
-$$
+$\displaystyle v_3 = [0.1(0) + 0.1(-1) + 0.9(1),\quad \ldots] = [0.8,\ 0.8]$
 
 **Step 2 — Compute $\dfrac{\partial L}{\partial a_{1j}}$ via chain rule through $z_1$.**
 
-$$
-z_1 = a_{11} v_1 + a_{12} v_2 + a_{13} v_3
-$$
+$\displaystyle z_1 = a_{11} v_1 + a_{12} v_2 + a_{13} v_3$
 
-$$
-\frac{\partial L}{\partial a_{1j}} = \frac{\partial L}{\partial z_1} \cdot v_j^{\top}
-$$
+$\displaystyle \frac{\partial L}{\partial a_{1j}} = \frac{\partial L}{\partial z_1} \cdot v_j^{\top}$
 
-$$
-\frac{\partial L}{\partial a_{11}} = [1, 1] \cdot [0.75, 0.75] = 0.75 + 0.75 = 1.50
-$$
+$\displaystyle \frac{\partial L}{\partial a_{11}} = [1, 1] \cdot [0.75, 0.75] = 0.75 + 0.75 = 1.50$
 
-$$
-\frac{\partial L}{\partial a_{12}} = [1, 1] \cdot [-0.25, -0.25] = -0.25 + (-0.25) = -0.50
-$$
+$\displaystyle \frac{\partial L}{\partial a_{12}} = [1, 1] \cdot [-0.25, -0.25] = -0.25 + (-0.25) = -0.50$
 
-$$
-\frac{\partial L}{\partial a_{13}} = [1, 1] \cdot [0.8, 0.8] = 0.8 + 0.8 = 1.60
-$$
+$\displaystyle \frac{\partial L}{\partial a_{13}} = [1, 1] \cdot [0.8, 0.8] = 0.8 + 0.8 = 1.60$
 
 **Step 3 — Apply softmax Jacobian.**
 
@@ -317,44 +258,31 @@ For softmax with output $a$, the Jacobian is: $\dfrac{\partial a_j}{\partial e_i
 
 Therefore:
 
-$$
-\frac{\partial L}{\partial e_{1i}} = \sum_j \frac{\partial L}{\partial a_{1j}} \cdot a_{1j}(\delta_{ij} - a_{1i})
-= a_{1i}\left(\frac{\partial L}{\partial a_{1i}} - S\right)
-$$
+$\displaystyle \frac{\partial L}{\partial e_{1i}} = \sum_j \frac{\partial L}{\partial a_{1j}} \cdot a_{1j}(\delta_{ij} - a_{1i}) = a_{1i}\left(\frac{\partial L}{\partial a_{1i}} - S\right)$
 
 where $S = \displaystyle\sum_j \frac{\partial L}{\partial a_{1j}} \cdot a_{1j}$.
 
 **Step 4 — Compute $S$.**
 
-$$
-S = 1.50 \times 0.672 + (-0.50) \times 0.058 + 1.60 \times 0.270
-$$
+$\displaystyle S = 1.50 \times 0.672 + (-0.50) \times 0.058 + 1.60 \times 0.270$
 
-$$
-S = 1.008 - 0.029 + 0.432 = 1.411
-$$
+$\displaystyle S = 1.008 - 0.029 + 0.432 = 1.411$
 
 **Step 5 — Compute each gradient component.**
 
-$$
-\frac{\partial L}{\partial e_{11}} = 0.672 \times (1.50 - 1.411) = 0.672 \times 0.089 \approx 0.060
-$$
+$\displaystyle \frac{\partial L}{\partial e_{11}} = 0.672 \times (1.50 - 1.411) = 0.672 \times 0.089 \approx 0.060$
 
-$$
-\frac{\partial L}{\partial e_{12}} = 0.058 \times (-0.50 - 1.411) = 0.058 \times (-1.911) \approx -0.111
-$$
+$\displaystyle \frac{\partial L}{\partial e_{12}} = 0.058 \times (-0.50 - 1.411) = 0.058 \times (-1.911) \approx -0.111$
 
-$$
-\frac{\partial L}{\partial e_{13}} = 0.270 \times (1.60 - 1.411) = 0.270 \times 0.189 \approx 0.051
-$$
+$\displaystyle \frac{\partial L}{\partial e_{13}} = 0.270 \times (1.60 - 1.411) = 0.270 \times 0.189 \approx 0.051$
 
 **Step 6 — Sum the components.**
 
-$$
-\sum_i \frac{\partial L}{\partial e_{1i}} = 0.060 + (-0.111) + 0.051 = \boxed{0}
-$$
+$\displaystyle \sum_i \frac{\partial L}{\partial e_{1i}} = 0.060 + (-0.111) + 0.051 = \boxed{0}$
 
 > **Key insight:** The sum of gradients flowing back through softmax **always equals zero**. This is a mathematical property: $\sum_i \frac{\partial L}{\partial e_i} = a_i \cdot (\text{something}) - a_i \cdot S$, and the $a_i$ terms always cancel, giving a zero sum. This is why the gradient vector $\frac{\partial L}{\partial e}$ has zero mean.
+
+</details>
 
 ---
 
@@ -362,18 +290,18 @@ $$
 
 **Which of the following is (are) hyperparameters? (Select all that apply)**
 
-| Option | Answer |
-|---|:---:|
-| vocabulary size | **✓** |
-| $d_k, d_v, d_q$ | **✓** |
-| number of heads | **✓** |
-| warm-up step | **✓** |
-| $d_{\text{model}}$ | **✓** |
-| number of layers | **✓** |
-| size of the attention mask | ✗ |
+- ( ) vocabulary size
+- ( ) $d_k, d_v, d_q$
+- ( ) number of heads
+- ( ) warm-up steps
+- ( ) $d_{\text{model}}$
+- ( ) number of layers
+- ( ) size of the attention mask
 
-**Answer: All except "size of the attention mask"**
+<details>
+<summary><b>Answer & Solution</b></summary>
 
+**Answer:** All except "size of the attention mask"
 #### ✏️ Step-by-Step Solution
 
 **Step 1 — Define hyperparameter.**
@@ -395,15 +323,13 @@ A **hyperparameter** is a configuration value set *before* training begins that 
 **Step 3 — Explain why "size of attention mask" is NOT a hyperparameter.**
 
 The attention mask is a $T \times T$ binary matrix where:
-$$
-M_{ij} = \begin{cases} 0 & \text{if position } j \text{ is allowed} \\ -\infty & \text{otherwise (masked)} \end{cases}
-$$
+$\displaystyle M_{ij} = \begin{cases} 0 & \text{if position } j \text{ is allowed} \\ -\infty & \text{otherwise (masked)} \end{cases}$
 
 Its size is **fully determined** by the context length $T$. It is not a free parameter — you cannot change the mask size without changing $T$.
 
-$$
-\boxed{\text{Hyperparameters: vocabulary size, } d_k/d_v/d_q, \text{ number of heads, warm-up step, } d_{\text{model}}, \text{ number of layers}}
-$$
+$\displaystyle \boxed{\text{Hyperparameters: vocabulary size, } d_k/d_v/d_q, \text{ number of heads, warm-up step, } d_{\text{model}}, \text{ number of layers}}$
+
+</details>
 
 ---
 
@@ -417,17 +343,17 @@ $$
 
 *(Numeric input)*
 
-**Answer: $\boxed{4}$**
+<details>
+<summary><b>Answer & Solution</b></summary>
 
+**Answer:** $\boxed{4}$
 #### ✏️ Step-by-Step Solution
 
 **Step 1 — Recall how auto-regressive decoding works.**
 
 In an encoder-decoder transformer, the decoder generates tokens **one at a time**. At each time step $t$, the decoder takes as input all previously generated tokens and produces the next one. This is known as **auto-regressive** (or **greedy**) decoding.
 
-$$
-y_1 \rightarrow y_2 \rightarrow y_3 \rightarrow \cdots \rightarrow y_T
-$$
+$\displaystyle y_1 \rightarrow y_2 \rightarrow y_3 \rightarrow \cdots \rightarrow y_T$
 
 Each arrow requires **one forward pass** through the decoder.
 
@@ -448,6 +374,6 @@ Ignoring the [End] token, the decoder must generate **4 target tokens**, requiri
 | 3 | [Start], Token 1, Token 2 | Token 3 |
 | 4 | [Start], Token 1, Token 2, Token 3 | Token 4 |
 
-$$
-\boxed{\text{Minimum decoder runs} = 4}
-$$
+$\displaystyle \boxed{\text{Minimum decoder runs} = 4}$
+
+</details>
