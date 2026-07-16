@@ -207,7 +207,7 @@ The attention matrix $A_i \in \mathbb{R}^{m \times n}$ has:
 
 Looking at the diagram, the tokens shown are:
 
-$`\displaystyle \text{The\_, animal\_, didn\_, '\_, t\_, cross\_, the\_, street\_, because\_, it\_, was\_, too\_, tire\_, d\_, \langle\text{special}\rangle}`$
+`The_`, `animal_`, `didn_`, `'_`, `t_`, `cross_`, `the_`, `street_`, `because_`, `it_`, `was_`, `too_`, `tire_`, `d_`, and `<special>`.
 
 That gives: $14 \text{ regular tokens} + 1 \text{ special token} = 15$ total tokens.
 

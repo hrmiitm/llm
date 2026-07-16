@@ -349,7 +349,7 @@ At inference time, the true future target is unavailable, so the decoder feeds b
 Greedy decoding chooses
 
 ```math
-y_t=\arg\max_w P(w\mid y_{<t}).
+y_t=\arg\max_w P(w\mid y_{\lt t}).
 ```
 
 It is fast and deterministic, but a locally best token is not guaranteed to produce the globally best sequence.

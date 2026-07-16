@@ -208,7 +208,7 @@ To calculate it from a probability table:
 Long sequences have small raw probabilities because many numbers below 1 are multiplied. In real systems, log probabilities are preferred:
 
 ```math
-\log P(\text{sequence})=\sum_t\log P(y_t\mid y_{<t}).
+\log P(\text{sequence})=\sum_t\log P(y_t\mid y_{\lt t}).
 ```
 
 ### 8.1 Greedy-path tables
@@ -222,7 +222,7 @@ Follow the question's convention: it may treat a non-greedy path as impossible u
 ### 9.1 Greedy search
 
 ```math
-y_t=\arg\max_wP(w\mid y_{<t}).
+y_t=\arg\max_wP(w\mid y_{\lt t}).
 ```
 
 Greedy search is fast and deterministic but can choose repetitive or locally attractive continuations.
