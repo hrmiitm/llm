@@ -57,14 +57,14 @@ export function MarkdownContent({ markdown, className }: Props) {
   const html = renderMarkdown(markdown);
 
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return undefined;
-
     let cancelled = false;
 
     async function renderDiagrams() {
-      const slots = Array.from(root!.querySelectorAll<HTMLElement>('.kroki-diagram[data-kroki-source]'));
-      if (slots.length === 0) return;
+      const root = rootRef.current;
+      if (!root) return;
+
+      const initialSlots = Array.from(root.querySelectorAll<HTMLElement>('.kroki-diagram[data-kroki-source]'));
+      if (initialSlots.length === 0) return;
 
       let mermaid: MermaidApi;
       try {
@@ -75,11 +75,31 @@ export function MarkdownContent({ markdown, className }: Props) {
       }
       if (cancelled) return;
 
-      for (const slot of slots) {
+      const currentRoot = rootRef.current;
+      if (!currentRoot) return;
+
+      // Re-query slots on current root after asynchronous mermaid load
+      const slots = Array.from(currentRoot.querySelectorAll<HTMLElement>('.kroki-diagram[data-kroki-source]'));
+
+      for (let i = 0; i < slots.length; i++) {
         if (cancelled) return;
+
+        let slot = slots[i];
+        if (!currentRoot.contains(slot)) {
+          const freshSlots = Array.from(currentRoot.querySelectorAll<HTMLElement>('.kroki-diagram[data-kroki-source]'));
+          if (freshSlots[i]) {
+            slot = freshSlots[i];
+          } else {
+            continue;
+          }
+        }
 
         const encodedSource = slot.dataset.krokiSource;
         if (!encodedSource) continue;
+
+        if (slot.dataset.rendered === 'true' && slot.querySelector('svg')) {
+          continue;
+        }
 
         slot.setAttribute('aria-busy', 'true');
         slot.textContent = 'Loading diagram…';
@@ -88,9 +108,6 @@ export function MarkdownContent({ markdown, className }: Props) {
           const source = decodeDiagramSource(encodedSource);
           const id = `kroki-mermaid-${diagramNumber++}`;
 
-          // Pass the slot itself as the render container so mermaid places the
-          // temp SVG element adjacent to our slot rather than appending to body.
-          // We then extract the innerHTML (the rendered SVG string).
           const renderContainer = document.createElement('div');
           renderContainer.style.position = 'absolute';
           renderContainer.style.visibility = 'hidden';
@@ -104,22 +121,28 @@ export function MarkdownContent({ markdown, className }: Props) {
             svg = result.svg;
             bindFunctions = result.bindFunctions ?? undefined;
           } finally {
-            // Always remove the temp container
             renderContainer.remove();
           }
 
           if (cancelled) return;
 
-          slot.innerHTML = svg;
-          const svgEl = slot.querySelector('svg');
+          const liveRoot = rootRef.current;
+          let liveSlot = slot;
+          if (liveRoot && !liveRoot.contains(liveSlot)) {
+            const fresh = Array.from(liveRoot.querySelectorAll<HTMLElement>('.kroki-diagram[data-kroki-source]'));
+            if (fresh[i]) liveSlot = fresh[i];
+          }
+
+          liveSlot.innerHTML = svg;
+          liveSlot.dataset.rendered = 'true';
+          const svgEl = liveSlot.querySelector('svg');
           if (svgEl) {
             svgEl.setAttribute('role', 'img');
-            const label = slot.getAttribute('aria-label') ?? 'Course diagram';
+            const label = liveSlot.getAttribute('aria-label') ?? 'Course diagram';
             svgEl.setAttribute('aria-label', label);
           }
-          bindFunctions?.(slot);
+          bindFunctions?.(liveSlot);
         } catch (error) {
-          // Retain the error in developer tools while keeping learner-facing UI concise.
           console.error('Could not render course diagram.', error);
           if (!cancelled) {
             slot.classList.add('kroki-diagram-error');
