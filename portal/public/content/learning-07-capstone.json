@@ -60,17 +60,17 @@
     {
       "id": "learning-07-capstone-q3",
       "num": "Q3",
-      "title": "Encoder self-attention scores (Numeric Input)",
+      "title": "Encoder self-attention score tensor (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "How many raw score cells does one encoder self-attention head form for one example?",
-      "bodyMd": "How many raw score cells does one encoder self-attention head form for one example?\n\n*(Numeric input)*",
+      "questionText": "How many raw encoder self-attention score cells are formed across the full batch and all heads in **one encoder layer**?",
+      "bodyMd": "How many raw encoder self-attention score cells are formed across the full batch and all heads in **one encoder layer**?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "36"
+        "value": "216"
       },
-      "solutionMd": "Each of the 6 source queries compares with 6 source keys:\n\n\\[\nT_s^2=6^2=36.\n\\]\n\n**Answer:** \\(\\boxed{36}\\)",
+      "solutionMd": "Each source sequence contributes \\(6\\times6\\) scores per head. Account for the 2 batch items and 3 heads:\n\n\\[\nB\\times h\\times T_s^2=2\\times3\\times6^2=216.\n\\]\n\nThis is a score-cell count. It is separate from the \\(d_h=8\\)-dimensional vector arithmetic that produces each score.\n\n**Answer:** \\(\\boxed{216}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -80,17 +80,17 @@
     {
       "id": "learning-07-capstone-q4",
       "num": "Q4",
-      "title": "Decoder's blocked future (Numeric Input)",
+      "title": "Decoder's blocked future across heads (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "How many cells are strictly above the diagonal in the decoder's \\(T_t=4\\) causal self-attention mask?",
-      "bodyMd": "How many cells are strictly above the diagonal in the decoder's \\(T_t=4\\) causal self-attention mask?\n\n*(Numeric input)*",
+      "questionText": "How many score cells are blocked by the decoder's causal mask across the full batch and all heads in one decoder self-attention module?",
+      "bodyMd": "How many score cells are blocked by the decoder's causal mask across the full batch and all heads in one decoder self-attention module?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "6"
+        "value": "36"
       },
-      "solutionMd": "The number of forbidden future pairs is triangular:\n\n\\[\n\\frac{T_t(T_t-1)}2=\\frac{4\\cdot3}{2}=6.\n\\]\n\nThe allowed region includes the diagonal and the past.\n\n**Answer:** \\(\\boxed{6}\\)",
+      "solutionMd": "For one target sequence and one head, the forbidden future pairs are triangular:\n\n\\[\n\\frac{T_t(T_t-1)}2=\\frac{4\\cdot3}{2}=6.\n\\]\n\nReplicate that mask for 2 batch items and 3 heads:\n\n\\[\n2\\times3\\times6=\\boxed{36}.\n\\]\n\nThe allowed region includes the diagonal and the past.\n\n**Answer:** \\(\\boxed{36}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -100,17 +100,17 @@
     {
       "id": "learning-07-capstone-q5",
       "num": "Q5",
-      "title": "Cross-attention scores (Numeric Input)",
+      "title": "Cross-attention score tensor (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "How many raw score cells does one decoder cross-attention head form for one example?",
-      "bodyMd": "How many raw score cells does one decoder cross-attention head form for one example?\n\n*(Numeric input)*",
+      "questionText": "How many raw cross-attention score cells are formed across the batch and all heads in one decoder layer?",
+      "bodyMd": "How many raw cross-attention score cells are formed across the batch and all heads in one decoder layer?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "24"
+        "value": "144"
       },
-      "solutionMd": "Decoder positions provide 4 queries; encoder positions provide 6 keys:\n\n\\[\nT_tT_s=4\\cdot6=24.\n\\]\n\n**Intuition:** cross-attention is “target asks, source answers.”\n\n**Answer:** \\(\\boxed{24}\\)",
+      "solutionMd": "Decoder positions provide 4 queries; encoder positions provide 6 keys. Include the batch and head axes:\n\n\\[\nB\\times h\\times T_tT_s=2\\times3\\times4\\times6=144.\n\\]\n\n**Intuition:** cross-attention is “target asks, source answers.”\n\n**Answer:** \\(\\boxed{144}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -160,17 +160,17 @@
     {
       "id": "learning-07-capstone-q8",
       "num": "Q8",
-      "title": "Encoder-layer total (Numeric Input)",
+      "title": "Encoder stack total (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "How many parameters are in the one encoder layer?",
-      "bodyMd": "How many parameters are in the one encoder layer?\n\n*(Numeric input)*",
+      "questionText": "How many parameters are in the two-layer encoder stack?",
+      "bodyMd": "How many parameters are in the two-layer encoder stack?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "4872"
+        "value": "9744"
       },
-      "solutionMd": "An encoder layer has MHA, FFN, and two layer norms. Each layer norm has \\(2d_{\\text{model}}=48\\) parameters:\n\n\\[\n2400+2376+2(48)=4872.\n\\]\n\n**Answer:** \\(\\boxed{4872}\\)",
+      "solutionMd": "An encoder layer has MHA, FFN, and two layer norms. Each layer norm has \\(2d_{\\text{model}}=48\\) parameters:\n\n\\[\n2400+2376+2(48)=4872.\n\\]\n\nThe two encoder layers do not share their parameters:\n\n\\[\n2\\times4872=\\boxed{9744}.\n\\]\n\n**Answer:** \\(\\boxed{9744}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -180,17 +180,17 @@
     {
       "id": "learning-07-capstone-q9",
       "num": "Q9",
-      "title": "Decoder-layer total (Numeric Input)",
+      "title": "Decoder stack total (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "How many parameters are in the one decoder layer?",
-      "bodyMd": "How many parameters are in the one decoder layer?\n\n*(Numeric input)*",
+      "questionText": "How many parameters are in the three-layer decoder stack?",
+      "bodyMd": "How many parameters are in the three-layer decoder stack?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "7320"
+        "value": "21960"
       },
-      "solutionMd": "The decoder has masked self-attention, cross-attention, FFN, and three layer norms:\n\n\\[\n2(2400)+2376+3(48)=7320.\n\\]\n\n**Memory hook:** decoder = **two** attention modules + FFN + **three** norms.\n\n**Answer:** \\(\\boxed{7320}\\)",
+      "solutionMd": "One decoder layer has masked self-attention, cross-attention, FFN, and three layer norms:\n\n\\[\n2(2400)+2376+3(48)=7320.\n\\]\n\nThe three independent decoder layers therefore use\n\n\\[\n3\\times7320=\\boxed{21960}.\n\\]\n\n**Memory hook:** decoder = **two** attention modules + FFN + **three** norms.\n\n**Answer:** \\(\\boxed{21960}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -200,17 +200,36 @@
     {
       "id": "learning-07-capstone-q10",
       "num": "Q10",
-      "title": "Target output projection (Numeric Input)",
-      "type": "numeric",
+      "title": "Output tensor versus output parameters (MCQ)",
+      "type": "single_choice",
       "context": null,
-      "questionText": "How many parameters are in the final target-vocabulary linear layer, including bias?",
-      "bodyMd": "How many parameters are in the final target-vocabulary linear layer, including bias?\n\n*(Numeric input)*",
-      "options": [],
+      "questionText": "For \\(B=2\\), \\(T_t=4\\), and \\(V_t=120\\), which statement correctly describes the final vocabulary-logit tensor and the separate output projection's parameter count?",
+      "bodyMd": "For \\(B=2\\), \\(T_t=4\\), and \\(V_t=120\\), which statement correctly describes the final vocabulary-logit tensor and the separate output projection's parameter count?\n\n- ( ) Logits: \\(2\\times4\\times120\\) (960 scalars); projection: \\(24\\times120+120=3000\\) parameters.\n- ( ) Logits: \\(2\\times4\\times24\\) (192 scalars); projection: \\(24+120=144\\) parameters.\n- ( ) Logits: \\(2\\times6\\times120\\) (1440 scalars); projection: \\(24\\times120=2880\\) parameters.\n- ( ) Logits: \\(2\\times4\\times3\\) (24 scalars); projection: \\(3\\) parameters.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Logits: \\(2\\times4\\times120\\) (960 scalars); projection: \\(24\\times120+120=3000\\) parameters."
+        },
+        {
+          "id": "B",
+          "text": "Logits: \\(2\\times4\\times24\\) (192 scalars); projection: \\(24+120=144\\) parameters."
+        },
+        {
+          "id": "C",
+          "text": "Logits: \\(2\\times6\\times120\\) (1440 scalars); projection: \\(24\\times120=2880\\) parameters."
+        },
+        {
+          "id": "D",
+          "text": "Logits: \\(2\\times4\\times3\\) (24 scalars); projection: \\(3\\) parameters."
+        }
+      ],
       "answer": {
-        "type": "numeric",
-        "value": "3000"
+        "type": "option",
+        "value": [
+          "A"
+        ]
       },
-      "solutionMd": "The layer maps 24 features to 120 vocabulary logits:\n\n\\[\n24\\cdot120+120=3000.\n\\]\n\n**Answer:** \\(\\boxed{3000}\\)",
+      "solutionMd": "The output tensor needs one vocabulary logit per target position:\n\n\\[\n2\\times4\\times120=960.\n\\]\n\nThe shared linear layer maps each 24-dimensional state to 120 logits, with a 120-dimensional bias:\n\n\\[\n24\\times120+120=3000.\n\\]\n\nDo not multiply the parameter count by batch size or target length; the same projection is reused at every target position.\n\n**Answer:** A",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -220,17 +239,17 @@
     {
       "id": "learning-07-capstone-q11",
       "num": "Q11",
-      "title": "Generated-sequence probability (Numeric Input)",
+      "title": "Sequence probability and loss (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "A decoder assigns probabilities \\(0.5\\), then \\(0.6\\), then \\(0.8\\) to the three tokens it generates. What is the joint probability of that three-token sequence, conditioned on its prompt?",
-      "bodyMd": "A decoder assigns probabilities \\(0.5\\), then \\(0.6\\), then \\(0.8\\) to the three tokens it generates. What is the joint probability of that three-token sequence, conditioned on its prompt?\n\n*(Numeric input)*",
+      "questionText": "A decoder assigns correct-token probabilities \\(0.7\\), then \\(0.4\\), then \\(0.5\\) to a three-token continuation. What is the **summed** negative log-likelihood, rounded to three decimals?",
+      "bodyMd": "A decoder assigns correct-token probabilities \\(0.7\\), then \\(0.4\\), then \\(0.5\\) to a three-token continuation. What is the **summed** negative log-likelihood, rounded to three decimals?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "0.24"
+        "value": "1.966"
       },
-      "solutionMd": "Apply the chain rule by multiplying the conditional choices:\n\n\\[\n0.5\\times0.6\\times0.8=0.24.\n\\]\n\n**Answer:** \\(\\boxed{0.24}\\)",
+      "solutionMd": "First combine the autoregressive probabilities:\n\n\\[\n0.7\\times0.4\\times0.5=0.14.\n\\]\n\nThen take negative natural log:\n\n\\[\n-\\ln(0.14)=1.966113\\ldots\\approx1.966.\n\\]\n\nThis is a **sum** over the three next-token losses. A mean loss would divide this value by 3.\n\n**Answer:** \\(\\boxed{1.966}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -240,17 +259,17 @@
     {
       "id": "learning-07-capstone-q12",
       "num": "Q12",
-      "title": "Top-\\(k\\) in the capstone (Numeric Input)",
+      "title": "Adaptive nucleus in the capstone (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "The next-token probabilities are \\([0.60,0.25,0.15]\\). Under top-\\(k\\) sampling with \\(k=2\\), what is the renormalized probability of the first token, rounded to three decimals?",
-      "bodyMd": "The next-token probabilities are \\([0.60,0.25,0.15]\\). Under top-\\(k\\) sampling with \\(k=2\\), what is the renormalized probability of the first token, rounded to three decimals?\n\n*(Numeric input)*",
+      "questionText": "The next-token probabilities are \\([0.50,0.20,0.15,0.15]\\) in descending order. Under top-\\(p\\) sampling with \\(p=0.80\\), what is the renormalized probability of the first token, rounded to three decimals?",
+      "bodyMd": "The next-token probabilities are \\([0.50,0.20,0.15,0.15]\\) in descending order. Under top-\\(p\\) sampling with \\(p=0.80\\), what is the renormalized probability of the first token, rounded to three decimals?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "0.706"
+        "value": "0.588"
       },
-      "solutionMd": "Keep mass \\(0.60+0.25=0.85\\), then normalize the first token:\n\n\\[\n\\frac{0.60}{0.85}=0.705882\\ldots\\approx0.706.\n\\]\n\n**Answer:** \\(\\boxed{0.706}\\)",
+      "solutionMd": "The cumulative masses are \\(0.50\\), \\(0.70\\), and \\(0.85\\), so the smallest nucleus contains the first three tokens. Keep mass \\(0.85\\), then normalize the first token:\n\n\\[\n\\frac{0.50}{0.85}=0.588235\\ldots\\approx0.588.\n\\]\n\n**Answer:** \\(\\boxed{0.588}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -321,17 +340,17 @@
     {
       "id": "learning-07-capstone-q15",
       "num": "Q15",
-      "title": "Full model total (Numeric Input)",
+      "title": "Full architecture budget (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "Including source embeddings, target embeddings, one encoder layer, one decoder layer, and the target output projection, how many parameters does this model have?",
-      "bodyMd": "Including source embeddings, target embeddings, one encoder layer, one decoder layer, and the target output projection, how many parameters does this model have?\n\n*(Numeric input)*",
+      "questionText": "Including source embeddings, target embeddings, the two-layer encoder stack, the three-layer decoder stack, and the target output projection, how many parameters does this model have?",
+      "bodyMd": "Including source embeddings, target embeddings, the two-layer encoder stack, the three-layer decoder stack, and the target output projection, how many parameters does this model have?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "20472"
+        "value": "39984"
       },
-      "solutionMd": "First count the token tables:\n\n\\[\nV_sd=100(24)=2400,\\qquad V_td=120(24)=2880.\n\\]\n\nThen combine every requested component:\n\n\\[\n2400+2880+4872+7320+3000=20472.\n\\]\n\n**Final checklist:** make a component list first, count each once, and include biases only when the question says they exist.\n\n**Answer:** \\(\\boxed{20472}\\)",
+      "solutionMd": "First count the token tables:\n\n\\[\nV_sd=100(24)=2400,\\qquad V_td=120(24)=2880.\n\\]\n\nThen combine every requested component:\n\n\\[\n2400+2880+9744+21960+3000=39984.\n\\]\n\n**Final checklist:** make a component list first, multiply unshared stacks by their layer count, and count each shared vocabulary projection once.\n\n**Answer:** \\(\\boxed{39984}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,

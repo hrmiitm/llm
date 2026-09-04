@@ -238,36 +238,17 @@
     {
       "id": "learning-05-decoding-q8",
       "num": "Q8",
-      "title": "Nucleus sampling (MCQ)",
-      "type": "single_choice",
+      "title": "Nucleus sampling with changing candidate size (Numeric Input)",
+      "type": "numeric",
       "context": null,
-      "questionText": "What does top-\\(p\\) (nucleus) sampling retain before drawing a token?",
-      "bodyMd": "What does top-\\(p\\) (nucleus) sampling retain before drawing a token?\n\n- ( ) Exactly \\(p\\) vocabulary items\n- ( ) The smallest set of highest-probability tokens whose cumulative mass reaches at least \\(p\\)\n- ( ) Only the single most probable token\n- ( ) Every token with probability below \\(p\\)",
-      "options": [
-        {
-          "id": "A",
-          "text": "Exactly \\(p\\) vocabulary items"
-        },
-        {
-          "id": "B",
-          "text": "The smallest set of highest-probability tokens whose cumulative mass reaches at least \\(p\\)"
-        },
-        {
-          "id": "C",
-          "text": "Only the single most probable token"
-        },
-        {
-          "id": "D",
-          "text": "Every token with probability below \\(p\\)"
-        }
-      ],
+      "questionText": "A next-token distribution in descending order is \\([0.45,0.25,0.12,0.10,0.08]\\). Under nucleus sampling with \\(p=0.80\\), what is the renormalized probability of the first token, rounded to three decimals?",
+      "bodyMd": "A next-token distribution in descending order is \\([0.45,0.25,0.12,0.10,0.08]\\). Under nucleus sampling with \\(p=0.80\\), what is the renormalized probability of the first token, rounded to three decimals?\n\n*(Numeric input)*",
+      "options": [],
       "answer": {
-        "type": "option",
-        "value": [
-          "B"
-        ]
+        "type": "numeric",
+        "value": "0.549"
       },
-      "solutionMd": "Unlike top-\\(k\\), top-\\(p\\) adapts its candidate-set size to the shape of the distribution. A peaked distribution needs few tokens to reach \\(p\\); a flat distribution needs more.\n\n**Answer:** B",
+      "solutionMd": "1. Accumulate descending probabilities: \\(0.45\\), then \\(0.70\\), then \\(0.82\\).\n2. The smallest retained nucleus has the first three tokens because \\(0.82\\ge0.80\\).\n3. Renormalize within that set:\n\n\\[\n\\frac{0.45}{0.82}=0.54878\\ldots\\approx0.549.\n\\]\n\nUnlike top-\\(k\\), top-\\(p\\) adapts its candidate-set size to the distribution's shape. The final two tokens receive probability 0 for this draw.\n\n**Answer:** \\(\\boxed{0.549}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -277,17 +258,17 @@
     {
       "id": "learning-05-decoding-q9",
       "num": "Q9",
-      "title": "Negative log-likelihood (Numeric Input)",
+      "title": "Mean sequence negative log-likelihood (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "If the model assigns probability \\(0.1\\) to the correct next token, what is the natural-log negative log-likelihood \\(-\\ln(0.1)\\), rounded to three decimals?",
-      "bodyMd": "If the model assigns probability \\(0.1\\) to the correct next token, what is the natural-log negative log-likelihood \\(-\\ln(0.1)\\), rounded to three decimals?\n\n*(Numeric input)*",
+      "questionText": "For a three-token target continuation, the correct-token probabilities are \\(0.8\\), \\(0.5\\), and \\(0.25\\). What is the **mean** negative log-likelihood per token, rounded to three decimals?",
+      "bodyMd": "For a three-token target continuation, the correct-token probabilities are \\(0.8\\), \\(0.5\\), and \\(0.25\\). What is the **mean** negative log-likelihood per token, rounded to three decimals?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "2.303"
+        "value": "0.768"
       },
-      "solutionMd": "\\[\n-\\ln(0.1)=2.302585\\ldots\\approx2.303.\n\\]\n\nHigher probability gives lower loss; probability 1 would give loss 0.\n\n**Answer:** \\(\\boxed{2.303}\\)",
+      "solutionMd": "First obtain the sequence probability:\n\n\\[\n0.8\\times0.5\\times0.25=0.1.\n\\]\n\nThe summed negative log-likelihood is \\(-\\ln(0.1)=2.302585\\ldots\\). The question asks for the **mean** across three predicted tokens:\n\n\\[\n\\frac{2.302585}{3}=0.767528\\ldots\\approx0.768.\n\\]\n\nHigher correct-token probability gives lower loss; always check whether a prompt wants a sum or a mean.\n\n**Answer:** \\(\\boxed{0.768}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -339,14 +320,14 @@
       "title": "Exhaustive-search growth (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "With vocabulary size \\(V=3\\), how many distinct nonempty prefixes exist through generation length 3: all length-1, length-2, and length-3 candidates combined?",
-      "bodyMd": "With vocabulary size \\(V=3\\), how many distinct nonempty prefixes exist through generation length 3: all length-1, length-2, and length-3 candidates combined?\n\n*(Numeric input)*",
+      "questionText": "With vocabulary size \\(V=4\\), how many distinct nonempty prefixes exist through generation length 4: all length-1 through length-4 candidates combined?",
+      "bodyMd": "With vocabulary size \\(V=4\\), how many distinct nonempty prefixes exist through generation length 4: all length-1 through length-4 candidates combined?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "39"
+        "value": "340"
       },
-      "solutionMd": "There are \\(3\\) length-1 prefixes, \\(3^2=9\\) length-2 prefixes, and \\(3^3=27\\) length-3 prefixes:\n\n\\[\n3+9+27=39.\n\\]\n\nThis exponential growth is why exact search becomes impractical for realistic vocabularies and lengths.\n\n**Answer:** \\(\\boxed{39}\\)",
+      "solutionMd": "There are \\(4\\) length-1 prefixes, \\(4^2=16\\) length-2 prefixes, \\(4^3=64\\) length-3 prefixes, and \\(4^4=256\\) length-4 prefixes:\n\n\\[\n4+16+64+256=340.\n\\]\n\nThis exponential growth is why exact search becomes impractical for realistic vocabularies and lengths.\n\n**Answer:** \\(\\boxed{340}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -456,36 +437,38 @@
     {
       "id": "learning-05-decoding-q15",
       "num": "Q15",
-      "title": "Final decision guide (MCQ)",
-      "type": "single_choice",
+      "title": "Beam-search checkpoint (MSQ)",
+      "type": "multiple_select",
       "context": null,
-      "questionText": "You need a fast, repeatable baseline output rather than variety. Which decoding strategy is the most direct fit?",
-      "bodyMd": "You need a fast, repeatable baseline output rather than variety. Which decoding strategy is the most direct fit?\n\n- ( ) Greedy decoding\n- ( ) Nucleus sampling with random draws\n- ( ) Exhaustive search over all unbounded sequences\n- ( ) Masked-language modeling",
+      "questionText": "Use the two-step model from Q1–Q5. A beam search has width 2 and ranks candidates by joint probability without length normalization. Which statements are correct?",
+      "bodyMd": "Use the two-step model from Q1–Q5. A beam search has width 2 and ranks candidates by joint probability without length normalization. Which statements are correct?\n\n- ( ) After step 1, the beam keeps both prefixes \\(A\\) and \\(B\\).\n- ( ) After expanding step 2, \\((B,C)\\) is retained because its joint probability is \\(0.36\\).\n- ( ) Greedy's sequence \\((A,C)\\) is guaranteed to be the only sequence retained by this beam.\n- ( ) A finite-width beam is more exploratory than greedy but is not a universal guarantee of the global optimum for arbitrary problems.",
       "options": [
         {
           "id": "A",
-          "text": "Greedy decoding"
+          "text": "After step 1, the beam keeps both prefixes \\(A\\) and \\(B\\)."
         },
         {
           "id": "B",
-          "text": "Nucleus sampling with random draws"
+          "text": "After expanding step 2, \\((B,C)\\) is retained because its joint probability is \\(0.36\\)."
         },
         {
           "id": "C",
-          "text": "Exhaustive search over all unbounded sequences"
+          "text": "Greedy's sequence \\((A,C)\\) is guaranteed to be the only sequence retained by this beam."
         },
         {
           "id": "D",
-          "text": "Masked-language modeling"
+          "text": "A finite-width beam is more exploratory than greedy but is not a universal guarantee of the global optimum for arbitrary problems."
         }
       ],
       "answer": {
         "type": "option",
         "value": [
-          "A"
+          "A",
+          "B",
+          "D"
         ]
       },
-      "solutionMd": "Greedy chooses the highest-probability next token at every step, so it is simple, fast, and deterministic under a fixed tie rule. It is a baseline—not a guarantee of globally optimal or best-quality text.\n\n**Answer:** A",
+      "solutionMd": "At step 1, width 2 keeps both available prefixes. At step 2, the four joint probabilities are \\(0.30,0.30,0.36,0.04\\), so \\((B,C)\\) is retained and one of the tied \\(A\\) continuations occupies the other slot. Greedy's output is therefore not the only retained candidate.\n\nA beam can recover paths that greedy prunes, but a narrow beam can still discard a future-winning prefix in a larger search tree.\n\n**Answer:** A, B and D",
       "marks": {
         "correct": 1,
         "incorrect": 0,

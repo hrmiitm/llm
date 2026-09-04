@@ -6,7 +6,7 @@ Understand why a decoder-only model needs positions and a causal mask, then conn
 
 ![Causal-mask pattern](assets/causal-mask.svg)
 
-For numerical questions, use a GPT-style layer with sequence length \(T=5\), \(d_{\text{model}}=128\), and \(h=4\) heads.
+For numerical questions, use a GPT-style layer with sequence length \(T=5\), \(d_{\text{model}}=128\), and \(h=4\) heads. When stated, use batch size \(B=2\).
 
 ### Q1 — Why positions? (MCQ)
 
@@ -62,24 +62,30 @@ There are 64 sine coordinates equal to 0 and 64 cosine coordinates equal to 1:
 **Answer:** \(\boxed{64}\)
 </details>
 
-### Q4 — Future cells in a causal mask (Numeric Input)
+### Q4 — Masked scores across a real layer (Numeric Input)
 
-For \(T=5\), how many entries lie strictly above the main diagonal and must be blocked in a left-to-right causal attention mask?
+For \(B=2\), \(h=4\), and \(T=5\), how many raw self-attention score cells are blocked because they point strictly into the future?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
-The blocked future cells are
+For one head and one sequence, the blocked future cells are
 
 \[
 1+2+3+4=\frac{5(5-1)}2=10.
 \]
 
-The diagonal remains visible: a token may attend to itself.
+That triangular mask is repeated for each of 2 batch items and 4 heads:
 
-**Answer:** \(\boxed{10}\)
+\[
+2\times4\times10=\boxed{80}.
+\]
+
+The diagonal remains visible: a token may attend to itself. Do not count a masked location once per feature dimension—the mask acts on score cells, not on \(d_h\) coordinates.
+
+**Answer:** \(\boxed{80}\)
 </details>
 
 ### Q5 — Mask shape (MCQ)
@@ -99,22 +105,30 @@ Every query position needs a permission decision for every key position, produci
 **Answer:** B
 </details>
 
-### Q6 — Visible history (Numeric Input)
+### Q6 — Total visible causal history (Numeric Input)
 
-Using zero-based positions \(0,1,2,3,4\), how many key positions may query position \(3\) attend to in standard left-to-right causal attention?
+Across all 5 query positions, 4 heads, and 2 batch items, how many causal self-attention score cells remain **allowed** (including the diagonal)?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
-It may see positions \(0,1,2,3\): all past tokens plus itself.
+For one sequence and one head, query positions may see \(1,2,3,4,5\) keys respectively. The lower triangle therefore contains
 
 \[
-3+1=4.
+1+2+3+4+5=\frac{5(5+1)}2=15
 \]
 
-**Answer:** \(\boxed{4}\)
+allowed cells. Multiply by 4 heads and 2 examples:
+
+\[
+2\times4\times15=\boxed{120}.
+\]
+
+As a check, allowed plus blocked is \(120+80=200=2\times4\times5^2\), the full score-tensor size.
+
+**Answer:** \(\boxed{120}\)
 </details>
 
 ### Q7 — Right-to-left text (MCQ)
@@ -151,27 +165,29 @@ GPT is a decoder-only transformer. Its self-attention is masked so each position
 **Answer:** B
 </details>
 
-### Q9 — Causal-language-model target (MCQ)
+### Q9 — Shifted labels with special tokens (MCQ)
 
-For the token sequence \([x_1,x_2,x_3,x_4]\), what is the usual next-token prediction target at the position containing \(x_2\)?
+Teacher-forced input is \([\text{BOS},x_1,x_2,x_3]\) and the desired continuation is \([x_1,x_2,x_3,\text{EOS}]\). What is the training target for the state at the input position containing \(x_3\)?
 
-- ( ) \(x_1\)
 - ( ) \(x_2\)
 - ( ) \(x_3\)
-- ( ) All vocabulary tokens at once
+- ( ) \(\text{BOS}\)
+- ( ) \(\text{EOS}\)
 
 <details>
 <summary>Solution</summary>
 
-Causal language modeling shifts the labels one step left:
+Causal language modeling shifts the labels by one place:
 
 \[
-P(x_1,x_2,x_3,x_4)=\prod_t P(x_t\mid x_{<t}).
+\text{input: }[\text{BOS},x_1,x_2,x_3]
+\quad\longrightarrow\quad
+\text{labels: }[x_1,x_2,x_3,\text{EOS}].
 \]
 
-The state at \(x_2\)'s position is trained to predict the next token \(x_3\).
+The final content-token state is trained to predict the stop token, \(\text{EOS}\). Including EOS teaches the model when a sequence should end.
 
-**Answer:** C
+**Answer:** D
 </details>
 
 ### Q10 — Training and inference (MSQ)
@@ -208,20 +224,30 @@ Every vocabulary logit participates in softmax normalization. With tied weights,
 **Answer:** B
 </details>
 
-### Q12 — Per-head width (Numeric Input)
+### Q12 — Attention scale (Numeric Input)
 
-What is \(d_h\) for \(d_{\text{model}}=128\) and \(h=4\)?
+For \(d_{\text{model}}=128\) and \(h=4\), what is the scale divisor \(\sqrt{d_h}\) in scaled dot-product attention, rounded to three decimals?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
+First find a head's width:
+
 \[
 d_h=\frac{128}{4}=32.
 \]
 
-**Answer:** \(\boxed{32}\)
+Then use the score scale:
+
+\[
+\sqrt{d_h}=\sqrt{32}\approx5.657.
+\]
+
+This division regulates the magnitude of QK scores before softmax; it does not change the number of heads or tokens.
+
+**Answer:** \(\boxed{5.657}\)
 </details>
 
 ### Q13 — Pretraining and fine-tuning (MSQ)
@@ -259,19 +285,21 @@ All entries with \(j>i\) receive a very negative score before softmax, making th
 **Answer:** `j ≤ i`
 </details>
 
-### Q15 — One-sentence checkpoint (MCQ)
+### Q15 — Debug a generation claim (MSQ)
 
-Which statement best summarizes the GPT learning loop?
+A student says: “At generation step 4, GPT can use the true step-5 word because it saw it during teacher-forced training.” Which corrections are valid?
 
-- ( ) Read every future token, then classify the first token
-- ( ) Use a causal prefix to predict the next token, then append the chosen token at generation time
-- ( ) Encode source tokens with unrestricted attention only
-- ( ) Replace all probabilities with a fixed lookup table
+- ( ) At inference, there is no true future word available to provide.
+- ( ) The causal mask prevents step 4 from reading a later token even if a full training sequence is present.
+- ( ) The token generated at step 4 becomes part of the prefix used at step 5.
+- ( ) Teacher forcing makes a future-token leak correct at inference.
 
 <details>
 <summary>Solution</summary>
 
-GPT learns a probability distribution for the next token from a causal prefix. At generation time, it selects or samples a token and extends the prefix, repeating the same operation.
+Teacher forcing is a training convenience: it supplies known earlier ground-truth tokens and scores shifted labels in parallel. The causal mask still blocks future positions. At inference, the model has only the prompt and its own earlier generated tokens.
 
-**Answer:** B
+**Memory hook:** training can be parallel; generation is a **prefix loop**.
+
+**Answer:** A, B and C
 </details>

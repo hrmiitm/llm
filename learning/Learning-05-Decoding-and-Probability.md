@@ -153,39 +153,52 @@ The discarded token receives probability 0 for this sampling step.
 **Answer:** \(\boxed{0.625}\)
 </details>
 
-### Q8 — Nucleus sampling (MCQ)
+### Q8 — Nucleus sampling with changing candidate size (Numeric Input)
 
-What does top-\(p\) (nucleus) sampling retain before drawing a token?
-
-- ( ) Exactly \(p\) vocabulary items
-- ( ) The smallest set of highest-probability tokens whose cumulative mass reaches at least \(p\)
-- ( ) Only the single most probable token
-- ( ) Every token with probability below \(p\)
-
-<details>
-<summary>Solution</summary>
-
-Unlike top-\(k\), top-\(p\) adapts its candidate-set size to the shape of the distribution. A peaked distribution needs few tokens to reach \(p\); a flat distribution needs more.
-
-**Answer:** B
-</details>
-
-### Q9 — Negative log-likelihood (Numeric Input)
-
-If the model assigns probability \(0.1\) to the correct next token, what is the natural-log negative log-likelihood \(-\ln(0.1)\), rounded to three decimals?
+A next-token distribution in descending order is \([0.45,0.25,0.12,0.10,0.08]\). Under nucleus sampling with \(p=0.80\), what is the renormalized probability of the first token, rounded to three decimals?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
+1. Accumulate descending probabilities: \(0.45\), then \(0.70\), then \(0.82\).
+2. The smallest retained nucleus has the first three tokens because \(0.82\ge0.80\).
+3. Renormalize within that set:
+
 \[
--\ln(0.1)=2.302585\ldots\approx2.303.
+\frac{0.45}{0.82}=0.54878\ldots\approx0.549.
 \]
 
-Higher probability gives lower loss; probability 1 would give loss 0.
+Unlike top-\(k\), top-\(p\) adapts its candidate-set size to the distribution's shape. The final two tokens receive probability 0 for this draw.
 
-**Answer:** \(\boxed{2.303}\)
+**Answer:** \(\boxed{0.549}\)
+</details>
+
+### Q9 — Mean sequence negative log-likelihood (Numeric Input)
+
+For a three-token target continuation, the correct-token probabilities are \(0.8\), \(0.5\), and \(0.25\). What is the **mean** negative log-likelihood per token, rounded to three decimals?
+
+*(Numeric input)*
+
+<details>
+<summary>Solution</summary>
+
+First obtain the sequence probability:
+
+\[
+0.8\times0.5\times0.25=0.1.
+\]
+
+The summed negative log-likelihood is \(-\ln(0.1)=2.302585\ldots\). The question asks for the **mean** across three predicted tokens:
+
+\[
+\frac{2.302585}{3}=0.767528\ldots\approx0.768.
+\]
+
+Higher correct-token probability gives lower loss; always check whether a prompt wants a sum or a mean.
+
+**Answer:** \(\boxed{0.768}\)
 </details>
 
 ### Q10 — Why use log probabilities? (MCQ)
@@ -211,22 +224,22 @@ Because log is increasing, maximizing a product is equivalent to maximizing the 
 
 ### Q11 — Exhaustive-search growth (Numeric Input)
 
-With vocabulary size \(V=3\), how many distinct nonempty prefixes exist through generation length 3: all length-1, length-2, and length-3 candidates combined?
+With vocabulary size \(V=4\), how many distinct nonempty prefixes exist through generation length 4: all length-1 through length-4 candidates combined?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
-There are \(3\) length-1 prefixes, \(3^2=9\) length-2 prefixes, and \(3^3=27\) length-3 prefixes:
+There are \(4\) length-1 prefixes, \(4^2=16\) length-2 prefixes, \(4^3=64\) length-3 prefixes, and \(4^4=256\) length-4 prefixes:
 
 \[
-3+9+27=39.
+4+16+64+256=340.
 \]
 
 This exponential growth is why exact search becomes impractical for realistic vocabularies and lengths.
 
-**Answer:** \(\boxed{39}\)
+**Answer:** \(\boxed{340}\)
 </details>
 
 ### Q12 — Sampling trade-offs (MSQ)
@@ -279,19 +292,21 @@ Each new token conditions on the prefix already generated.
 **Answer:** `P(x1) P(x2 | x1) P(x3 | x1, x2)`
 </details>
 
-### Q15 — Final decision guide (MCQ)
+### Q15 — Beam-search checkpoint (MSQ)
 
-You need a fast, repeatable baseline output rather than variety. Which decoding strategy is the most direct fit?
+Use the two-step model from Q1–Q5. A beam search has width 2 and ranks candidates by joint probability without length normalization. Which statements are correct?
 
-- ( ) Greedy decoding
-- ( ) Nucleus sampling with random draws
-- ( ) Exhaustive search over all unbounded sequences
-- ( ) Masked-language modeling
+- ( ) After step 1, the beam keeps both prefixes \(A\) and \(B\).
+- ( ) After expanding step 2, \((B,C)\) is retained because its joint probability is \(0.36\).
+- ( ) Greedy's sequence \((A,C)\) is guaranteed to be the only sequence retained by this beam.
+- ( ) A finite-width beam is more exploratory than greedy but is not a universal guarantee of the global optimum for arbitrary problems.
 
 <details>
 <summary>Solution</summary>
 
-Greedy chooses the highest-probability next token at every step, so it is simple, fast, and deterministic under a fixed tie rule. It is a baseline—not a guarantee of globally optimal or best-quality text.
+At step 1, width 2 keeps both available prefixes. At step 2, the four joint probabilities are \(0.30,0.30,0.36,0.04\), so \((B,C)\) is retained and one of the tied \(A\) continuations occupies the other slot. Greedy's output is therefore not the only retained candidate.
 
-**Answer:** A
+A beam can recover paths that greedy prunes, but a narrow beam can still discard a future-winning prefix in a larger search tree.
+
+**Answer:** A, B and D
 </details>

@@ -78,21 +78,27 @@ So the summed loss is about \(2.079\). If an objective asks for a mean, divide b
 **Answer:** \(\boxed{2.079}\)
 </details>
 
-### Q5 — Which positions contribute? (MCQ)
+### Q5 — MLM context versus MLM targets (MSQ)
 
-Under the standard simplified MLM loss, which positions contribute directly to the prediction loss?
+The corrupted input is `[CLS] the [MASK] sat [MASK] [SEP]`; the two selected original targets are `cat` and `down`. Under the standard simplified MLM loss, which statements are correct?
 
-- ( ) Only the positions selected for masking/corruption
-- ( ) Every position equally, whether selected or not
-- ( ) Only the `[CLS]` position
-- ( ) No positions; MLM has no loss
+- ( ) There are two direct token-prediction loss terms.
+- ( ) `the` and `sat` can influence the predictions through encoder attention even though they are not direct targets.
+- ( ) The `[CLS]` position receives an MLM loss term merely because it exists in the input.
+- ( ) The model should predict the literal token `[MASK]` as the target at both selected positions.
 
 <details>
 <summary>Solution</summary>
 
-The model processes the whole corrupted sequence, but the usual MLM objective computes token-prediction loss at the selected target positions. Their surrounding unmasked tokens still help provide context through attention.
+The model processes every input position, so unmasked context words can provide evidence to the masked positions. But the simplified MLM objective sums only over the two selected locations:
 
-**Answer:** A
+\[
+\mathcal L=-\log P(\texttt{cat}\mid\tilde x)-\log P(\texttt{down}\mid\tilde x).
+\]
+
+`[MASK]` is an input corruption marker, not the label the model is supposed to recover.
+
+**Answer:** A and B
 </details>
 
 ### Q6 — `[CLS]` representation (MCQ)
@@ -129,25 +135,30 @@ What does `[SEP]` commonly mark in BERT-style inputs?
 **Answer:** A
 </details>
 
-### Q8 — Sentence-pair layout (MCQ)
+### Q8 — Sentence-pair representation size (Numeric Input)
 
-Which is a typical BERT input layout for two text segments A and B?
+Segment A has 3 wordpiece tokens and segment B has 2. Using `[CLS] A [SEP] B [SEP]` with \(d_{\text{model}}=16\), how many scalar values are in the one-example input representation before the first encoder layer?
 
-- ( ) `[CLS] A [SEP] B [SEP]`
-- ( ) `A B [MASK]` only
-- ( ) `[CLS] A B` with no boundary signal ever
-- ( ) `B [CLS] A [PAD]` only
+*(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
-The `[CLS]` token supplies a pooled classification location, and `[SEP]` provides segment boundaries:
+First count positions: one `[CLS]`, 3 A tokens, one separator, 2 B tokens, and a final separator:
 
 \[
-[\text{CLS}]\;A\;[\text{SEP}]\;B\;[\text{SEP}].
+1+3+1+2+1=8.
 \]
 
-**Answer:** A
+Each position has 16 features after token, position, and segment/type signals are combined:
+
+\[
+8\times16=\boxed{128}.
+\]
+
+The segment embedding tells A and B apart; it does not add another tensor axis.
+
+**Answer:** \(\boxed{128}\)
 </details>
 
 ### Q9 — BERT versus GPT (MSQ)
@@ -184,22 +195,30 @@ For a masked word in “The bank of the river,” context on both sides helps re
 **Answer:** A
 </details>
 
-### Q11 — Classification logits (Numeric Input)
+### Q11 — Classification-head parameters (Numeric Input)
 
-Suppose the final `[CLS]` vector has width \(d_{\text{model}}=16\) and a classifier predicts 3 classes. How many logits does the classifier output for one example?
+Suppose the final `[CLS]` vector has width \(d_{\text{model}}=16\) and a classifier predicts 3 classes. How many trainable parameters are in its linear classifier head, including bias?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
-One logit is produced per class, independent of hidden width after the linear map:
+The classifier maps 16 features to 3 logits:
 
 \[
-W_{\text{cls}}\in\mathbb{R}^{16\times3}\quad\Rightarrow\quad 3\text{ logits}.
+W_{\text{cls}}\in\mathbb{R}^{16\times3}.
 \]
 
-**Answer:** \(\boxed{3}\)
+That gives \(16\times3=48\) weights and 3 bias values:
+
+\[
+48+3=\boxed{51}.
+\]
+
+The head emits 3 logits per example, but the question asks for its parameter count.
+
+**Answer:** \(\boxed{51}\)
 </details>
 
 ### Q12 — Special-input information (MSQ)
@@ -252,19 +271,19 @@ The conditioning sequence \(\tilde{x}\) includes the corrupted input; the target
 **Answer:** `-sum_{i in M} log P(x_i | x_tilde)`
 </details>
 
-### Q15 — Model-selection checkpoint (MCQ)
+### Q15 — Design a review classifier (MSQ)
 
-Which model family is the more direct starting point for classifying whether a review is positive or negative using a pooled sentence representation?
+You are building a three-class review classifier with a BERT-style encoder. Which design choices are appropriate?
 
-- ( ) BERT-style encoder model with a classifier head
-- ( ) GPT decoding with random sampling only
-- ( ) Exhaustive sequence search only
-- ( ) A causal mask with no learned model
+- ( ) Start the input with `[CLS]` and feed its final contextual vector to a 3-logit classifier head.
+- ( ) During supervised classification fine-tuning, compare the 3 logits with the review's class label using a classification loss.
+- ( ) Sample a free-form continuation from the vocabulary as the only way to obtain the class.
+- ( ) Keep positional information so the encoder can distinguish different word orders.
 
 <details>
 <summary>Solution</summary>
 
-A BERT-style encoder produces contextual token representations and a `[CLS]` representation that can feed a classification head. A generative model can be adapted to classification too, but BERT's setup is the direct conceptual match here.
+A BERT-style encoder gives every token, including `[CLS]`, bidirectional contextual information. The classifier head converts the final `[CLS]` vector to class logits; a supervised classification loss teaches which logit should be largest. Positions remain necessary because “not good” and “good, not …” are not interchangeable word orders.
 
-**Answer:** A
+**Answer:** A, B and D
 </details>

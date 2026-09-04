@@ -77,24 +77,27 @@ Apply softmax across the row:
 **Answer:** \(\boxed{0.731}\)
 </details>
 
-### Q4 — Probability check (Numeric Input)
+### Q4 — A mask changes the softmax support (Numeric Input)
 
-What must the two attention weights in any one softmax row add up to?
+A query has raw scores \([2,1,-3]\). The third key is a forbidden future token and is replaced by \(-\infty\) before softmax. What attention weight does that third key receive?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
-If \(\alpha_j=\frac{e^{s_j}}{\sum_m e^{s_m}}\), then
+1. Apply the mask to the scores:
 
 \[
-\sum_j\alpha_j=\frac{\sum_j e^{s_j}}{\sum_m e^{s_m}}=1.
+\operatorname{softmax}([2,1,-\infty]).
 \]
 
-**Memory hook:** softmax makes a *spotlight budget*: all of the light totals 1.
+2. The masked position contributes \(e^{-\infty}=0\) to the numerator and denominator.
+3. Its normalized attention weight is therefore \(0\), while the first two unmasked weights still sum to 1.
 
-**Answer:** \(\boxed{1}\)
+**Memory hook:** mask **before** softmax; forbidden means **zero attention**.
+
+**Answer:** \(\boxed{0}\)
 </details>
 
 ### Q5 — Weighted value sum (Numeric Input)
@@ -175,22 +178,25 @@ For finite scores, exponentials are positive, so every softmax weight is positiv
 **Answer:** A, B and C
 </details>
 
-### Q9 — Equal scores (Numeric Input)
+### Q9 — Stable softmax and score shifts (Numeric Input)
 
-If a query has two unmasked keys with equal scores \([3,3]\), what attention weight does each key receive?
+A three-key attention row has raw scores \([9,7,5]\). A stable implementation subtracts the maximum, giving \([0,-2,-4]\), before softmax. What is the first key's attention weight, rounded to three decimals?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
+Subtracting the same constant from every score does not change softmax probabilities. Compute from the stable row:
+
 \[
-\frac{e^3}{e^3+e^3}=\frac12=0.5.
+\alpha_1=\frac{e^0}{e^0+e^{-2}+e^{-4}}
+=\frac{1}{1+0.1353+0.0183}=0.8668\ldots
 \]
 
-The absolute score does not matter here; equality makes the split even.
+The subtraction prevents overflow while preserving the attention distribution.
 
-**Answer:** \(\boxed{0.5}\)
+**Answer:** \(\boxed{0.867}\)
 </details>
 
 ### Q10 — Self-attention or cross-attention? (MCQ)
@@ -227,25 +233,27 @@ Each target position asks one query, so \(Q\) has \(T_t\) rows. Each source posi
 **Answer:** A, B and C
 </details>
 
-### Q12 — Highest dot product (MCQ)
+### Q12 — Masked scaled-attention forward pass (Numeric Input)
 
-A query is \([1,1]\). Its two keys are \([1,0]\) and \([0,2]\). Which key gets the higher raw score?
+Let \(q=[1,2]\), \(k_1=[2,0]\), \(k_2=[0,1]\), \(k_3=[1,1]\), and \(v_1=[2,0]\), \(v_2=[0,4]\), \(v_3=[9,9]\). Use \(d_k=2\), but mask \(k_3,v_3\) as a future token. What is the **second coordinate** of the attention output?
 
-- ( ) The first key
-- ( ) The second key
-- ( ) They tie
-- ( ) Neither; dot products cannot be used as attention scores
+*(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
+1. Compute raw scores: \(q\cdot k_1=2\), \(q\cdot k_2=2\), and \(q\cdot k_3=3\).
+2. Scaling by \(\sqrt2\) preserves the tie between the two unmasked keys. The mask removes the otherwise-largest third score.
+3. Softmax over the two equal allowed scores gives weights \([0.5,0.5,0]\).
+4. Mix values, not keys:
+
 \[
-[1,1]\cdot[1,0]=1,\qquad [1,1]\cdot[0,2]=2.
+0.5[2,0]+0.5[0,4]+0[9,9]=[1,2].
 \]
 
-The second key is more aligned with this query.
+The requested second coordinate is 2.
 
-**Answer:** B
+**Answer:** \(\boxed{2}\)
 </details>
 
 ### Q13 — The attention recipe (Short Answer)
@@ -281,19 +289,19 @@ Queries and keys decide *where* to look. Values are the payload that gets combin
 **Answer:** C
 </details>
 
-### Q15 — Attention checkpoint (MSQ)
+### Q15 — Shape-and-mask checkpoint (MSQ)
 
-Choose every correct statement.
+For causal self-attention with \(B=2\), \(h=3\), \(T=4\), and \(d_h=8\), choose every correct statement.
 
-- ( ) Each attention row belongs to one query position.
-- ( ) A causal mask may remove some keys before softmax.
-- ( ) Attention weights tell us how the value vectors are mixed.
-- ( ) Attention changes the sequence length by definition.
+- ( ) The score tensor has shape \(2\times3\times4\times4\).
+- ( ) After concatenating all heads, the attention output has shape \(2\times4\times24\) before the output projection.
+- ( ) The causal mask blocks \(2\times3\times\frac{4(4-1)}2=36\) score cells.
+- ( ) Causal attention must reduce the query sequence length from 4 to 3.
 
 <details>
 <summary>Solution</summary>
 
-Attention preserves the number of query rows: a self-attention layer with \(T\) queries produces \(T\) output rows. A mask can make forbidden scores effectively \(-\infty\), giving them zero probability after softmax. The remaining weights mix values.
+The first two axes are batch and head; every head makes a \(T\times T\) score table. Concatenating 3 heads of width 8 gives model width \(3\times8=24\). The causal upper triangle has 6 forbidden cells per head/example, hence 36 total. Attention preserves the 4 query positions.
 
 **Answer:** A, B and C
 </details>

@@ -35,58 +35,62 @@ d_h=\frac{d_{\text{model}}}{h}=\frac{32}{4}=8.
 **Answer:** \(\boxed{8}\)
 </details>
 
-### Q2 — One head's query shape (Short Answer)
+### Q2 — Batched head projection shape (Short Answer)
 
-For a sequence of 5 tokens, what is the shape of the projected query matrix for one head?
+For a batch of 3 sequences of length 5, what is the shape of the projected query tensor for **one** head? Use batch-first order.
 
 <details>
 <summary>Solution</summary>
 
-There is one query row per token and \(d_h=8\) features per head:
+There is one query row per token, \(d_h=8\) features per head, and one such matrix for each batch item:
 
 \[
-Q_{\text{one head}}\in\mathbb{R}^{5\times8}.
+Q_{\text{one head}}\in\mathbb{R}^{3\times5\times8}.
 \]
 
-**Answer:** `5 × 8`
+If all heads are kept in one tensor, an additional head axis would give \(3\times4\times5\times8\). The question asks for a single head, so omit that axis.
+
+**Answer:** `3 × 5 × 8`
 </details>
 
-### Q3 — Self-attention score cells (Numeric Input)
+### Q3 — Batched multi-head self-attention work (Numeric Input)
 
-For a five-token self-attention sequence, how many score cells does one head have before masking?
+For the batch of 3 five-token sequences and 4 heads, how many raw self-attention score cells are formed before masking?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
-Self-attention compares every query token with every key token:
+Each head in each example compares every query token with every key token:
 
 \[
-T\times T=5\times5=25.
+ B\times h\times T^2=3\times4\times5^2=300.
 \]
 
-**Answer:** \(\boxed{25}\)
+This counts score cells, not the \(d_h\)-length dot-product multiplications used to produce them.
+
+**Answer:** \(\boxed{300}\)
 </details>
 
-### Q4 — Cross-attention score cells (Numeric Input)
+### Q4 — Batched cross-attention score cells (Numeric Input)
 
-If the decoder has 4 target tokens and the encoder has 5 source tokens, how many scores does one cross-attention head form?
+For the same batch size and 4 heads, if the decoder has 4 target tokens and the encoder has 5 source tokens, how many cross-attention scores are formed before masking?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
-Cross-attention has a query for each target token and a key for each source token:
+Cross-attention has a query for each target token and a key for each source token, for every head and batch example:
 
 \[
-T_t\times T_s=4\times5=20.
+B\times h\times T_t\times T_s=3\times4\times4\times5=240.
 \]
 
-The score table is rectangular when source and target lengths differ.
+The per-head score table is \(4\times5\), so it is rectangular; the batch and head axes multiply the count.
 
-**Answer:** \(\boxed{20}\)
+**Answer:** \(\boxed{240}\)
 </details>
 
 ### Q5 — Multi-head attention parameters (Numeric Input)
@@ -135,68 +139,82 @@ The FFN expands then contracts:
 **Answer:** \(\boxed{4192}\)
 </details>
 
-### Q7 — Layer norm parameters (Numeric Input)
+### Q7 — Encoder normalization parameters (Numeric Input)
 
-How many trainable parameters are in one layer-normalization module over \(d_{\text{model}}=32\)?
+How many trainable parameters are used by the **two** layer-normalization modules in one encoder layer?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
-Layer norm learns a scale \(\gamma\) and offset \(\beta\) for each feature:
+One layer norm learns a scale \(\gamma\) and offset \(\beta\) for each feature:
 
 \[
 2d_{\text{model}}=2\cdot32=64.
 \]
 
-Do not confuse these with batch-normalization statistics; layer norm operates across features of each example/token.
+The encoder has two of them, so \(2\times64=128\). Do not confuse these with batch-normalization statistics; layer norm operates across features of each example/token.
 
-**Answer:** \(\boxed{64}\)
+**Answer:** \(\boxed{128}\)
 </details>
 
-### Q8 — Encoder-layer total (Numeric Input)
+### Q8 — Two-layer encoder stack (Numeric Input)
 
-An encoder layer has one MHA module, one FFN, and two layer norms. How many parameters does this encoder layer have?
+How many parameters are in a **two-layer encoder stack**, assuming both layers use the stated dimensions but do not share weights?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
+First count one encoder layer:
+
 \[
-\text{encoder}=4224+4192+2(64)=8544.
+4224+4192+128=8544.
+\]
+
+The two layers have independent parameters, so
+
+\[
+2\times8544=17088.
 \]
 
 Residual connections add activations but no trainable parameters.
 
-**Answer:** \(\boxed{8544}\)
+**Answer:** \(\boxed{17088}\)
 </details>
 
-### Q9 — Decoder-layer total (Numeric Input)
+### Q9 — Three-layer decoder stack (Numeric Input)
 
-A decoder layer has masked self-attention, cross-attention, one FFN, and three layer norms. How many parameters does it have?
+How many parameters are in a **three-layer decoder stack**, assuming independent parameters in each layer?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
-It contains two MHA modules:
+First count one decoder layer. It contains two MHA modules:
 
 \[
 \text{decoder}=2(4224)+4192+3(64)
 =8448+4192+192=12832.
 \]
 
+Then multiply by the three unshared layers:
+
+\[
+3\times12832=38496.
+\]
+
 **Mnemonic:** encoder: one attention; decoder: **self + source** attention.
 
-**Answer:** \(\boxed{12832}\)
+**Answer:** \(\boxed{38496}\)
 </details>
 
-### Q10 — Embedding tables (Numeric Input)
+### Q10 — All vocabulary-facing parameters (Numeric Input)
 
-How many parameters are in the separate source and target token embedding tables together?
+How many parameters are in the source embedding table, target embedding table, and separate target output projection (including its bias) together?
 
 *(Numeric input)*
 
@@ -210,25 +228,37 @@ V_s d_{\text{model}} + V_t d_{\text{model}}
 =100(32)+120(32)=7040.
 \]
 
-**Answer:** \(\boxed{7040}\)
+The untied output layer contributes
+
+\[
+32(120)+120=3960.
+\]
+
+Therefore the vocabulary-facing total is \(7040+3960=11000\). This total would be smaller if target input/output weights were tied.
+
+**Answer:** \(\boxed{11000}\)
 </details>
 
-### Q11 — Output projection (Numeric Input)
+### Q11 — Weight tying changes the budget (Numeric Input)
 
-How many parameters are in the target vocabulary output layer, including its bias, if it maps \(32\) features to \(V_t=120\) logits?
+In a **hypothetical tied-weight variant**, the target input embedding matrix is reused as the target output projection matrix; the source embedding remains separate and the target output bias remains. How many vocabulary-facing parameters does this tied variant have?
 
 *(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
+1. Source embedding: \(100\times32=3200\).
+2. One shared target embedding/output matrix: \(120\times32=3840\).
+3. Output bias: \(120\).
+
 \[
-d_{\text{model}}V_t+V_t=32(120)+120=3960.
+3200+3840+120=\boxed{7160}.
 \]
 
-Its output is one logit for every possible next target token.
+Compare this with Q10's untied \(11000\): tying removes one duplicate \(32\times120\) target matrix, but not the output bias.
 
-**Answer:** \(\boxed{3960}\)
+**Answer:** \(\boxed{7160}\)
 </details>
 
 ### Q12 — What has parameters? (MSQ)
@@ -290,20 +320,30 @@ where \(\sigma\) is the nonlinearity. It processes each token position independe
 **Answer:** A
 </details>
 
-### Q15 — Decoder count formula (Short Answer)
+### Q15 — Architecture budget checkpoint (Numeric Input)
 
-Write the component-level parameter formula for one decoder layer, using the symbols MHA, FFN, and LN.
+Combine the two-layer encoder stack, three-layer decoder stack, and all vocabulary-facing parameters from Q8–Q10. What is the model's total trainable parameter count under the assumptions in this assignment?
+
+*(Numeric input)*
 
 <details>
 <summary>Solution</summary>
 
-The decoder contains masked self-attention, cross-attention, an FFN, and three layer norms:
+Keep the three disjoint groups separate before adding:
 
 \[
-2\operatorname{MHA}+\operatorname{FFN}+3\operatorname{LN}.
+\underbrace{17088}_{\text{two encoder layers}}
++\underbrace{38496}_{\text{three decoder layers}}
++\underbrace{11000}_{\text{embeddings + output}}.
 \]
 
-Use this structure before inserting any dimensions; it prevents double-counting or missing cross-attention.
+Thus
 
-**Answer:** `2 MHA + FFN + 3 LN`
+\[
+17088+38496+11000=\boxed{66584}.
+\]
+
+**Check:** the output layer is included once in Q10; do not accidentally add it again.
+
+**Answer:** \(\boxed{66584}\)
 </details>

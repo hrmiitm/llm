@@ -79,17 +79,17 @@
     {
       "id": "learning-01-foundations-q3",
       "num": "Q3",
-      "title": "Batch-output volume (Short Answer)",
+      "title": "Padding cost in a hidden-state tensor (Short Answer)",
       "type": "numeric",
       "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
-      "questionText": "A batch has $B=3$ sequences, context length $T=5$, and hidden width $d_{model}=8$. How many elements are in the encoder output tensor?",
-      "bodyMd": "**A batch has $B=3$ sequences, context length $T=5$, and hidden width $d_{model}=8$. How many elements are in the encoder output tensor?**\n\n*(Numeric input)*",
+      "questionText": "Three examples contain 4, 7, and 2 real tokens and are padded to their batch maximum. With $d_{model}=12$, how many hidden-state *elements* belong to padded positions?",
+      "bodyMd": "**Three examples contain 4, 7, and 2 real tokens and are padded to their batch maximum. With $d_{model}=12$, how many hidden-state *elements* belong to padded positions?**\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "120"
+        "value": "96"
       },
-      "solutionMd": "**Answer:** $\\boxed{120}$\n\n#### Step-by-step solution\n\nThe standard batch-first hidden-state shape is\n\n$$B\\times T\\times d_{model}.$$\n\nSubstitute the values:\n\n$$3\\times5\\times8=\\boxed{120}.$$\n\n**Memory hook:** **B-T-D** = batches, tokens, dimensions.",
+      "solutionMd": "**Answer:** $\\boxed{96}$\n\n#### Step-by-step solution\n\n1. The maximum real length is $T=7$.\n2. Padding counts are $7-4=3$, $7-7=0$, and $7-2=5$.\n3. There are $3+0+5=8$ padded **token positions**.\n4. Every token position carries a 12-dimensional hidden state, so\n\n$$8\\times12=\\boxed{96}.$$\n\nThis is why a padding mask is necessary: those 96 placeholder values have the right shape but no linguistic meaning.\n\n**Memory hook:** first count **pad slots**, then multiply by **depth**.",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -99,17 +99,17 @@
     {
       "id": "learning-01-foundations-q4",
       "num": "Q4",
-      "title": "Embedding-table parameters (Short Answer)",
+      "title": "Input/output vocabulary parameters (Short Answer)",
       "type": "numeric",
       "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
-      "questionText": "A vocabulary has 500 tokens and embedding dimension 16. How many parameters are in the embedding table?",
-      "bodyMd": "**A vocabulary has 500 tokens and embedding dimension 16. How many parameters are in the embedding table?**\n\n*(Numeric input)*",
+      "questionText": "A language model has vocabulary size $V=500$ and $d_{model}=16$. It uses an input embedding table and a separate output projection with a bias. How many vocabulary-related trainable parameters are there in total?",
+      "bodyMd": "**A language model has vocabulary size $V=500$ and $d_{model}=16$. It uses an input embedding table and a separate output projection with a bias. How many vocabulary-related trainable parameters are there in total?**\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "8000"
+        "value": "16500"
       },
-      "solutionMd": "**Answer:** $\\boxed{8000}$\n\n#### Step-by-step solution\n\nOne embedding vector is stored for every vocabulary entry:\n\n$$E\\in\\mathbb{R}^{|V|\\times d_{model}}.$$\n\nTherefore\n\n$$500\\times16=\\boxed{8000}.$$\n\n**Memory hook:** embedding table = **vocabulary rows × vector columns**.",
+      "solutionMd": "**Answer:** $\\boxed{16500}$\n\n#### Step-by-step solution\n\n1. The input embedding table stores one vector per vocabulary item:\n\n$$E\\in\\mathbb{R}^{|V|\\times d_{model}}.$$\n\nSo it has $500\\times16=8000$ parameters.\n\n2. The output layer maps 16 hidden features to 500 vocabulary logits and has one bias per logit:\n\n$$16\\times500+500=8500.$$\n\n3. Because the question says the tables are **separate**, add both parts:\n\n$$8000+8500=\\boxed{16500}.$$\n\nIf input/output weights were tied, the $500\\times16$ matrix would be shared rather than counted twice; the output bias would still be separate.\n\n**Memory hook:** vocabulary parameters have an **in** table and an **out** table—ask whether they are tied.",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -236,17 +236,17 @@
     {
       "id": "learning-01-foundations-q8",
       "num": "Q8",
-      "title": "Positional-encoding norm at position zero (Short Answer)",
+      "title": "Adding position to content (Short Answer)",
       "type": "numeric",
       "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
-      "questionText": "For sinusoidal positional encoding with $d_{model}=4$ and $pos=0$, what is the squared Euclidean norm of the positional vector?",
-      "bodyMd": "**For sinusoidal positional encoding with $d_{model}=4$ and $pos=0$, what is the squared Euclidean norm of the positional vector?**\n\n*(Numeric input)*",
+      "questionText": "For $d_{model}=6$ at position $0$, let a token embedding be $X=[1,0,1,0,1,0]$. With sinusoidal encoding ordered as sine/cosine pairs, what is the squared $L_2$ norm of $H^{(0)}=X+PE(0)$?",
+      "bodyMd": "**For $d_{model}=6$ at position $0$, let a token embedding be $X=[1,0,1,0,1,0]$. With sinusoidal encoding ordered as sine/cosine pairs, what is the squared $L_2$ norm of $H^{(0)}=X+PE(0)$?**\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "2"
+        "value": "6"
       },
-      "solutionMd": "**Answer:** $\\boxed{2}$\n\n#### Step-by-step solution\n\nThere are two sine/cosine pairs. At position zero, each pair is\n\n$$[\\sin(0),\\cos(0)]=[0,1].$$\n\nSo $PE(0)=[0,1,0,1]$, and\n\n$$0^2+1^2+0^2+1^2=\\boxed{2}.$$\n\n**Memory hook:** each sine/cosine pair contributes $\\sin^2\\theta+\\cos^2\\theta=1$.",
+      "solutionMd": "**Answer:** $\\boxed{6}$\n\n#### Step-by-step solution\n\n1. At position zero, every sine coordinate is 0 and every cosine coordinate is 1. With three sine/cosine pairs,\n\n$$PE(0)=[0,1,0,1,0,1].$$\n\n2. Add position information coordinate by coordinate:\n\n$$H^{(0)}=[1,1,1,1,1,1].$$\n\n3. Square and sum its six coordinates:\n\n$$\\|H^{(0)}\\|_2^2=6\\times1^2=\\boxed{6}.$$\n\n**Memory hook:** input representation = **content + place**, coordinate by coordinate.",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -375,17 +375,17 @@
     {
       "id": "learning-01-foundations-q12",
       "num": "Q12",
-      "title": "Output volume after padding (Short Answer)",
+      "title": "How much attention is real? (Short Answer)",
       "type": "numeric",
       "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
-      "questionText": "Four sequences are padded to $T=6$. If $d_{model}=10$, how many values are in the final encoder output for the batch?",
-      "bodyMd": "**Four sequences are padded to $T=6$. If $d_{model}=10$, how many values are in the final encoder output for the batch?**\n\n*(Numeric input)*",
+      "questionText": "A batch has real sequence lengths $[6,4,2,1]$ and is padded to $T=6$. If the padding mask blocks every pad query/key interaction, how many self-attention score cells are valid across the batch for one head?",
+      "bodyMd": "**A batch has real sequence lengths $[6,4,2,1]$ and is padded to $T=6$. If the padding mask blocks every pad query/key interaction, how many self-attention score cells are valid across the batch for one head?**\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "240"
+        "value": "57"
       },
-      "solutionMd": "**Answer:** $\\boxed{240}$\n\n#### Step-by-step solution\n\nThe final encoder preserves the batch, token, and hidden axes:\n\n$$4\\times6\\times10=\\boxed{240}.$$\n\nThe number of layers changes the computation, not this final shape.\n\n**Memory hook:** layers change **content**, not the usual B-T-D layout.",
+      "solutionMd": "**Answer:** $\\boxed{57}$\n\n#### Step-by-step solution\n\nFor one sequence with $L$ real tokens, the valid self-attention block is $L\\times L$, not $6\\times6$.\n\n$$6^2+4^2+2^2+1^2=36+16+4+1=\\boxed{57}.$$\n\nThe dense padded tensor still allocates $4\\times6^2=144$ score locations, but the mask says only 57 correspond to real-token pairs.\n\n**Memory hook:** for attention, a length $L$ contributes an $L\\times L$ square.",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -455,17 +455,17 @@
     {
       "id": "learning-01-foundations-q15",
       "num": "Q15",
-      "title": "Foundations checkpoint (Short Answer)",
+      "title": "Foundations checkpoint: special tokens, padding, and B-T-D (Short Answer)",
       "type": "numeric",
       "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
-      "questionText": "A batch has $B=4$, padded length $T=6$, and $d_{model}=12$. How many elements are in its hidden-state tensor?",
-      "bodyMd": "**A batch has $B=4$, padded length $T=6$, and $d_{model}=12$. How many elements are in its hidden-state tensor?**\n\n*(Numeric input)*",
+      "questionText": "Two raw texts have 3 and 5 tokens. Each is wrapped as `[CLS] text [SEP]`, then padded together. With $d_{model}=12$, how many hidden-state elements correspond to *real* (non-padding) positions?",
+      "bodyMd": "**Two raw texts have 3 and 5 tokens. Each is wrapped as `[CLS] text [SEP]`, then padded together. With $d_{model}=12$, how many hidden-state elements correspond to *real* (non-padding) positions?**\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "288"
+        "value": "144"
       },
-      "solutionMd": "**Answer:** $\\boxed{288}$\n\n#### Step-by-step solution\n\nUse the complete input-to-hidden-state shape:\n\n$$\\mathbb{R}^{B\\times T\\times d_{model}}=\\mathbb{R}^{4\\times6\\times12}.$$\n\nTherefore,\n\n$$4\\times6\\times12=\\boxed{288}.$$\n\n**Memory hook:** when stuck, write **B-T-D** before doing any multiplication.",
+      "solutionMd": "**Answer:** $\\boxed{144}$\n\n#### Step-by-step solution\n\n1. `[CLS]` and `[SEP]` add two real tokens to each text, giving lengths $3+2=5$ and $5+2=7$.\n2. The batch is padded to $T=7$, but only $5+7=12$ positions are real.\n3. Each real position has 12 hidden features:\n\n$$12\\times12=\\boxed{144}.$$\n\nFor comparison, the allocated tensor has $2\\times7\\times12=168$ elements; the remaining 24 are padding representations and must be masked.\n\n**Memory hook:** separate **allocated** B-T-D space from **meaningful** non-pad space.",
       "marks": {
         "correct": 1,
         "incorrect": 0,

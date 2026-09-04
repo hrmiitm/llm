@@ -40,17 +40,17 @@
     {
       "id": "learning-03-transformer-blocks-q2",
       "num": "Q2",
-      "title": "One head's query shape (Short Answer)",
+      "title": "Batched head projection shape (Short Answer)",
       "type": "text",
       "context": null,
-      "questionText": "For a sequence of 5 tokens, what is the shape of the projected query matrix for one head?",
-      "bodyMd": "For a sequence of 5 tokens, what is the shape of the projected query matrix for one head?",
+      "questionText": "For a batch of 3 sequences of length 5, what is the shape of the projected query tensor for **one** head? Use batch-first order.",
+      "bodyMd": "For a batch of 3 sequences of length 5, what is the shape of the projected query tensor for **one** head? Use batch-first order.",
       "options": [],
       "answer": {
         "type": "text",
-        "value": "5 × 8"
+        "value": "3 × 5 × 8"
       },
-      "solutionMd": "There is one query row per token and \\(d_h=8\\) features per head:\n\n\\[\nQ_{\\text{one head}}\\in\\mathbb{R}^{5\\times8}.\n\\]\n\n**Answer:** `5 × 8`",
+      "solutionMd": "There is one query row per token, \\(d_h=8\\) features per head, and one such matrix for each batch item:\n\n\\[\nQ_{\\text{one head}}\\in\\mathbb{R}^{3\\times5\\times8}.\n\\]\n\nIf all heads are kept in one tensor, an additional head axis would give \\(3\\times4\\times5\\times8\\). The question asks for a single head, so omit that axis.\n\n**Answer:** `3 × 5 × 8`",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -60,17 +60,17 @@
     {
       "id": "learning-03-transformer-blocks-q3",
       "num": "Q3",
-      "title": "Self-attention score cells (Numeric Input)",
+      "title": "Batched multi-head self-attention work (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "For a five-token self-attention sequence, how many score cells does one head have before masking?",
-      "bodyMd": "For a five-token self-attention sequence, how many score cells does one head have before masking?\n\n*(Numeric input)*",
+      "questionText": "For the batch of 3 five-token sequences and 4 heads, how many raw self-attention score cells are formed before masking?",
+      "bodyMd": "For the batch of 3 five-token sequences and 4 heads, how many raw self-attention score cells are formed before masking?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "25"
+        "value": "300"
       },
-      "solutionMd": "Self-attention compares every query token with every key token:\n\n\\[\nT\\times T=5\\times5=25.\n\\]\n\n**Answer:** \\(\\boxed{25}\\)",
+      "solutionMd": "Each head in each example compares every query token with every key token:\n\n\\[\n B\\times h\\times T^2=3\\times4\\times5^2=300.\n\\]\n\nThis counts score cells, not the \\(d_h\\)-length dot-product multiplications used to produce them.\n\n**Answer:** \\(\\boxed{300}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -80,17 +80,17 @@
     {
       "id": "learning-03-transformer-blocks-q4",
       "num": "Q4",
-      "title": "Cross-attention score cells (Numeric Input)",
+      "title": "Batched cross-attention score cells (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "If the decoder has 4 target tokens and the encoder has 5 source tokens, how many scores does one cross-attention head form?",
-      "bodyMd": "If the decoder has 4 target tokens and the encoder has 5 source tokens, how many scores does one cross-attention head form?\n\n*(Numeric input)*",
+      "questionText": "For the same batch size and 4 heads, if the decoder has 4 target tokens and the encoder has 5 source tokens, how many cross-attention scores are formed before masking?",
+      "bodyMd": "For the same batch size and 4 heads, if the decoder has 4 target tokens and the encoder has 5 source tokens, how many cross-attention scores are formed before masking?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "20"
+        "value": "240"
       },
-      "solutionMd": "Cross-attention has a query for each target token and a key for each source token:\n\n\\[\nT_t\\times T_s=4\\times5=20.\n\\]\n\nThe score table is rectangular when source and target lengths differ.\n\n**Answer:** \\(\\boxed{20}\\)",
+      "solutionMd": "Cross-attention has a query for each target token and a key for each source token, for every head and batch example:\n\n\\[\nB\\times h\\times T_t\\times T_s=3\\times4\\times4\\times5=240.\n\\]\n\nThe per-head score table is \\(4\\times5\\), so it is rectangular; the batch and head axes multiply the count.\n\n**Answer:** \\(\\boxed{240}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -140,17 +140,17 @@
     {
       "id": "learning-03-transformer-blocks-q7",
       "num": "Q7",
-      "title": "Layer norm parameters (Numeric Input)",
+      "title": "Encoder normalization parameters (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "How many trainable parameters are in one layer-normalization module over \\(d_{\\text{model}}=32\\)?",
-      "bodyMd": "How many trainable parameters are in one layer-normalization module over \\(d_{\\text{model}}=32\\)?\n\n*(Numeric input)*",
+      "questionText": "How many trainable parameters are used by the **two** layer-normalization modules in one encoder layer?",
+      "bodyMd": "How many trainable parameters are used by the **two** layer-normalization modules in one encoder layer?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "64"
+        "value": "128"
       },
-      "solutionMd": "Layer norm learns a scale \\(\\gamma\\) and offset \\(\\beta\\) for each feature:\n\n\\[\n2d_{\\text{model}}=2\\cdot32=64.\n\\]\n\nDo not confuse these with batch-normalization statistics; layer norm operates across features of each example/token.\n\n**Answer:** \\(\\boxed{64}\\)",
+      "solutionMd": "One layer norm learns a scale \\(\\gamma\\) and offset \\(\\beta\\) for each feature:\n\n\\[\n2d_{\\text{model}}=2\\cdot32=64.\n\\]\n\nThe encoder has two of them, so \\(2\\times64=128\\). Do not confuse these with batch-normalization statistics; layer norm operates across features of each example/token.\n\n**Answer:** \\(\\boxed{128}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -160,17 +160,17 @@
     {
       "id": "learning-03-transformer-blocks-q8",
       "num": "Q8",
-      "title": "Encoder-layer total (Numeric Input)",
+      "title": "Two-layer encoder stack (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "An encoder layer has one MHA module, one FFN, and two layer norms. How many parameters does this encoder layer have?",
-      "bodyMd": "An encoder layer has one MHA module, one FFN, and two layer norms. How many parameters does this encoder layer have?\n\n*(Numeric input)*",
+      "questionText": "How many parameters are in a **two-layer encoder stack**, assuming both layers use the stated dimensions but do not share weights?",
+      "bodyMd": "How many parameters are in a **two-layer encoder stack**, assuming both layers use the stated dimensions but do not share weights?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "8544"
+        "value": "17088"
       },
-      "solutionMd": "\\[\n\\text{encoder}=4224+4192+2(64)=8544.\n\\]\n\nResidual connections add activations but no trainable parameters.\n\n**Answer:** \\(\\boxed{8544}\\)",
+      "solutionMd": "First count one encoder layer:\n\n\\[\n4224+4192+128=8544.\n\\]\n\nThe two layers have independent parameters, so\n\n\\[\n2\\times8544=17088.\n\\]\n\nResidual connections add activations but no trainable parameters.\n\n**Answer:** \\(\\boxed{17088}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -180,17 +180,17 @@
     {
       "id": "learning-03-transformer-blocks-q9",
       "num": "Q9",
-      "title": "Decoder-layer total (Numeric Input)",
+      "title": "Three-layer decoder stack (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "A decoder layer has masked self-attention, cross-attention, one FFN, and three layer norms. How many parameters does it have?",
-      "bodyMd": "A decoder layer has masked self-attention, cross-attention, one FFN, and three layer norms. How many parameters does it have?\n\n*(Numeric input)*",
+      "questionText": "How many parameters are in a **three-layer decoder stack**, assuming independent parameters in each layer?",
+      "bodyMd": "How many parameters are in a **three-layer decoder stack**, assuming independent parameters in each layer?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "12832"
+        "value": "38496"
       },
-      "solutionMd": "It contains two MHA modules:\n\n\\[\n\\text{decoder}=2(4224)+4192+3(64)\n=8448+4192+192=12832.\n\\]\n\n**Mnemonic:** encoder: one attention; decoder: **self + source** attention.\n\n**Answer:** \\(\\boxed{12832}\\)",
+      "solutionMd": "First count one decoder layer. It contains two MHA modules:\n\n\\[\n\\text{decoder}=2(4224)+4192+3(64)\n=8448+4192+192=12832.\n\\]\n\nThen multiply by the three unshared layers:\n\n\\[\n3\\times12832=38496.\n\\]\n\n**Mnemonic:** encoder: one attention; decoder: **self + source** attention.\n\n**Answer:** \\(\\boxed{38496}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -200,17 +200,17 @@
     {
       "id": "learning-03-transformer-blocks-q10",
       "num": "Q10",
-      "title": "Embedding tables (Numeric Input)",
+      "title": "All vocabulary-facing parameters (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "How many parameters are in the separate source and target token embedding tables together?",
-      "bodyMd": "How many parameters are in the separate source and target token embedding tables together?\n\n*(Numeric input)*",
+      "questionText": "How many parameters are in the source embedding table, target embedding table, and separate target output projection (including its bias) together?",
+      "bodyMd": "How many parameters are in the source embedding table, target embedding table, and separate target output projection (including its bias) together?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "7040"
+        "value": "11000"
       },
-      "solutionMd": "Each vocabulary item has a \\(32\\)-dimensional embedding:\n\n\\[\nV_s d_{\\text{model}} + V_t d_{\\text{model}}\n=100(32)+120(32)=7040.\n\\]\n\n**Answer:** \\(\\boxed{7040}\\)",
+      "solutionMd": "Each vocabulary item has a \\(32\\)-dimensional embedding:\n\n\\[\nV_s d_{\\text{model}} + V_t d_{\\text{model}}\n=100(32)+120(32)=7040.\n\\]\n\nThe untied output layer contributes\n\n\\[\n32(120)+120=3960.\n\\]\n\nTherefore the vocabulary-facing total is \\(7040+3960=11000\\). This total would be smaller if target input/output weights were tied.\n\n**Answer:** \\(\\boxed{11000}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -220,17 +220,17 @@
     {
       "id": "learning-03-transformer-blocks-q11",
       "num": "Q11",
-      "title": "Output projection (Numeric Input)",
+      "title": "Weight tying changes the budget (Numeric Input)",
       "type": "numeric",
       "context": null,
-      "questionText": "How many parameters are in the target vocabulary output layer, including its bias, if it maps \\(32\\) features to \\(V_t=120\\) logits?",
-      "bodyMd": "How many parameters are in the target vocabulary output layer, including its bias, if it maps \\(32\\) features to \\(V_t=120\\) logits?\n\n*(Numeric input)*",
+      "questionText": "In a **hypothetical tied-weight variant**, the target input embedding matrix is reused as the target output projection matrix; the source embedding remains separate and the target output bias remains. How many vocabulary-facing parameters does this tied variant have?",
+      "bodyMd": "In a **hypothetical tied-weight variant**, the target input embedding matrix is reused as the target output projection matrix; the source embedding remains separate and the target output bias remains. How many vocabulary-facing parameters does this tied variant have?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "3960"
+        "value": "7160"
       },
-      "solutionMd": "\\[\nd_{\\text{model}}V_t+V_t=32(120)+120=3960.\n\\]\n\nIts output is one logit for every possible next target token.\n\n**Answer:** \\(\\boxed{3960}\\)",
+      "solutionMd": "1. Source embedding: \\(100\\times32=3200\\).\n2. One shared target embedding/output matrix: \\(120\\times32=3840\\).\n3. Output bias: \\(120\\).\n\n\\[\n3200+3840+120=\\boxed{7160}.\n\\]\n\nCompare this with Q10's untied \\(11000\\): tying removes one duplicate \\(32\\times120\\) target matrix, but not the output bias.\n\n**Answer:** \\(\\boxed{7160}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -359,17 +359,17 @@
     {
       "id": "learning-03-transformer-blocks-q15",
       "num": "Q15",
-      "title": "Decoder count formula (Short Answer)",
-      "type": "text",
+      "title": "Architecture budget checkpoint (Numeric Input)",
+      "type": "numeric",
       "context": null,
-      "questionText": "Write the component-level parameter formula for one decoder layer, using the symbols MHA, FFN, and LN.",
-      "bodyMd": "Write the component-level parameter formula for one decoder layer, using the symbols MHA, FFN, and LN.",
+      "questionText": "Combine the two-layer encoder stack, three-layer decoder stack, and all vocabulary-facing parameters from Q8–Q10. What is the model's total trainable parameter count under the assumptions in this assignment?",
+      "bodyMd": "Combine the two-layer encoder stack, three-layer decoder stack, and all vocabulary-facing parameters from Q8–Q10. What is the model's total trainable parameter count under the assumptions in this assignment?\n\n*(Numeric input)*",
       "options": [],
       "answer": {
-        "type": "text",
-        "value": "2 MHA + FFN + 3 LN"
+        "type": "numeric",
+        "value": "66584"
       },
-      "solutionMd": "The decoder contains masked self-attention, cross-attention, an FFN, and three layer norms:\n\n\\[\n2\\operatorname{MHA}+\\operatorname{FFN}+3\\operatorname{LN}.\n\\]\n\nUse this structure before inserting any dimensions; it prevents double-counting or missing cross-attention.\n\n**Answer:** `2 MHA + FFN + 3 LN`",
+      "solutionMd": "Keep the three disjoint groups separate before adding:\n\n\\[\n\\underbrace{17088}_{\\text{two encoder layers}}\n+\\underbrace{38496}_{\\text{three decoder layers}}\n+\\underbrace{11000}_{\\text{embeddings + output}}.\n\\]\n\nThus\n\n\\[\n17088+38496+11000=\\boxed{66584}.\n\\]\n\n**Check:** the output layer is included once in Q10; do not accidentally add it again.\n\n**Answer:** \\(\\boxed{66584}\\)",
       "marks": {
         "correct": 1,
         "incorrect": 0,

@@ -61,53 +61,62 @@ Shorter sequences receive padding until they also have five slots.
 
 </details>
 
-### Q3 — Batch-output volume (Short Answer)
+### Q3 — Padding cost in a hidden-state tensor (Short Answer)
 
-**A batch has $B=3$ sequences, context length $T=5$, and hidden width $d_{model}=8$. How many elements are in the encoder output tensor?**
+**Three examples contain 4, 7, and 2 real tokens and are padded to their batch maximum. With $d_{model}=12$, how many hidden-state *elements* belong to padded positions?**
 
 *(Numeric input)*
 
 <details>
 <summary><b>Answer & Solution</b></summary>
 
-**Answer:** $\boxed{120}$
+**Answer:** $\boxed{96}$
 
 #### Step-by-step solution
 
-The standard batch-first hidden-state shape is
+1. The maximum real length is $T=7$.
+2. Padding counts are $7-4=3$, $7-7=0$, and $7-2=5$.
+3. There are $3+0+5=8$ padded **token positions**.
+4. Every token position carries a 12-dimensional hidden state, so
 
-$$B\times T\times d_{model}.$$
+$$8\times12=\boxed{96}.$$
 
-Substitute the values:
+This is why a padding mask is necessary: those 96 placeholder values have the right shape but no linguistic meaning.
 
-$$3\times5\times8=\boxed{120}.$$
-
-**Memory hook:** **B-T-D** = batches, tokens, dimensions.
+**Memory hook:** first count **pad slots**, then multiply by **depth**.
 
 </details>
 
-### Q4 — Embedding-table parameters (Short Answer)
+### Q4 — Input/output vocabulary parameters (Short Answer)
 
-**A vocabulary has 500 tokens and embedding dimension 16. How many parameters are in the embedding table?**
+**A language model has vocabulary size $V=500$ and $d_{model}=16$. It uses an input embedding table and a separate output projection with a bias. How many vocabulary-related trainable parameters are there in total?**
 
 *(Numeric input)*
 
 <details>
 <summary><b>Answer & Solution</b></summary>
 
-**Answer:** $\boxed{8000}$
+**Answer:** $\boxed{16500}$
 
 #### Step-by-step solution
 
-One embedding vector is stored for every vocabulary entry:
+1. The input embedding table stores one vector per vocabulary item:
 
 $$E\in\mathbb{R}^{|V|\times d_{model}}.$$
 
-Therefore
+So it has $500\times16=8000$ parameters.
 
-$$500\times16=\boxed{8000}.$$
+2. The output layer maps 16 hidden features to 500 vocabulary logits and has one bias per logit:
 
-**Memory hook:** embedding table = **vocabulary rows × vector columns**.
+$$16\times500+500=8500.$$
+
+3. Because the question says the tables are **separate**, add both parts:
+
+$$8000+8500=\boxed{16500}.$$
+
+If input/output weights were tied, the $500\times16$ matrix would be shared rather than counted twice; the output bias would still be separate.
+
+**Memory hook:** vocabulary parameters have an **in** table and an **out** table—ask whether they are tied.
 
 </details>
 
@@ -189,28 +198,32 @@ where $X$ is the token embedding and $P$ gives each position a signature.
 
 </details>
 
-### Q8 — Positional-encoding norm at position zero (Short Answer)
+### Q8 — Adding position to content (Short Answer)
 
-**For sinusoidal positional encoding with $d_{model}=4$ and $pos=0$, what is the squared Euclidean norm of the positional vector?**
+**For $d_{model}=6$ at position $0$, let a token embedding be $X=[1,0,1,0,1,0]$. With sinusoidal encoding ordered as sine/cosine pairs, what is the squared $L_2$ norm of $H^{(0)}=X+PE(0)$?**
 
 *(Numeric input)*
 
 <details>
 <summary><b>Answer & Solution</b></summary>
 
-**Answer:** $\boxed{2}$
+**Answer:** $\boxed{6}$
 
 #### Step-by-step solution
 
-There are two sine/cosine pairs. At position zero, each pair is
+1. At position zero, every sine coordinate is 0 and every cosine coordinate is 1. With three sine/cosine pairs,
 
-$$[\sin(0),\cos(0)]=[0,1].$$
+$$PE(0)=[0,1,0,1,0,1].$$
 
-So $PE(0)=[0,1,0,1]$, and
+2. Add position information coordinate by coordinate:
 
-$$0^2+1^2+0^2+1^2=\boxed{2}.$$
+$$H^{(0)}=[1,1,1,1,1,1].$$
 
-**Memory hook:** each sine/cosine pair contributes $\sin^2\theta+\cos^2\theta=1$.
+3. Square and sum its six coordinates:
+
+$$\|H^{(0)}\|_2^2=6\times1^2=\boxed{6}.$$
+
+**Memory hook:** input representation = **content + place**, coordinate by coordinate.
 
 </details>
 
@@ -288,26 +301,26 @@ Vocabulary size and head count do not appear in this addition.
 
 </details>
 
-### Q12 — Output volume after padding (Short Answer)
+### Q12 — How much attention is real? (Short Answer)
 
-**Four sequences are padded to $T=6$. If $d_{model}=10$, how many values are in the final encoder output for the batch?**
+**A batch has real sequence lengths $[6,4,2,1]$ and is padded to $T=6$. If the padding mask blocks every pad query/key interaction, how many self-attention score cells are valid across the batch for one head?**
 
 *(Numeric input)*
 
 <details>
 <summary><b>Answer & Solution</b></summary>
 
-**Answer:** $\boxed{240}$
+**Answer:** $\boxed{57}$
 
 #### Step-by-step solution
 
-The final encoder preserves the batch, token, and hidden axes:
+For one sequence with $L$ real tokens, the valid self-attention block is $L\times L$, not $6\times6$.
 
-$$4\times6\times10=\boxed{240}.$$
+$$6^2+4^2+2^2+1^2=36+16+4+1=\boxed{57}.$$
 
-The number of layers changes the computation, not this final shape.
+The dense padded tensor still allocates $4\times6^2=144$ score locations, but the mask says only 57 correspond to real-token pairs.
 
-**Memory hook:** layers change **content**, not the usual B-T-D layout.
+**Memory hook:** for attention, a length $L$ contributes an $L\times L$ square.
 
 </details>
 
@@ -354,27 +367,27 @@ IDs remain vocabulary indexes, and order remains important even after position v
 
 </details>
 
-### Q15 — Foundations checkpoint (Short Answer)
+### Q15 — Foundations checkpoint: special tokens, padding, and B-T-D (Short Answer)
 
-**A batch has $B=4$, padded length $T=6$, and $d_{model}=12$. How many elements are in its hidden-state tensor?**
+**Two raw texts have 3 and 5 tokens. Each is wrapped as `[CLS] text [SEP]`, then padded together. With $d_{model}=12$, how many hidden-state elements correspond to *real* (non-padding) positions?**
 
 *(Numeric input)*
 
 <details>
 <summary><b>Answer & Solution</b></summary>
 
-**Answer:** $\boxed{288}$
+**Answer:** $\boxed{144}$
 
 #### Step-by-step solution
 
-Use the complete input-to-hidden-state shape:
+1. `[CLS]` and `[SEP]` add two real tokens to each text, giving lengths $3+2=5$ and $5+2=7$.
+2. The batch is padded to $T=7$, but only $5+7=12$ positions are real.
+3. Each real position has 12 hidden features:
 
-$$\mathbb{R}^{B\times T\times d_{model}}=\mathbb{R}^{4\times6\times12}.$$
+$$12\times12=\boxed{144}.$$
 
-Therefore,
+For comparison, the allocated tensor has $2\times7\times12=168$ elements; the remaining 24 are padding representations and must be masked.
 
-$$4\times6\times12=\boxed{288}.$$
-
-**Memory hook:** when stuck, write **B-T-D** before doing any multiplication.
+**Memory hook:** separate **allocated** B-T-D space from **meaningful** non-pad space.
 
 </details>
