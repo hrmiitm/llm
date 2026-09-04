@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { renderMarkdown } from '../lib/renderer';
 
 interface Props {
@@ -54,7 +54,12 @@ function decodeDiagramSource(encodedSource: string): string {
 /** Renders Markdown and hydrates Kroki-compatible Mermaid source blocks. */
 export function MarkdownContent({ markdown, className }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const html = renderMarkdown(markdown);
+  // Keep both the markup and the dangerouslySetInnerHTML prop stable while a
+  // parent (notably the exam timer) rerenders. React compares the prop object
+  // by identity and would otherwise replace Mermaid's hydrated SVG with the
+  // original placeholder HTML on every tick.
+  const html = useMemo(() => renderMarkdown(markdown), [markdown]);
+  const innerHtml = useMemo(() => ({ __html: html }), [html]);
 
   useEffect(() => {
     let cancelled = false;
@@ -159,5 +164,5 @@ export function MarkdownContent({ markdown, className }: Props) {
     return () => { cancelled = true; };
   }, [html]);
 
-  return <div ref={rootRef} className={className} dangerouslySetInnerHTML={{ __html: html }} />;
+  return <div ref={rootRef} className={className} dangerouslySetInnerHTML={innerHtml} />;
 }
