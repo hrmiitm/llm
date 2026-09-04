@@ -311,6 +311,19 @@ function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
   const lines = raw.split('\n');
   const header = parseHeader(lines);
 
+  // Some learning modules introduce a diagram before the first bounded
+  // "Context for Q…" section. Keep that shared introduction with every
+  // question so the diagram is not silently dropped from the question pack.
+  const firstQuestionIndex = lines.findIndex(line => /^#{2,3}\s+Q\d+\s*[—–-]\s+/.test(line));
+  const preambleLines = firstQuestionIndex >= 0 ? lines.slice(0, firstQuestionIndex) : [];
+  const firstContextIndex = preambleLines.findIndex(line => /^##\s+Context for\s+/i.test(line));
+  const documentIntroLines = firstContextIndex >= 0 ? preambleLines.slice(0, firstContextIndex) : preambleLines;
+  const titleIndex = documentIntroLines.findIndex(line => /^#\s+/.test(line));
+  const sharedPreamble = (titleIndex >= 0 ? documentIntroLines.slice(titleIndex + 1) : documentIntroLines).join('\n').trim();
+  const fallbackContext = /assets\/[^\s)]+\.mmd\)/.test(sharedPreamble)
+    ? inlineKrokiDiagrams(sharedPreamble)
+    : null;
+
   const questions = [];
   let currentContext = null;
   let i = 0;
@@ -346,7 +359,7 @@ function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
         && (!currentContext.range
           || (qNumber >= currentContext.range.start && qNumber <= currentContext.range.end))
         ? currentContext.markdown
-        : null;
+        : fallbackContext;
 
       // Collect question body until <details>
       const bodyLines = [];
