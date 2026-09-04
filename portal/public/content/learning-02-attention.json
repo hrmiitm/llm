@@ -44,7 +44,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "For the first query, which key receives the smaller raw score?",
-      "bodyMd": "For the first query, which key receives the smaller raw score?\n\n- ( ) Key 1\n- ( ) Both keys receive the same score\n- ( ) Key 2\n- ( ) There is not enough information",
+      "bodyMd": "For the first query, which key receives the smaller raw score?",
       "options": [
         {
           "id": "A",
@@ -143,7 +143,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Which expression is scaled dot-product attention?",
-      "bodyMd": "Which expression is scaled dot-product attention?\n\n- ( ) \\(\\operatorname{softmax}(QV^\\top)K\\)\n- ( ) \\(\\operatorname{softmax}(QK^\\top/\\sqrt{d_k})V\\)\n- ( ) \\(Q+K+V\\)\n- ( ) \\(\\operatorname{softmax}(KQ^\\top)V^\\top\\)",
+      "bodyMd": "Which expression is scaled dot-product attention?",
       "options": [
         {
           "id": "A",
@@ -182,7 +182,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Why divide \\(QK^\\top\\) by \\(\\sqrt{d_k}\\) in scaled dot-product attention?",
-      "bodyMd": "Why divide \\(QK^\\top\\) by \\(\\sqrt{d_k}\\) in scaled dot-product attention?\n\n- ( ) To make every attention row exactly uniform\n- ( ) To prevent large dot products from making softmax overly sharp\n- ( ) To reduce the number of tokens\n- ( ) To remove positional information",
+      "bodyMd": "Why divide \\(QK^\\top\\) by \\(\\sqrt{d_k}\\) in scaled dot-product attention?",
       "options": [
         {
           "id": "A",
@@ -221,7 +221,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which statements about a softmax attention row are always true?",
-      "bodyMd": "Which statements about a softmax attention row are always true?\n\n- ( ) Every weight is positive.\n- ( ) The weights sum to 1.\n- ( ) The largest score has the largest weight.\n- ( ) Every weight is exactly 0 or 1.",
+      "bodyMd": "Which statements about a softmax attention row are always true?",
       "options": [
         {
           "id": "A",
@@ -282,7 +282,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "In an encoder-decoder transformer, decoder cross-attention uses decoder states for \\(Q\\) and encoder states for \\(K,V\\). What does this let a target token do?",
-      "bodyMd": "In an encoder-decoder transformer, decoder cross-attention uses decoder states for \\(Q\\) and encoder states for \\(K,V\\). What does this let a target token do?\n\n- ( ) Look at relevant source tokens while it is being generated\n- ( ) Read future target tokens\n- ( ) Eliminate the output softmax\n- ( ) Avoid learning embeddings",
+      "bodyMd": "In an encoder-decoder transformer, decoder cross-attention uses decoder states for \\(Q\\) and encoder states for \\(K,V\\). What does this let a target token do?",
       "options": [
         {
           "id": "A",
@@ -321,7 +321,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Suppose target length is \\(T_t\\) and source length is \\(T_s\\). Which statements are correct for one cross-attention head?",
-      "bodyMd": "Suppose target length is \\(T_t\\) and source length is \\(T_s\\). Which statements are correct for one cross-attention head?\n\n- ( ) \\(Q\\) has \\(T_t\\) rows.\n- ( ) \\(K\\) has \\(T_s\\) rows.\n- ( ) The score matrix has shape \\(T_t\\times T_s\\).\n- ( ) The score matrix must be square.",
+      "bodyMd": "Suppose target length is \\(T_t\\) and source length is \\(T_s\\). Which statements are correct for one cross-attention head?",
       "options": [
         {
           "id": "A",
@@ -402,7 +402,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "After the attention weights have been computed, which vectors are averaged to form the output?",
-      "bodyMd": "After the attention weights have been computed, which vectors are averaged to form the output?\n\n- ( ) Query vectors\n- ( ) Key vectors\n- ( ) Value vectors\n- ( ) Positional vectors only",
+      "bodyMd": "After the attention weights have been computed, which vectors are averaged to form the output?",
       "options": [
         {
           "id": "A",
@@ -441,7 +441,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "For causal self-attention with \\(B=2\\), \\(h=3\\), \\(T=4\\), and \\(d_h=8\\), choose every correct statement.",
-      "bodyMd": "For causal self-attention with \\(B=2\\), \\(h=3\\), \\(T=4\\), and \\(d_h=8\\), choose every correct statement.\n\n- ( ) The score tensor has shape \\(2\\times3\\times4\\times4\\).\n- ( ) After concatenating all heads, the attention output has shape \\(2\\times4\\times24\\) before the output projection.\n- ( ) The causal mask blocks \\(2\\times3\\times\\frac{4(4-1)}2=36\\) score cells.\n- ( ) Causal attention must reduce the query sequence length from 4 to 3.",
+      "bodyMd": "For causal self-attention with \\(B=2\\), \\(h=3\\), \\(T=4\\), and \\(d_h=8\\), choose every correct statement.",
       "options": [
         {
           "id": "A",

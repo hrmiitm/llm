@@ -64,7 +64,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Which token does greedy decoding choose at the first step?",
-      "bodyMd": "Which token does greedy decoding choose at the first step?\n\n- ( ) A\n- ( ) B\n- ( ) C\n- ( ) It must enumerate both complete paths first",
+      "bodyMd": "Which token does greedy decoding choose at the first step?",
       "options": [
         {
           "id": "A",
@@ -103,7 +103,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "What full two-token sequence does greedy decoding produce under the stated tie rule?",
-      "bodyMd": "What full two-token sequence does greedy decoding produce under the stated tie rule?\n\n- ( ) \\(A,C\\)\n- ( ) \\(A,D\\)\n- ( ) \\(B,C\\)\n- ( ) \\(B,D\\)",
+      "bodyMd": "What full two-token sequence does greedy decoding produce under the stated tie rule?",
       "options": [
         {
           "id": "A",
@@ -142,7 +142,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Which two-token sequence has the highest joint probability?",
-      "bodyMd": "Which two-token sequence has the highest joint probability?\n\n- ( ) \\(A,C\\)\n- ( ) \\(A,D\\)\n- ( ) \\(B,C\\)\n- ( ) \\(B,D\\)",
+      "bodyMd": "Which two-token sequence has the highest joint probability?",
       "options": [
         {
           "id": "A",
@@ -181,7 +181,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which statements are correct?",
-      "bodyMd": "Which statements are correct?\n\n- ( ) Greedy decoding makes a local choice at each step.\n- ( ) Exhaustive search can compare all complete candidate sequences in a finite toy problem.\n- ( ) Greedy decoding is guaranteed to find the maximum-probability full sequence.\n- ( ) A decoding algorithm operates on probabilities produced by the model.",
+      "bodyMd": "Which statements are correct?",
       "options": [
         {
           "id": "A",
@@ -282,7 +282,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Why are log probabilities commonly added during search instead of multiplying raw probabilities?",
-      "bodyMd": "Why are log probabilities commonly added during search instead of multiplying raw probabilities?\n\n- ( ) Logarithms reverse the ranking of sequences\n- ( ) Products become sums and very small products are numerically easier to handle\n- ( ) They make every sequence probability equal to 1\n- ( ) They eliminate the vocabulary softmax",
+      "bodyMd": "Why are log probabilities commonly added during search instead of multiplying raw probabilities?",
       "options": [
         {
           "id": "A",
@@ -341,7 +341,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which statements are true?",
-      "bodyMd": "Which statements are true?\n\n- ( ) Greedy decoding is deterministic when ties are resolved consistently.\n- ( ) Sampling can produce different outputs from the same prompt.\n- ( ) Top-\\(k\\) always keeps a fixed number of candidates before sampling.\n- ( ) Sampling guarantees factually correct text.",
+      "bodyMd": "Which statements are true?",
       "options": [
         {
           "id": "A",
@@ -382,7 +382,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "A model repeatedly emits a high-probability phrase. Which interpretation is best?",
-      "bodyMd": "A model repeatedly emits a high-probability phrase. Which interpretation is best?\n\n- ( ) The model has proven the phrase is true\n- ( ) A locally attractive loop can dominate generation, causing repetitive degeneration\n- ( ) The causal mask has become bidirectional\n- ( ) The vocabulary contains only one token",
+      "bodyMd": "A model repeatedly emits a high-probability phrase. Which interpretation is best?",
       "options": [
         {
           "id": "A",
@@ -441,7 +441,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Use the two-step model from Q1–Q5. A beam search has width 2 and ranks candidates by joint probability without length normalization. Which statements are correct?",
-      "bodyMd": "Use the two-step model from Q1–Q5. A beam search has width 2 and ranks candidates by joint probability without length normalization. Which statements are correct?\n\n- ( ) After step 1, the beam keeps both prefixes \\(A\\) and \\(B\\).\n- ( ) After expanding step 2, \\((B,C)\\) is retained because its joint probability is \\(0.36\\).\n- ( ) Greedy's sequence \\((A,C)\\) is guaranteed to be the only sequence retained by this beam.\n- ( ) A finite-width beam is more exploratory than greedy but is not a universal guarantee of the global optimum for arbitrary problems.",
+      "bodyMd": "Use the two-step model from Q1–Q5. A beam search has width 2 and ranks candidates by joint probability without length normalization. Which statements are correct?",
       "options": [
         {
           "id": "A",

@@ -23,7 +23,7 @@
       "type": "single_choice",
       "context": "A dataset contains **four sample sequences** of words:\n\n| # | Sequence | Word Count |\n|---|---|:---:|\n| 1 | I enjoyed the movie Transformers | 5 |\n| 2 | We live among its people now | 6 |\n| 3 | They have much to learn | 5 |\n| 4 | Freedom is the right of all sentient beings | 8 |\n\nThe sequences have **no continuity** — the order among sequences does not matter.\n\nLet the embedding dimension of each word be $\\mathbb{R}^{1 \\times 256}$.\n\n---",
       "questionText": "Suppose we want the transformer to process each sequence in its entirety. What should be the minimum context length (window) $T$?",
-      "bodyMd": "**Suppose we want the transformer to process each sequence in its entirety. What should be the minimum context length (window) $T$?**\n\n- ( ) 5\n- ( ) 6\n- ( ) 8\n- ( ) 24",
+      "bodyMd": "**Suppose we want the transformer to process each sequence in its entirety. What should be the minimum context length (window) $T$?**",
       "options": [
         {
           "id": "A",
@@ -62,7 +62,7 @@
       "type": "single_choice",
       "context": "A dataset contains **four sample sequences** of words:\n\n| # | Sequence | Word Count |\n|---|---|:---:|\n| 1 | I enjoyed the movie Transformers | 5 |\n| 2 | We live among its people now | 6 |\n| 3 | They have much to learn | 5 |\n| 4 | Freedom is the right of all sentient beings | 8 |\n\nThe sequences have **no continuity** — the order among sequences does not matter.\n\nLet the embedding dimension of each word be $\\mathbb{R}^{1 \\times 256}$.\n\n---",
       "questionText": "We pack all sequences into a batch and pass them to the encoder. The projection matrices $(W_Q, W_K, W_V) \\in \\mathbb{R}^{256 \\times 64}$. Which tensor gives the correct dimension of the input to the encoder?",
-      "bodyMd": "**We pack all sequences into a batch and pass them to the encoder. The projection matrices $(W_Q, W_K, W_V) \\in \\mathbb{R}^{256 \\times 64}$. Which tensor gives the correct dimension of the input to the encoder?**\n\n- ( ) $4 \\times 256 \\times 8$\n- ( ) $4 \\times 8 \\times 256$\n- ( ) $8 \\times 256 \\times 64$\n- ( ) $4 \\times 256 \\times 64$",
+      "bodyMd": "**We pack all sequences into a batch and pass them to the encoder. The projection matrices $(W_Q, W_K, W_V) \\in \\mathbb{R}^{256 \\times 64}$. Which tensor gives the correct dimension of the input to the encoder?**",
       "options": [
         {
           "id": "A",
@@ -159,7 +159,7 @@
       "type": "single_choice",
       "context": "The diagram below shows attention scores from **three independent heads** $(h_1, h_2, h_3)$ for the word **\"it\\_\"**.\n\n![Attention scores for the word \"it_\" across three heads h1 (blue), h2 (orange), h3 (red)](assets/W1-F1.PNG)\n\n- Each attention head is represented by a **colour**: $h_1$ = blue, $h_2$ = orange, $h_3$ = red.\n- **Darker shade = higher attention score.**\n- The last row is the attention score for a **special token**.\n- The attention matrix in the $i$-th head: $A_i \\in \\mathbb{R}^{m \\times n}$.\n- Assume **zero-based indexing** where required.\n\nThe sentence being attended to is: *\"The\\_ animal\\_ didn\\_ '\\_ t\\_ cross\\_ the\\_ street\\_ because\\_ it\\_ was\\_ too\\_ tire\\_ d\\_\"* + 1 special token = **15 tokens total**.\n\n---",
       "questionText": "Which of these attention heads captures a strong relation between the words \"it\\_\" and \"animal\\_\"?",
-      "bodyMd": "**Which of these attention heads captures a strong relation between the words \"it\\_\" and \"animal\\_\"?**\n\n- ( ) $h_1$\n- ( ) $h_2$\n- ( ) $h_3$",
+      "bodyMd": "**Which of these attention heads captures a strong relation between the words \"it\\_\" and \"animal\\_\"?**",
       "options": [
         {
           "id": "A",
@@ -194,7 +194,7 @@
       "type": "single_choice",
       "context": "The input embeddings for the words **\"learning\"**, **\"brings\"**, and **\"joy\"** are:\n\n```math\nh_1 = [0.5,\\ 0.25,\\ 1], \\quad h_2 = [0.1,\\ 0.25,\\ 0], \\quad h_3 = [0.1,\\ 0.1,\\ 0.9]\n```\n\nNote: embeddings are **row vectors**. The projection matrices are:\n\n```math\nW_Q = \\begin{bmatrix} 1 & 1 \\\\ -1 & 1 \\\\ 0 & 1 \\end{bmatrix}, \\quad W_K = \\begin{bmatrix} 0 & 1 \\\\ 1 & 0 \\\\ 0 & 1 \\end{bmatrix}, \\quad W_V = \\begin{bmatrix} 0 & 0 \\\\ -1 & -1 \\\\ 1 & 1 \\end{bmatrix}\n```\n\nLet $z_j$ denote the **linear combination of value vectors** for the $j$-th word.\n\n---",
       "questionText": "While constructing $z_1$, more attention was given to the word \"learning\". The statement is:",
-      "bodyMd": "**While constructing $z_1$, more attention was given to the word \"learning\". The statement is:**\n\n- ( ) True\n- ( ) False",
+      "bodyMd": "**While constructing $z_1$, more attention was given to the word \"learning\". The statement is:**",
       "options": [
         {
           "id": "A",
@@ -223,7 +223,7 @@
       "type": "single_choice",
       "context": "The input embeddings for the words **\"learning\"**, **\"brings\"**, and **\"joy\"** are:\n\n```math\nh_1 = [0.5,\\ 0.25,\\ 1], \\quad h_2 = [0.1,\\ 0.25,\\ 0], \\quad h_3 = [0.1,\\ 0.1,\\ 0.9]\n```\n\nNote: embeddings are **row vectors**. The projection matrices are:\n\n```math\nW_Q = \\begin{bmatrix} 1 & 1 \\\\ -1 & 1 \\\\ 0 & 1 \\end{bmatrix}, \\quad W_K = \\begin{bmatrix} 0 & 1 \\\\ 1 & 0 \\\\ 0 & 1 \\end{bmatrix}, \\quad W_V = \\begin{bmatrix} 0 & 0 \\\\ -1 & -1 \\\\ 1 & 1 \\end{bmatrix}\n```\n\nLet $z_j$ denote the **linear combination of value vectors** for the $j$-th word.\n\n---",
       "questionText": "While constructing $z_2$, all words were given equal attention. The statement is:",
-      "bodyMd": "**While constructing $z_2$, all words were given equal attention. The statement is:**\n\n- ( ) True\n- ( ) False",
+      "bodyMd": "**While constructing $z_2$, all words were given equal attention. The statement is:**",
       "options": [
         {
           "id": "A",

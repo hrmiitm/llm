@@ -4,7 +4,7 @@ import type { GAPack } from '../../types';
 import { fetchPack } from '../../lib/content';
 import { QuestionRenderer } from '../../components/QuestionRenderer';
 import { PracticePalette } from '../../components/PracticePalette';
-import { renderMarkdown } from '../../lib/renderer';
+import { MarkdownContent } from '../../components/MarkdownContent';
 
 type Answer = string | string[] | null;
 
@@ -135,7 +135,7 @@ export function PracticePage() {
                 <button className="solution-header" onClick={() => setShowSolution(value => !value)} aria-expanded={showSolution}>
                   <h4>⌁ Step-by-Step Solution</h4><span>{showSolution ? 'Hide ▲' : 'Show ▼'}</span>
                 </button>
-                {showSolution && <div className="solution-body question-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(currentQ.solutionMd) }} />}
+                {showSolution && <MarkdownContent className="solution-body question-text" markdown={currentQ.solutionMd} />}
               </div>
             )}
           </div>

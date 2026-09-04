@@ -3,7 +3,7 @@ import { useParams, useLocation, Link } from 'react-router-dom';
 import type { AttemptResult, GAPack, PerQuestionResult } from '../../types';
 import { fetchPack } from '../../lib/content';
 import { loadResult } from '../../storage/db';
-import { renderMarkdown } from '../../lib/renderer';
+import { MarkdownContent } from '../../components/MarkdownContent';
 
 export function ResultsPage() {
   const { attemptId } = useParams<{ attemptId: string }>();
@@ -168,11 +168,7 @@ function ReviewItem({
       {expanded && q && (
         <div className="review-item-body">
           {/* Question */}
-          <div className="question-text" style={{ marginBottom: '1rem' }}>
-            <div
-              dangerouslySetInnerHTML={{ __html: renderMarkdown(q.bodyMd) }}
-            />
-          </div>
+          <MarkdownContent className="question-text" markdown={q.bodyMd} />
 
           {/* Answer comparison */}
           <div className="answer-comparison">
@@ -205,10 +201,7 @@ function ReviewItem({
                 <span style={{ fontSize: '0.8rem', color: '#15803d' }}>{showSolution ? '▲ Hide' : '▼ Show'}</span>
               </div>
               {showSolution && (
-                <div
-                  className="solution-body question-text"
-                  dangerouslySetInnerHTML={{ __html: renderMarkdown(q.solutionMd) }}
-                />
+                <MarkdownContent className="solution-body question-text" markdown={q.solutionMd} />
               )}
             </div>
           )}

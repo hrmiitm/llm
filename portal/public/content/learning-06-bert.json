@@ -24,7 +24,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "What is BERT fundamentally built from?",
-      "bodyMd": "What is BERT fundamentally built from?\n\n- ( ) A decoder-only causal stack\n- ( ) An encoder-only stack with bidirectional self-attention\n- ( ) A no-attention recurrent stack\n- ( ) An encoder-decoder translation stack only",
+      "bodyMd": "What is BERT fundamentally built from?",
       "options": [
         {
           "id": "A",
@@ -63,7 +63,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "In masked language modeling (MLM), what is the model trained to predict?",
-      "bodyMd": "In masked language modeling (MLM), what is the model trained to predict?\n\n- ( ) The next token at every position only\n- ( ) The original identities of selected hidden/corrupted tokens\n- ( ) The number of transformer layers\n- ( ) A fixed answer regardless of input",
+      "bodyMd": "In masked language modeling (MLM), what is the model trained to predict?",
       "options": [
         {
           "id": "A",
@@ -142,7 +142,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "The corrupted input is `[CLS] the [MASK] sat [MASK] [SEP]`; the two selected original targets are `cat` and `down`. Under the standard simplified MLM loss, which statements are correct?",
-      "bodyMd": "The corrupted input is `[CLS] the [MASK] sat [MASK] [SEP]`; the two selected original targets are `cat` and `down`. Under the standard simplified MLM loss, which statements are correct?\n\n- ( ) There are two direct token-prediction loss terms.\n- ( ) `the` and `sat` can influence the predictions through encoder attention even though they are not direct targets.\n- ( ) The `[CLS]` position receives an MLM loss term merely because it exists in the input.\n- ( ) The model should predict the literal token `[MASK]` as the target at both selected positions.",
+      "bodyMd": "The corrupted input is `[CLS] the [MASK] sat [MASK] [SEP]`; the two selected original targets are `cat` and `down`. Under the standard simplified MLM loss, which statements are correct?",
       "options": [
         {
           "id": "A",
@@ -182,7 +182,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "For single-sentence sequence classification, how is BERT's `[CLS]` representation commonly used?",
-      "bodyMd": "For single-sentence sequence classification, how is BERT's `[CLS]` representation commonly used?\n\n- ( ) It is discarded before training\n- ( ) It is fed to a task-specific classifier head\n- ( ) It is used only as a padding symbol\n- ( ) It blocks all attention scores",
+      "bodyMd": "For single-sentence sequence classification, how is BERT's `[CLS]` representation commonly used?",
       "options": [
         {
           "id": "A",
@@ -221,7 +221,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "What does `[SEP]` commonly mark in BERT-style inputs?",
-      "bodyMd": "What does `[SEP]` commonly mark in BERT-style inputs?\n\n- ( ) The end of one segment and/or separation between segments\n- ( ) The only token that may be masked\n- ( ) The vocabulary softmax denominator\n- ( ) A causal future boundary for generation",
+      "bodyMd": "What does `[SEP]` commonly mark in BERT-style inputs?",
       "options": [
         {
           "id": "A",
@@ -280,7 +280,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which comparisons are correct?",
-      "bodyMd": "Which comparisons are correct?\n\n- ( ) BERT MLM can use left and right context around a selected token.\n- ( ) GPT causal language modeling blocks future tokens at a position.\n- ( ) BERT is naturally used as a left-to-right free-running generator without changing the objective.\n- ( ) Both BERT and GPT use token embeddings and transformer attention.",
+      "bodyMd": "Which comparisons are correct?",
       "options": [
         {
           "id": "A",
@@ -321,7 +321,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Why can BERT be useful for understanding a token in a sentence?",
-      "bodyMd": "Why can BERT be useful for understanding a token in a sentence?\n\n- ( ) Its ordinary encoder attention can incorporate context on both sides\n- ( ) It predicts only from tokens that come after it\n- ( ) It forbids all token-to-token interaction\n- ( ) It removes words before making embeddings",
+      "bodyMd": "Why can BERT be useful for understanding a token in a sentence?",
       "options": [
         {
           "id": "A",
@@ -380,7 +380,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which information can a BERT-style input representation include before entering encoder layers?",
-      "bodyMd": "Which information can a BERT-style input representation include before entering encoder layers?\n\n- ( ) Token embeddings\n- ( ) Positional embeddings\n- ( ) Segment/type embeddings for sentence pairs\n- ( ) The future ground-truth label as an input feature",
+      "bodyMd": "Which information can a BERT-style input representation include before entering encoder layers?",
       "options": [
         {
           "id": "A",
@@ -421,7 +421,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "You want a model to fill in a deliberately hidden word using both neighboring words. Which pretraining objective most directly matches this goal?",
-      "bodyMd": "You want a model to fill in a deliberately hidden word using both neighboring words. Which pretraining objective most directly matches this goal?\n\n- ( ) Masked language modeling\n- ( ) Greedy decoding\n- ( ) Causal next-token prediction only\n- ( ) Top-\\(k\\) sampling",
+      "bodyMd": "You want a model to fill in a deliberately hidden word using both neighboring words. Which pretraining objective most directly matches this goal?",
       "options": [
         {
           "id": "A",
@@ -480,7 +480,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "You are building a three-class review classifier with a BERT-style encoder. Which design choices are appropriate?",
-      "bodyMd": "You are building a three-class review classifier with a BERT-style encoder. Which design choices are appropriate?\n\n- ( ) Start the input with `[CLS]` and feed its final contextual vector to a 3-logit classifier head.\n- ( ) During supervised classification fine-tuning, compare the 3 logits with the review's class label using a classification loss.\n- ( ) Sample a free-form continuation from the vocabulary as the only way to obtain the class.\n- ( ) Keep positional information so the encoder can distinguish different word orders.",
+      "bodyMd": "You are building a three-class review classifier with a BERT-style encoder. Which design choices are appropriate?",
       "options": [
         {
           "id": "A",

@@ -22,9 +22,9 @@
       "num": "Q1",
       "title": "Token or word? (MCQ)",
       "type": "single_choice",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "Which statement is most accurate?",
-      "bodyMd": "**Which statement is most accurate?**\n\n- ( ) A token is always a complete dictionary word.\n- ( ) A token ID is a learned meaning score.\n- ( ) A token can be a word, a subword, or punctuation.\n- ( ) Tokens only exist after attention is computed.",
+      "bodyMd": "**Which statement is most accurate?**",
       "options": [
         {
           "id": "A",
@@ -61,7 +61,7 @@
       "num": "Q2",
       "title": "Minimum context length (Short Answer)",
       "type": "numeric",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "A batch contains sequences of 3, 5, and 4 tokens. What is the smallest context length $T$ that avoids truncating any sequence?",
       "bodyMd": "**A batch contains sequences of 3, 5, and 4 tokens. What is the smallest context length $T$ that avoids truncating any sequence?**\n\n*(Numeric input)*",
       "options": [],
@@ -81,7 +81,7 @@
       "num": "Q3",
       "title": "Padding cost in a hidden-state tensor (Short Answer)",
       "type": "numeric",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "Three examples contain 4, 7, and 2 real tokens and are padded to their batch maximum. With $d_{model}=12$, how many hidden-state *elements* belong to padded positions?",
       "bodyMd": "**Three examples contain 4, 7, and 2 real tokens and are padded to their batch maximum. With $d_{model}=12$, how many hidden-state *elements* belong to padded positions?**\n\n*(Numeric input)*",
       "options": [],
@@ -101,7 +101,7 @@
       "num": "Q4",
       "title": "Input/output vocabulary parameters (Short Answer)",
       "type": "numeric",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "A language model has vocabulary size $V=500$ and $d_{model}=16$. It uses an input embedding table and a separate output projection with a bias. How many vocabulary-related trainable parameters are there in total?",
       "bodyMd": "**A language model has vocabulary size $V=500$ and $d_{model}=16$. It uses an input embedding table and a separate output projection with a bias. How many vocabulary-related trainable parameters are there in total?**\n\n*(Numeric input)*",
       "options": [],
@@ -121,9 +121,9 @@
       "num": "Q5",
       "title": "Correct input shape (MCQ)",
       "type": "single_choice",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "For $B=2$, $T=7$, and $d_{model}=32$, which is the usual batch-first encoder-input shape?",
-      "bodyMd": "**For $B=2$, $T=7$, and $d_{model}=32$, which is the usual batch-first encoder-input shape?**\n\n- ( ) $2\\times32\\times7$\n- ( ) $2\\times7\\times32$\n- ( ) $7\\times2\\times32$\n- ( ) $32\\times7\\times2$",
+      "bodyMd": "**For $B=2$, $T=7$, and $d_{model}=32$, which is the usual batch-first encoder-input shape?**",
       "options": [
         {
           "id": "A",
@@ -160,9 +160,9 @@
       "num": "Q6",
       "title": "Meaning of a token ID (MCQ)",
       "type": "single_choice",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "What does token ID 4812 mean before embedding lookup?",
-      "bodyMd": "**What does token ID 4812 mean before embedding lookup?**\n\n- ( ) The token is 4,812 times more important than ID 1.\n- ( ) It is an address selecting one row of the embedding table.\n- ( ) It is the token's probability.\n- ( ) It is one coordinate of the token vector.",
+      "bodyMd": "**What does token ID 4812 mean before embedding lookup?**",
       "options": [
         {
           "id": "A",
@@ -199,9 +199,9 @@
       "num": "Q7",
       "title": "Why add positional information? (MCQ)",
       "type": "single_choice",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "Why is position information added to token embeddings?",
-      "bodyMd": "**Why is position information added to token embeddings?**\n\n- ( ) It tells attention where each token occurs in the sequence.\n- ( ) It converts probabilities into logits.\n- ( ) It replaces the tokenizer.\n- ( ) It removes the need for an embedding table.",
+      "bodyMd": "**Why is position information added to token embeddings?**",
       "options": [
         {
           "id": "A",
@@ -238,7 +238,7 @@
       "num": "Q8",
       "title": "Adding position to content (Short Answer)",
       "type": "numeric",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "For $d_{model}=6$ at position $0$, let a token embedding be $X=[1,0,1,0,1,0]$. With sinusoidal encoding ordered as sine/cosine pairs, what is the squared $L_2$ norm of $H^{(0)}=X+PE(0)$?",
       "bodyMd": "**For $d_{model}=6$ at position $0$, let a token embedding be $X=[1,0,1,0,1,0]$. With sinusoidal encoding ordered as sine/cosine pairs, what is the squared $L_2$ norm of $H^{(0)}=X+PE(0)$?**\n\n*(Numeric input)*",
       "options": [],
@@ -258,9 +258,9 @@
       "num": "Q9",
       "title": "Padding and masks (MSQ)",
       "type": "multiple_select",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "Which statements about padding are true? (Select all that apply.)",
-      "bodyMd": "**Which statements about padding are true? (Select all that apply.)**\n\n- ( ) Padding gives batch sequences a common tensor shape.\n- ( ) An attention mask should stop useful tokens from attending to padding.\n- ( ) Padding makes the longest sequence shorter.\n- ( ) Padding removes the need to choose a context length.",
+      "bodyMd": "**Which statements about padding are true? (Select all that apply.)**",
       "options": [
         {
           "id": "A",
@@ -298,9 +298,9 @@
       "num": "Q10",
       "title": "Static versus contextual vectors (MCQ)",
       "type": "single_choice",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "Which representation can make `bank` differ in “river bank” and “money bank”?",
-      "bodyMd": "**Which representation can make `bank` differ in “river bank” and “money bank”?**\n\n- ( ) Its token ID\n- ( ) A static lookup vector alone\n- ( ) A contextual hidden state after Transformer layers\n- ( ) The position index alone",
+      "bodyMd": "**Which representation can make `bank` differ in “river bank” and “money bank”?**",
       "options": [
         {
           "id": "A",
@@ -337,9 +337,9 @@
       "num": "Q11",
       "title": "Same dimensions for addition (MSQ)",
       "type": "multiple_select",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "Which conditions must hold to add token embeddings $X$ and positional vectors $P$? (Select all that apply.)",
-      "bodyMd": "**Which conditions must hold to add token embeddings $X$ and positional vectors $P$? (Select all that apply.)**\n\n- ( ) They need matching sequence positions.\n- ( ) They need the same final vector width.\n- ( ) Their vocabulary sizes must be identical.\n- ( ) Their number of attention heads must be identical.",
+      "bodyMd": "**Which conditions must hold to add token embeddings $X$ and positional vectors $P$? (Select all that apply.)**",
       "options": [
         {
           "id": "A",
@@ -377,7 +377,7 @@
       "num": "Q12",
       "title": "How much attention is real? (Short Answer)",
       "type": "numeric",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "A batch has real sequence lengths $[6,4,2,1]$ and is padded to $T=6$. If the padding mask blocks every pad query/key interaction, how many self-attention score cells are valid across the batch for one head?",
       "bodyMd": "**A batch has real sequence lengths $[6,4,2,1]$ and is padded to $T=6$. If the padding mask blocks every pad query/key interaction, how many self-attention score cells are valid across the batch for one head?**\n\n*(Numeric input)*",
       "options": [],
@@ -397,9 +397,9 @@
       "num": "Q13",
       "title": "Read the input side of an architecture diagram (MSQ)",
       "type": "multiple_select",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "The lettered diagram below is used again in Learning 08. Which statements about its two input additions are correct? (Select all that apply.)",
-      "bodyMd": "The lettered diagram below is used again in Learning 08. Which statements about its two input additions are correct? (Select all that apply.)\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)\n\n- ( ) A is the source-token embedding path and B supplies source positional information.\n- ( ) C is the shifted-right target embedding path and D supplies target positional information.\n- ( ) The two circular `+` nodes are causal masks that erase future tokens.\n- ( ) E and L begin the encoder and decoder's learned attention processing after their input additions.",
+      "bodyMd": "The lettered diagram below is used again in Learning 08. Which statements about its two input additions are correct? (Select all that apply.)\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.mmd)",
       "options": [
         {
           "id": "A",
@@ -438,9 +438,9 @@
       "num": "Q14",
       "title": "What becomes contextual? (MSQ)",
       "type": "multiple_select",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "After Transformer blocks process a sentence, which statements are true? (Select all that apply.)",
-      "bodyMd": "**After Transformer blocks process a sentence, which statements are true? (Select all that apply.)**\n\n- ( ) Each token's hidden state may contain information from other tokens.\n- ( ) The same token string can have different hidden states in different sentences.\n- ( ) Token IDs are changed into larger IDs.\n- ( ) Word order is irrelevant once positions are added.",
+      "bodyMd": "**After Transformer blocks process a sentence, which statements are true? (Select all that apply.)**",
       "options": [
         {
           "id": "A",
@@ -478,7 +478,7 @@
       "num": "Q15",
       "title": "Foundations checkpoint: special tokens, padding, and B-T-D (Short Answer)",
       "type": "numeric",
-      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)",
       "questionText": "Two raw texts have 3 and 5 tokens. Each is wrapped as `[CLS] text [SEP]`, then padded together. With $d_{model}=12$, how many hidden-state elements correspond to *real* (non-padding) positions?",
       "bodyMd": "**Two raw texts have 3 and 5 tokens. Each is wrapped as `[CLS] text [SEP]`, then padded together. With $d_{model}=12$, how many hidden-state elements correspond to *real* (non-padding) positions?**\n\n*(Numeric input)*",
       "options": [],

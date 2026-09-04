@@ -56,9 +56,21 @@ function fixAssetPaths(src: string): string {
   return src.replace(/!\[([^\]]*)\]\((?:\.?\/)?assets\/([^)]+)\)/g, `![$1](${ASSETS_PREFIX}$2)`);
 }
 
+function replaceKrokiDiagramRefs(src: string): string {
+  // A .mmd file is Kroki-compatible Mermaid source. MarkdownContent renders it
+  // locally, so course diagrams do not rely on a remote renderer or static SVG.
+  return src.replace(
+    /!\[([^\]]*)\]\((?:\.?\/)?assets\/([^)]+\.mmd)\)/g,
+    (_match, alt: string, file: string) => (
+      `<div class="kroki-diagram" data-kroki-src="${ASSETS_PREFIX}${file}" role="img" aria-label="${alt}"></div>`
+    ),
+  );
+}
+
 export function renderMarkdown(src: string): string {
   if (!src) return '';
-  let processed = fixAssetPaths(src);
+  let processed = replaceKrokiDiagramRefs(src);
+  processed = fixAssetPaths(processed);
   processed = processLatex(processed);
   const html = marked.parse(processed) as string;
   return DOMPurify.sanitize(html, {

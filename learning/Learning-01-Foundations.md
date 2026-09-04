@@ -11,7 +11,7 @@ Keep this input pipeline in mind throughout the assignment:
 text → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor
 ```
 
-![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)
+![Input pipeline from text to initial hidden states](assets/input-pipeline.mmd)
 
 ### Q1 — Token or word? (MCQ)
 
@@ -328,7 +328,7 @@ The dense padded tensor still allocates $4\times6^2=144$ score locations, but th
 
 The lettered diagram below is used again in Learning 08. Which statements about its two input additions are correct? (Select all that apply.)
 
-![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)
+![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.mmd)
 
 - ( ) A is the source-token embedding path and B supplies source positional information.
 - ( ) C is the shifted-right target embedding path and D supplies target positional information.

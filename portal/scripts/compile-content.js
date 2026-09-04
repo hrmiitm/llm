@@ -185,14 +185,19 @@ function parseQType(text) {
   return 'single_choice';
 }
 
+const OPTION_LINE = /^-\s+\(\s*[xX]?\s*\)\s+(.+)/;
+
+function optionText(line) {
+  return line.match(OPTION_LINE)?.[1]?.trim() ?? null;
+}
+
 function extractOptions(lines) {
   const opts = [];
-  const optRe = /^-\s+\(\s*[xX]?\s*\)\s+(.+)/;
   for (const line of lines) {
-    const m = line.match(optRe);
-    if (m) {
+    const text = optionText(line);
+    if (text) {
       const id = String.fromCharCode(65 + opts.length); // A, B, C, ...
-      opts.push({ id, text: m[1].trim() });
+      opts.push({ id, text });
     }
   }
   return opts;
@@ -314,7 +319,9 @@ function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
         i++;
       }
 
-      const bodyText = bodyLines.join('\n').trim();
+      // Options are rendered as interactive controls by QuestionRenderer. Keeping
+      // them in body Markdown created a duplicate, non-interactive bullet list.
+      const bodyText = bodyLines.filter(line => optionText(line) === null).join('\n').trim();
       const options = extractOptions(bodyLines);
       const qType = parseQType(`${qTitle}\n${bodyText}`);
 

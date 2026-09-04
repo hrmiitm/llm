@@ -4,7 +4,7 @@
 
 Understand why a decoder-only model needs positions and a causal mask, then connect next-token training to autoregressive generation.
 
-![Causal-mask pattern](assets/causal-mask.svg)
+![Causal-mask pattern](assets/causal-mask.mmd)
 
 For numerical questions, use a GPT-style layer with sequence length \(T=5\), \(d_{\text{model}}=128\), and \(h=4\) heads. When stated, use batch size \(B=2\).
 

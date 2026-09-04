@@ -1,14 +1,13 @@
 flowchart LR
-    Scores[Raw score matrix\nall query-key pairs] --> Mask[Add -∞ to future positions]
+    Scores[Raw scores S] --> Mask[Add causal mask M]
     Mask --> Softmax[Row-wise softmax]
-    Softmax --> Weights[Causal attention weights\nonly present and past tokens remain]
+    Softmax --> Weights[Attention weights A]
 
-    subgraph Matrix[Lower-triangular visibility]
-        V[1 0 0 0\n1 1 0 0\n1 1 1 0\n1 1 1 1]
-    end
-    Mask -. enforces .-> Matrix
+    Allowed[Keys j <= i keep score: M_ij = 0] --> Mask
+    Future[Keys j > i are future: M_ij = -infinity] --> Mask
+    Weights --> Result[Only j <= i have nonzero weight; each row sums to 1]
 
     classDef op fill:#fff4e5,stroke:#d97706,color:#5b3500;
     classDef result fill:#ecfdf5,stroke:#15803d,color:#14532d;
     class Scores,Mask,Softmax op;
-    class Weights,Matrix result;
+    class Weights,Result,Allowed,Future result;

@@ -204,7 +204,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "For \\(B=2\\), \\(T_t=4\\), and \\(V_t=120\\), which statement correctly describes the final vocabulary-logit tensor and the separate output projection's parameter count?",
-      "bodyMd": "For \\(B=2\\), \\(T_t=4\\), and \\(V_t=120\\), which statement correctly describes the final vocabulary-logit tensor and the separate output projection's parameter count?\n\n- ( ) Logits: \\(2\\times4\\times120\\) (960 scalars); projection: \\(24\\times120+120=3000\\) parameters.\n- ( ) Logits: \\(2\\times4\\times24\\) (192 scalars); projection: \\(24+120=144\\) parameters.\n- ( ) Logits: \\(2\\times6\\times120\\) (1440 scalars); projection: \\(24\\times120=2880\\) parameters.\n- ( ) Logits: \\(2\\times4\\times3\\) (24 scalars); projection: \\(3\\) parameters.",
+      "bodyMd": "For \\(B=2\\), \\(T_t=4\\), and \\(V_t=120\\), which statement correctly describes the final vocabulary-logit tensor and the separate output projection's parameter count?",
       "options": [
         {
           "id": "A",
@@ -303,7 +303,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which pairings are appropriate?",
-      "bodyMd": "Which pairings are appropriate?\n\n- ( ) Translate a source sequence while generating target tokens: encoder-decoder transformer with decoder cross-attention.\n- ( ) Predict a deliberately hidden word from both neighbors: BERT-style MLM.\n- ( ) Generate a continuation one token at a time: GPT-style causal language model.\n- ( ) Give every future target token to a causal decoder at inference so it can choose the answer.",
+      "bodyMd": "Which pairings are appropriate?",
       "options": [
         {
           "id": "A",

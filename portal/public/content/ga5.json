@@ -23,7 +23,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "What are all the challenges one would face while building a vocabulary from a large corpus of text (assume the corpus contains only English text)?",
-      "bodyMd": "**What are all the challenges one would face while building a vocabulary from a large corpus of text (assume the corpus contains only English text)?**\n\n- ( ) Deciding the size of the vocabulary\n- ( ) Method to handle unknown tokens\n- ( ) Handling misspelled words\n- ( ) Handling names and numbers\n- ( ) None of these",
+      "bodyMd": "**What are all the challenges one would face while building a vocabulary from a large corpus of text (assume the corpus contains only English text)?**",
       "options": [
         {
           "id": "A",
@@ -66,7 +66,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Select correct statements regarding character-level tokenization.",
-      "bodyMd": "**Select correct statements regarding character-level tokenization.**\n\n- ( ) The size of vocabulary by character level tokenization will be **larger** than word level tokenization, if the corpus consists of all the books published on Harry Potter.\n- ( ) Computing softmax probabilities will be easy.\n- ( ) The vocabulary will not expand if new words/sentences are added to the corpus.\n- ( ) No issue of handling unknown tokens",
+      "bodyMd": "**Select correct statements regarding character-level tokenization.**",
       "options": [
         {
           "id": "A",
@@ -103,7 +103,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "For which of the following options, applying BPE (based on white-space delimiter as a pre-tokenization step) is NOT feasible?",
-      "bodyMd": "**For which of the following options, applying BPE (based on white-space delimiter as a pre-tokenization step) is NOT feasible?**\n\n- ( ) (Japanese) — see image in assets\n- ( ) (Turkish) benim adım John Smith\n- ( ) (English) My name is John Smith\n- ( ) (German) Mein Name ist John Smith",
+      "bodyMd": "**For which of the following options, applying BPE (based on white-space delimiter as a pre-tokenization step) is NOT feasible?**",
       "options": [
         {
           "id": "A",
@@ -160,7 +160,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Which of the following pairs has the least frequency before any merge?",
-      "bodyMd": "**Which of the following pairs has the least frequency before any merge?**\n\n- ( ) (`w`, `</w>`)\n- ( ) (`l`, `d`)\n- ( ) (`i`, `n`)\n- ( ) (`n`, `e`)\n- ( ) (`w`, `e`)\n- ( ) None of these.",
+      "bodyMd": "**Which of the following pairs has the least frequency before any merge?**",
       "options": [
         {
           "id": "A",
@@ -287,7 +287,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Suppose the process stopped after 7 merges (in order):",
-      "bodyMd": "**Suppose the process stopped after 7 merges (in order):**\n\n| # | Token 1 | Token 2 | → Merged |\n|:---:|:---:|:---:|:---:|\n| 1 | `e` | `s` | `es` |\n| 2 | `es` | `t` | `est` |\n| 3 | `est` | `</w>` | `est</w>` |\n| 4 | `l` | `o` | `lo` |\n| 5 | `lo` | `w` | `low` |\n| 6 | `lo` | `n` | `lon` |\n| 7 | `lon` | `e` | `lone` |\n\n**How will the word `finest</w>` be tokenized?**\n\n- ( ) (`f`, `i`, `n`, `est</w>`)\n- ( ) (`f`, `i`, `n`, `est`, `</w>`)\n- ( ) (`f`, `i`, `n`, `e`, `s`, `t</w>`)\n- ( ) (`f`, `i`, `n`, `e`, `st`, `</w>`)\n- ( ) (`fin`, `est</w>`)\n- ( ) None of these",
+      "bodyMd": "**Suppose the process stopped after 7 merges (in order):**\n\n| # | Token 1 | Token 2 | → Merged |\n|:---:|:---:|:---:|:---:|\n| 1 | `e` | `s` | `es` |\n| 2 | `es` | `t` | `est` |\n| 3 | `est` | `</w>` | `est</w>` |\n| 4 | `l` | `o` | `lo` |\n| 5 | `lo` | `w` | `low` |\n| 6 | `lo` | `n` | `lon` |\n| 7 | `lon` | `e` | `lone` |\n\n**How will the word `finest</w>` be tokenized?**",
       "options": [
         {
           "id": "A",

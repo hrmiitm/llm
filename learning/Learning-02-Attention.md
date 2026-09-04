@@ -4,7 +4,7 @@
 
 Learn scaled dot-product attention from first principles: queries ask, keys advertise, values carry information. Work through the score, softmax, and weighted-sum calculations yourself.
 
-![Attention pipeline](assets/attention-pipeline.svg)
+![Attention pipeline](assets/attention-pipeline.mmd)
 
 For Questions 1–6, use this tiny self-attention example. The two token states are
 

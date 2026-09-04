@@ -1,4 +1,5 @@
-import { renderMarkdown, renderInlineText } from '../lib/renderer';
+import { renderInlineText } from '../lib/renderer';
+import { MarkdownContent } from './MarkdownContent';
 import type { Question, QuestionOption } from '../types';
 
 interface Props {
@@ -50,18 +51,12 @@ export function QuestionRenderer({ question, selectedAnswer, onAnswer, showCorre
       {context && (
         <div className="question-context">
           <div className="context-label">📋 Context for this question</div>
-          <div
-            className="question-text"
-            dangerouslySetInnerHTML={{ __html: renderMarkdown(context) }}
-          />
+          <MarkdownContent className="question-text" markdown={context} />
         </div>
       )}
 
       {/* Question body */}
-      <div
-        className="question-text"
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(bodyMd) }}
-      />
+      <MarkdownContent className="question-text" markdown={bodyMd} />
 
       {/* Options */}
       {type === 'single_choice' && (

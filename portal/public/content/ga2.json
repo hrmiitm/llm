@@ -123,7 +123,7 @@
       "type": "multiple_select",
       "context": "**[Continuation from Week 1 — Q7 & Q8]**\n\nThe input embeddings are:\n\n```math\nh_1 = [0.5, 0.25, 1], \\quad h_2 = [0.1, 0.25, 0], \\quad h_3 = [0.1, 0.1, 0.9]\n```\n\nThe projection matrices:\n\n```math\nW_Q = \\begin{bmatrix} 1 & 1 \\\\ -1 & 1 \\\\ 0 & 1 \\end{bmatrix}, \\quad W_K = \\begin{bmatrix} 0 & 1 \\\\ 1 & 0 \\\\ 0 & 1 \\end{bmatrix}, \\quad W_V = \\begin{bmatrix} 0 & 0 \\\\ -1 & -1 \\\\ 1 & 1 \\end{bmatrix}\n```\n\nComputed as: $Q = HW_Q$, $K = HW_K$, $V = HW_V$.\n\nLet:\n\n- $e_j$ = unnormalized attention score vector for word $j$ (ignore $\\sqrt{d_k}$ scaling)\n- $a_j$ = normalized attention score (softmax of $e_j$)\n- $z_j$ = linear combination of value vectors for word $j$\n\n---",
       "questionText": "Which of the following is (are) hyperparameters? (Select all that apply)",
-      "bodyMd": "**Which of the following is (are) hyperparameters? (Select all that apply)**\n\n- ( ) vocabulary size\n- ( ) $d_k, d_v, d_q$\n- ( ) number of heads\n- ( ) warm-up steps\n- ( ) $d_{\\text{model}}$\n- ( ) number of layers\n- ( ) size of the attention mask",
+      "bodyMd": "**Which of the following is (are) hyperparameters? (Select all that apply)**",
       "options": [
         {
           "id": "A",

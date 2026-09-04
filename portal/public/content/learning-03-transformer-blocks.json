@@ -244,7 +244,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which components contain trainable parameters in the usual transformer block?",
-      "bodyMd": "Which components contain trainable parameters in the usual transformer block?\n\n- ( ) The Q/K/V/output projections\n- ( ) The two FFN linear layers\n- ( ) Layer norm's scale and bias\n- ( ) A residual addition by itself",
+      "bodyMd": "Which components contain trainable parameters in the usual transformer block?",
       "options": [
         {
           "id": "A",
@@ -285,7 +285,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "What is the main role of a residual connection such as \\(x+\\operatorname{FFN}(x)\\)?",
-      "bodyMd": "What is the main role of a residual connection such as \\(x+\\operatorname{FFN}(x)\\)?\n\n- ( ) It removes the need for attention\n- ( ) It gives information and gradients a direct route through the layer\n- ( ) It makes all token vectors identical\n- ( ) It replaces the vocabulary softmax",
+      "bodyMd": "What is the main role of a residual connection such as \\(x+\\operatorname{FFN}(x)\\)?",
       "options": [
         {
           "id": "A",
@@ -324,7 +324,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Which component normally supplies a pointwise nonlinearity such as ReLU or GELU?",
-      "bodyMd": "Which component normally supplies a pointwise nonlinearity such as ReLU or GELU?\n\n- ( ) The feed-forward network\n- ( ) The causal-mask triangle\n- ( ) The vocabulary index\n- ( ) The residual addition alone",
+      "bodyMd": "Which component normally supplies a pointwise nonlinearity such as ReLU or GELU?",
       "options": [
         {
           "id": "A",

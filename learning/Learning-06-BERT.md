@@ -4,7 +4,7 @@
 
 Learn how BERT uses an encoder and bidirectional context to predict deliberately hidden tokens, then use its special representations for classification.
 
-![BERT versus GPT](assets/bert-gpt.svg)
+![BERT versus GPT](assets/bert-gpt.mmd)
 
 ### Q1 — BERT's core stack (MCQ)
 

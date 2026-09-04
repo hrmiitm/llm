@@ -18,7 +18,7 @@ V_s=800,\qquad V_t=1000,\qquad N_e=N_d=2.
 
 All Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.
 
-![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)
+![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.mmd)
 
 ### Q1 — Source tensor at E (Short Answer)
 

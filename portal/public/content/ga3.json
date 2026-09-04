@@ -43,7 +43,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Consider a Right-to-Left (RTL) language (e.g., \"transformer movie the enjoyed I\"). If we use GPT for Causal Language Modelling (CLM), then:",
-      "bodyMd": "**Consider a Right-to-Left (RTL) language (e.g., \"transformer movie the enjoyed I\"). If we use GPT for Causal Language Modelling (CLM), then:**\n\n- ( ) It is necessary to flip the attention mask horizontally\n- ( ) It is necessary to flip the attention mask vertically\n- ( ) Neither the horizontal nor the vertical flipping of attention mask is required",
+      "bodyMd": "**Consider a Right-to-Left (RTL) language (e.g., \"transformer movie the enjoyed I\"). If we use GPT for Causal Language Modelling (CLM), then:**",
       "options": [
         {
           "id": "A",
@@ -76,7 +76,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Choose the correct statements: (Select all that apply)",
-      "bodyMd": "**Choose the correct statements: (Select all that apply)**\n\n- ( ) All parameters of GPT are randomly initialized during **pre-training**\n- ( ) The model minimizes the CLM objective during **fine-tuning**\n- ( ) All parameters of GPT are randomly initialized during **fine-tuning**\n- ( ) In general, fine-tuning requires a dataset **with labels**",
+      "bodyMd": "**Choose the correct statements: (Select all that apply)**",
       "options": [
         {
           "id": "A",
@@ -116,7 +116,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Vocabulary: 10,000 words; 100 rare words appeared only once. Embedding layer and output layer parameters are shared. A batch of 256 samples contains NONE of the 100 rare words. After one training iteration:",
-      "bodyMd": "**Vocabulary: 10,000 words; 100 rare words appeared only once. Embedding layer and output layer parameters are shared. A batch of 256 samples contains NONE of the 100 rare words. After one training iteration:**\n\n- ( ) It is certain that embeddings of none of the 100 rare words will get updated\n- ( ) There is a chance that embeddings of all or some of these 100 rare words will get updated\n- ( ) The embeddings of all 100 rare words will definitely get updated",
+      "bodyMd": "**Vocabulary: 10,000 words; 100 rare words appeared only once. Embedding layer and output layer parameters are shared. A batch of 256 samples contains NONE of the 100 rare words. After one training iteration:**",
       "options": [
         {
           "id": "A",
@@ -151,7 +151,7 @@
       "type": "single_choice",
       "context": "**Rajesh's GPT-like model configuration:**\n\n| Parameter | Value |\n|---|:---:|\n| Vocabulary size | 1000 |\n| Sequence length | 64 |\n| Embedding dimension $d_{\\text{model}}$ | 128 |\n| Number of transformer blocks (layers) | 4 |\n| Number of attention heads per block | 4 |\n| FFN hidden layer size | 256 |\n\n---",
       "questionText": "What is the shape of the positional embedding?",
-      "bodyMd": "**What is the shape of the positional embedding?**\n\n- ( ) $64 \\times 128$\n- ( ) $64 \\times 4$\n- ( ) $12 \\times 128$\n- ( ) $512 \\times 768$",
+      "bodyMd": "**What is the shape of the positional embedding?**",
       "options": [
         {
           "id": "A",
@@ -188,7 +188,7 @@
       "type": "single_choice",
       "context": "**Rajesh's GPT-like model configuration:**\n\n| Parameter | Value |\n|---|:---:|\n| Vocabulary size | 1000 |\n| Sequence length | 64 |\n| Embedding dimension $d_{\\text{model}}$ | 128 |\n| Number of transformer blocks (layers) | 4 |\n| Number of attention heads per block | 4 |\n| FFN hidden layer size | 256 |\n\n---",
       "questionText": "What is the shape of the per-head query projection matrix $W_Q^i$?",
-      "bodyMd": "**What is the shape of the per-head query projection matrix $W_Q^i$?**\n\n- ( ) $32 \\times 32$\n- ( ) $64 \\times 32$\n- ( ) $128 \\times 16$\n- ( ) $128 \\times 32$\n- ( ) $8 \\times 32$\n- ( ) None of these",
+      "bodyMd": "**What is the shape of the per-head query projection matrix $W_Q^i$?**",
       "options": [
         {
           "id": "A",
@@ -233,7 +233,7 @@
       "type": "single_choice",
       "context": "**Rajesh's GPT-like model configuration:**\n\n| Parameter | Value |\n|---|:---:|\n| Vocabulary size | 1000 |\n| Sequence length | 64 |\n| Embedding dimension $d_{\\text{model}}$ | 128 |\n| Number of transformer blocks (layers) | 4 |\n| Number of attention heads per block | 4 |\n| FFN hidden layer size | 256 |\n\n---",
       "questionText": "What is the shape of the mask $M$?",
-      "bodyMd": "**What is the shape of the mask $M$?**\n\n- ( ) $16 \\times 16$\n- ( ) $32 \\times 32$\n- ( ) $64 \\times 64$\n- ( ) $128 \\times 128$\n- ( ) None of these",
+      "bodyMd": "**What is the shape of the mask $M$?**",
       "options": [
         {
           "id": "A",

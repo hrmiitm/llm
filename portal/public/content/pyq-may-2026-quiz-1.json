@@ -24,7 +24,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which statements are true about traditional attention used in sequence-to-sequence models? (Select all that apply.)",
-      "bodyMd": "**Which statements are true about traditional attention used in sequence-to-sequence models? (Select all that apply.)**\n\n- ( ) The decoder decides which encoder states are important.\n- ( ) Attention weights are computed over all decoder hidden states.\n- ( ) The context vector is a weighted sum of encoder states.\n- ( ) Encoder hidden states are ignored after encoding.",
+      "bodyMd": "**Which statements are true about traditional attention used in sequence-to-sequence models? (Select all that apply.)**",
       "options": [
         {
           "id": "A",
@@ -50,7 +50,7 @@
           "C"
         ]
       },
-      "solutionMd": "**Answer:** A and C\n\n#### Step-by-step solution\n\n**Step 1 — Identify the objects in encoder-decoder attention.**\n\nThe encoder produces hidden states $h_1,h_2,\\ldots,h_T$. At decoder step $t$, the decoder state supplies a query that scores how relevant each encoder state is:\n\n$$e_{t,j} = \\operatorname{score}(s_{t-1},h_j),\\qquad a_{t,j}=\\operatorname{softmax}(e_{t,j}).$$\n\n**Step 2 — Form the context vector.**\n\nThe context passed to the decoder is the weighted sum\n\n$$c_t=\\sum_{j=1}^{T}a_{t,j}h_j.$$\n\nSo the decoder does decide which encoder states matter, and the context vector is a weighted sum of them.\n\n![Kroki-style attention pipeline](assets/attention-pipeline.svg)\n\n**Step 3 — Eliminate the false statements.**\n\n- **B is false:** attention weights are computed over encoder states (the keys/values), not over all decoder hidden states.\n- **D is false:** encoder states are precisely what attention uses after the encoder has finished.\n\nTherefore, the correct selections are $\\boxed{\\text{A, C}}$.",
+      "solutionMd": "**Answer:** A and C\n\n#### Step-by-step solution\n\n**Step 1 — Identify the objects in encoder-decoder attention.**\n\nThe encoder produces hidden states $h_1,h_2,\\ldots,h_T$. At decoder step $t$, the decoder state supplies a query that scores how relevant each encoder state is:\n\n$$e_{t,j} = \\operatorname{score}(s_{t-1},h_j),\\qquad a_{t,j}=\\operatorname{softmax}(e_{t,j}).$$\n\n**Step 2 — Form the context vector.**\n\nThe context passed to the decoder is the weighted sum\n\n$$c_t=\\sum_{j=1}^{T}a_{t,j}h_j.$$\n\nSo the decoder does decide which encoder states matter, and the context vector is a weighted sum of them.\n\n![Attention pipeline](assets/attention-pipeline.mmd)\n\n**Step 3 — Eliminate the false statements.**\n\n- **B is false:** attention weights are computed over encoder states (the keys/values), not over all decoder hidden states.\n- **D is false:** encoder states are precisely what attention uses after the encoder has finished.\n\nTherefore, the correct selections are $\\boxed{\\text{A, C}}$.",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -84,7 +84,7 @@
       "type": "single_choice",
       "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
       "questionText": "Choose the token pair with the least attention score.",
-      "bodyMd": "**Choose the token pair with the least attention score.**\n\n- ( ) `{learn, easy}`\n- ( ) `{learn, math}`\n- ( ) `{easy, math}`\n- ( ) `{learn, learn}`\n- ( ) `{easy, easy}`",
+      "bodyMd": "**Choose the token pair with the least attention score.**",
       "options": [
         {
           "id": "A",
@@ -207,7 +207,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Consider the following statements about teacher forcing in autoregressive sequence-to-sequence training.",
-      "bodyMd": "**Consider the following statements about teacher forcing in autoregressive sequence-to-sequence training.**\n\n**Statement 1:** Teacher forcing passes the input token to a larger Teacher model whose output becomes the next token.\n**Statement 2:** Teacher forcing helps prevent compounding early incorrect predictions that can destabilize training.\n\n- ( ) Statement 1 is true but Statement 2 is false.\n- ( ) Statement 1 is false but Statement 2 is true.\n- ( ) Both statements are true.\n- ( ) Both statements are false.",
+      "bodyMd": "**Consider the following statements about teacher forcing in autoregressive sequence-to-sequence training.**\n\n**Statement 1:** Teacher forcing passes the input token to a larger Teacher model whose output becomes the next token.\n**Statement 2:** Teacher forcing helps prevent compounding early incorrect predictions that can destabilize training.",
       "options": [
         {
           "id": "A",
@@ -244,7 +244,7 @@
       "num": "Q10",
       "title": "Probability of “you eat apples” (Short Answer)",
       "type": "numeric",
-      "context": "The language model generates three word tokens after `<START>`. The table shows the relevant conditional probabilities; the actual vocabulary may be larger.\n\n| From | To | Probability |\n|---|---|---:|\n| `<START>` | i | 0.5 |\n| `<START>` | you | 0.4 |\n| i | like | 0.6 |\n| i | eat | 0.3 |\n| you | like | 0.4 |\n| you | eat | 0.5 |\n| i like | apples | 0.7 |\n| i like | bananas | 0.2 |\n| i eat | apples | 0.4 |\n| i eat | bananas | 0.6 |\n| you like | apples | 0.4 |\n| you like | bananas | 0.5 |\n| you eat | apples | 0.9 |\n| you eat | bananas | 0.1 |\n\n![Kroki-style language-model probability tree](assets/decoder-search.svg)",
+      "context": "The language model generates three word tokens after `<START>`. The table shows the relevant conditional probabilities; the actual vocabulary may be larger.\n\n| From | To | Probability |\n|---|---|---:|\n| `<START>` | i | 0.5 |\n| `<START>` | you | 0.4 |\n| i | like | 0.6 |\n| i | eat | 0.3 |\n| you | like | 0.4 |\n| you | eat | 0.5 |\n| i like | apples | 0.7 |\n| i like | bananas | 0.2 |\n| i eat | apples | 0.4 |\n| i eat | bananas | 0.6 |\n| you like | apples | 0.4 |\n| you like | bananas | 0.5 |\n| you eat | apples | 0.9 |\n| you eat | bananas | 0.1 |\n\n![Language-model probability tree](assets/decoder-search.mmd)",
       "questionText": "Compute the joint probability of the sentence “you eat apples”. Give the answer to two digits after the decimal.",
       "bodyMd": "**Compute the joint probability of the sentence “you eat apples”. Give the answer to two digits after the decimal.**\n\n*(Numeric input)*",
       "options": [],
@@ -264,9 +264,9 @@
       "num": "Q11",
       "title": "Most probable listed sentence (MCQ)",
       "type": "single_choice",
-      "context": "The language model generates three word tokens after `<START>`. The table shows the relevant conditional probabilities; the actual vocabulary may be larger.\n\n| From | To | Probability |\n|---|---|---:|\n| `<START>` | i | 0.5 |\n| `<START>` | you | 0.4 |\n| i | like | 0.6 |\n| i | eat | 0.3 |\n| you | like | 0.4 |\n| you | eat | 0.5 |\n| i like | apples | 0.7 |\n| i like | bananas | 0.2 |\n| i eat | apples | 0.4 |\n| i eat | bananas | 0.6 |\n| you like | apples | 0.4 |\n| you like | bananas | 0.5 |\n| you eat | apples | 0.9 |\n| you eat | bananas | 0.1 |\n\n![Kroki-style language-model probability tree](assets/decoder-search.svg)",
+      "context": "The language model generates three word tokens after `<START>`. The table shows the relevant conditional probabilities; the actual vocabulary may be larger.\n\n| From | To | Probability |\n|---|---|---:|\n| `<START>` | i | 0.5 |\n| `<START>` | you | 0.4 |\n| i | like | 0.6 |\n| i | eat | 0.3 |\n| you | like | 0.4 |\n| you | eat | 0.5 |\n| i like | apples | 0.7 |\n| i like | bananas | 0.2 |\n| i eat | apples | 0.4 |\n| i eat | bananas | 0.6 |\n| you like | apples | 0.4 |\n| you like | bananas | 0.5 |\n| you eat | apples | 0.9 |\n| you eat | bananas | 0.1 |\n\n![Language-model probability tree](assets/decoder-search.mmd)",
       "questionText": "Choose the option corresponding to the sentence with the highest joint probability.",
-      "bodyMd": "**Choose the option corresponding to the sentence with the highest joint probability.**\n\n- ( ) `i eat apples`\n- ( ) `apples like you`\n- ( ) `i eat bananas`\n- ( ) `you like bananas`\n- ( ) `you like apples`",
+      "bodyMd": "**Choose the option corresponding to the sentence with the highest joint probability.**",
       "options": [
         {
           "id": "A",
@@ -307,7 +307,7 @@
       "num": "Q12",
       "title": "$P(\\text{apples}\\mid\\text{like})$ (Short Answer)",
       "type": "numeric",
-      "context": "The language model generates three word tokens after `<START>`. The table shows the relevant conditional probabilities; the actual vocabulary may be larger.\n\n| From | To | Probability |\n|---|---|---:|\n| `<START>` | i | 0.5 |\n| `<START>` | you | 0.4 |\n| i | like | 0.6 |\n| i | eat | 0.3 |\n| you | like | 0.4 |\n| you | eat | 0.5 |\n| i like | apples | 0.7 |\n| i like | bananas | 0.2 |\n| i eat | apples | 0.4 |\n| i eat | bananas | 0.6 |\n| you like | apples | 0.4 |\n| you like | bananas | 0.5 |\n| you eat | apples | 0.9 |\n| you eat | bananas | 0.1 |\n\n![Kroki-style language-model probability tree](assets/decoder-search.svg)",
+      "context": "The language model generates three word tokens after `<START>`. The table shows the relevant conditional probabilities; the actual vocabulary may be larger.\n\n| From | To | Probability |\n|---|---|---:|\n| `<START>` | i | 0.5 |\n| `<START>` | you | 0.4 |\n| i | like | 0.6 |\n| i | eat | 0.3 |\n| you | like | 0.4 |\n| you | eat | 0.5 |\n| i like | apples | 0.7 |\n| i like | bananas | 0.2 |\n| i eat | apples | 0.4 |\n| i eat | bananas | 0.6 |\n| you like | apples | 0.4 |\n| you like | bananas | 0.5 |\n| you eat | apples | 0.9 |\n| you eat | bananas | 0.1 |\n\n![Language-model probability tree](assets/decoder-search.mmd)",
       "questionText": "Using the probability tree, calculate $P(\\text{apples}\\mid\\text{like})$. Submit $-1$ if the information is insufficient.",
       "bodyMd": "**Using the probability tree, calculate $P(\\text{apples}\\mid\\text{like})$. Submit $-1$ if the information is insufficient.**\n\n*(Numeric input)*",
       "options": [],
@@ -329,7 +329,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which components are found within a GPT decoder layer? (Select all that apply.)",
-      "bodyMd": "**Which components are found within a GPT decoder layer? (Select all that apply.)**\n\n- ( ) Causal (masked) multi-head self-attention\n- ( ) Position-wise feed-forward network\n- ( ) Multi-head cross-attention\n- ( ) Recurrent neural network (RNN) layer\n- ( ) Add & Norm layer",
+      "bodyMd": "**Which components are found within a GPT decoder layer? (Select all that apply.)**",
       "options": [
         {
           "id": "A",
@@ -438,9 +438,9 @@
       "options": [],
       "answer": {
         "type": "numeric",
-        "value": "2"
+        "value": "5"
       },
-      "solutionMd": "**Answer:** $\\boxed{2}$\n\n#### Step-by-step solution\n\n**Step 1 — Find the rank of the target token at each timestep.**\n\n| Timestep | Target token | Relevant probabilities | Target rank |\n|---:|---|---|---:|\n| 1 | the | historic 0.38, **the 0.30**, … | 2 |\n| 2 | castle | **castle 0.40**, historic 0.30, … | 1 |\n| 3 | was | **was 0.50**, … | 1 |\n| 4 | abandoned | majestic 0.35, **abandoned 0.30**, … | 2 |\n\n**Step 2 — Take the worst rank along the path.**\n\nBeam width $b$ must be at least the target's rank whenever that target is selected. The maximum rank is\n\n$$\\max(2,1,1,2)=\\boxed{2}.$$\n\nWith beam width 1, the first token `the` would be discarded in favor of `historic`, so the target sequence could not be retained. Width 2 is sufficient under the supplied timestep-wise probabilities.",
+      "solutionMd": "**Answer:** $\\boxed{5}$\n\n#### Step-by-step solution\n\n**Step 1 — Rank prefixes, not individual next tokens.**\n\nBeam search keeps complete *prefixes* by their joint probability. Looking only at the rank of `the`, `castle`, `was`, or `abandoned` in its own column is not enough, because a stronger earlier prefix can combine with another high-probability next token.\n\nThe target prefix probabilities are\n\n$$\nP(\\texttt{the})=0.30,\\quad\nP(\\texttt{the castle})=0.30(0.40)=0.12,\n$$\n$$\nP(\\texttt{the castle was})=0.12(0.50)=0.06,\\quad\nP(\\texttt{the castle was abandoned})=0.06(0.30)=0.018.\n$$\n\n**Step 2 — Check the target prefix's rank at every depth.**\n\n| Depth | Target prefix probability | Rank among all prefixes at that depth |\n|---:|---:|---:|\n| 1 | 0.300 | 2 |\n| 2 | 0.120 | 2 |\n| 3 | 0.060 | 2 |\n| 4 | 0.018 | 5 |\n\nAt depth 4, four prefixes outrank the target: `historic castle was majestic` (0.0266), `historic castle was abandoned` (0.0228), `the castle was majestic` (0.0210), and `historic historic was majestic` (0.01995).\n\n**Step 3 — Use the worst prefix rank.**\n\nA width-4 beam drops the target at depth 4; a width-5 beam retains it. Therefore the minimum width that guarantees this target remains in the beam is\n\n$$\\boxed{5}.$$",
       "marks": {
         "correct": 1,
         "incorrect": 0,

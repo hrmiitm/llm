@@ -1,0 +1,25 @@
+flowchart LR
+    subgraph ENC[Encoder block (N times)]
+        direction BT
+        IN[Inputs] --> A[A] --> AddE((+)) --> E[E] --> F[F] --> G[G] --> H[H]
+        B[B] --> AddE
+        AddE -. residual .-> F
+        F -. residual .-> H
+    end
+
+    subgraph DEC[Decoder block (N times)]
+        direction BT
+        OUTIN[Outputs shifted right] --> C[C] --> AddD((+)) --> L[L] --> M[M] --> O[O] --> P[P] --> Q[Q] --> R[R]
+        D[D] --> AddD
+        AddD -. residual .-> M
+        M -. residual .-> P
+        P -. residual .-> R
+    end
+
+    H --> O
+    R --> S[S] --> T[T] --> U[U]
+
+    classDef letter fill:#ffffff,stroke:#334155,color:#0f172a;
+    classDef plus fill:#fff4e5,stroke:#d97706,color:#5b3500;
+    class A,B,C,D,E,F,G,H,L,M,O,P,Q,R,S,T,U letter;
+    class AddE,AddD plus;

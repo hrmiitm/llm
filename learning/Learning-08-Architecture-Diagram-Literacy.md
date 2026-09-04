@@ -8,7 +8,7 @@ Turn a lettered Transformer diagram into a mental execution trace. You will iden
 
 This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \(N\times\) mean that each block can be repeated.
 
-![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)
+![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.mmd)
 
 ### Q1 — Source-side input addition (MCQ)
 

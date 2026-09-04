@@ -4,7 +4,7 @@
 
 Assemble encoder and decoder layers from attention, feed-forward networks, residual paths, and layer normalization. Then count their trainable parameters accurately.
 
-![Encoder-decoder transformer](assets/transformer-encoder-decoder.svg)
+![Encoder-decoder transformer](assets/transformer-encoder-decoder.mmd)
 
 For Questions 1–10, consider a one-layer encoder-decoder transformer with
 

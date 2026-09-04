@@ -38,7 +38,7 @@ $$c_t=\sum_{j=1}^{T}a_{t,j}h_j.$$
 
 So the decoder does decide which encoder states matter, and the context vector is a weighted sum of them.
 
-![Kroki-style attention pipeline](assets/attention-pipeline.svg)
+![Attention pipeline](assets/attention-pipeline.mmd)
 
 **Step 3 — Eliminate the false statements.**
 
@@ -342,7 +342,7 @@ The language model generates three word tokens after `<START>`. The table shows 
 | you eat | apples | 0.9 |
 | you eat | bananas | 0.1 |
 
-![Kroki-style language-model probability tree](assets/decoder-search.svg)
+![Language-model probability tree](assets/decoder-search.mmd)
 
 ### Q10 — Probability of “you eat apples” (Short Answer)
 
@@ -614,25 +614,40 @@ Do not divide by $k$; top-$k$ renormalizes by the sum of the retained probabilit
 <details>
 <summary><b>Answer & Solution</b></summary>
 
-**Answer:** $\boxed{2}$
+**Answer:** $\boxed{5}$
 
 #### Step-by-step solution
 
-**Step 1 — Find the rank of the target token at each timestep.**
+**Step 1 — Rank prefixes, not individual next tokens.**
 
-| Timestep | Target token | Relevant probabilities | Target rank |
-|---:|---|---|---:|
-| 1 | the | historic 0.38, **the 0.30**, … | 2 |
-| 2 | castle | **castle 0.40**, historic 0.30, … | 1 |
-| 3 | was | **was 0.50**, … | 1 |
-| 4 | abandoned | majestic 0.35, **abandoned 0.30**, … | 2 |
+Beam search keeps complete *prefixes* by their joint probability. Looking only at the rank of `the`, `castle`, `was`, or `abandoned` in its own column is not enough, because a stronger earlier prefix can combine with another high-probability next token.
 
-**Step 2 — Take the worst rank along the path.**
+The target prefix probabilities are
 
-Beam width $b$ must be at least the target's rank whenever that target is selected. The maximum rank is
+$$
+P(\texttt{the})=0.30,\quad
+P(\texttt{the castle})=0.30(0.40)=0.12,
+$$
+$$
+P(\texttt{the castle was})=0.12(0.50)=0.06,\quad
+P(\texttt{the castle was abandoned})=0.06(0.30)=0.018.
+$$
 
-$$\max(2,1,1,2)=\boxed{2}.$$
+**Step 2 — Check the target prefix's rank at every depth.**
 
-With beam width 1, the first token `the` would be discarded in favor of `historic`, so the target sequence could not be retained. Width 2 is sufficient under the supplied timestep-wise probabilities.
+| Depth | Target prefix probability | Rank among all prefixes at that depth |
+|---:|---:|---:|
+| 1 | 0.300 | 2 |
+| 2 | 0.120 | 2 |
+| 3 | 0.060 | 2 |
+| 4 | 0.018 | 5 |
+
+At depth 4, four prefixes outrank the target: `historic castle was majestic` (0.0266), `historic castle was abandoned` (0.0228), `the castle was majestic` (0.0210), and `historic historic was majestic` (0.01995).
+
+**Step 3 — Use the worst prefix rank.**
+
+A width-4 beam drops the target at depth 4; a width-5 beam retains it. Therefore the minimum width that guarantees this target remains in the beam is
+
+$$\boxed{5}.$$
 
 </details>

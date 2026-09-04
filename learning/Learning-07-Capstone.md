@@ -4,7 +4,7 @@
 
 Bring the core ideas together: representations, attention shapes, encoder-decoder parameter counts, causal generation, decoding, and BERT's MLM objective.
 
-![Transformer overview](assets/transformer-encoder-decoder.svg)
+![Transformer overview](assets/transformer-encoder-decoder.mmd)
 
 Use this encoder-decoder system for Questions 1–10 and Q15:
 

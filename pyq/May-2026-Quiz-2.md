@@ -12,7 +12,7 @@ Attempt each question before opening the solution. The explanations emphasize th
 
 The reference diagram below is a faithful rendering of the lettered architecture in the source `.tex` for one ($N=1$) Transformer encoder-decoder block. The component letters are intentionally left as letters; infer each function from its position and connections.
 
-![Lettered Transformer encoder-decoder architecture from the source paper](assets/transformer-lettered-architecture.svg)
+![Lettered Transformer encoder-decoder architecture from the source paper](assets/transformer-lettered-architecture.mmd)
 
 ### Q2 — Identify every Add & Norm layer (Short Answer)
 
@@ -143,7 +143,7 @@ $$\operatorname{softmax}(A)\odot M.$$
 
 #### Step-by-step solution
 
-![Kroki-style causal masking flow](assets/causal-mask.svg)
+![Causal masking flow](assets/causal-mask.mmd)
 
 **Step 1 — Compare the two masking locations.**
 

@@ -4,7 +4,7 @@
 
 Learn the difference between a model's probabilities and the procedure used to turn them into text. Compare greedy decoding, exhaustive search, top-\(k\), and nucleus sampling.
 
-![Decoder search](assets/decoder-search.svg)
+![Decoder search](assets/decoder-search.mmd)
 
 For Questions 1–6, use the following tiny autoregressive model. It starts with `<s>` and generates two tokens. At step 1:
 

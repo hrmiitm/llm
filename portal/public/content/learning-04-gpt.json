@@ -24,7 +24,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Why are positional embeddings or positional encodings needed in a transformer?",
-      "bodyMd": "Why are positional embeddings or positional encodings needed in a transformer?\n\n- ( ) Self-attention alone has no inherent notion of token order\n- ( ) They make all vocabulary items share one embedding\n- ( ) They remove the need for a causal mask\n- ( ) They directly choose the next token",
+      "bodyMd": "Why are positional embeddings or positional encodings needed in a transformer?",
       "options": [
         {
           "id": "A",
@@ -63,7 +63,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "If one sequence has five positions and \\(d_{\\text{model}}=128\\), what is the shape of its position-embedding matrix before adding it to token embeddings?",
-      "bodyMd": "If one sequence has five positions and \\(d_{\\text{model}}=128\\), what is the shape of its position-embedding matrix before adding it to token embeddings?\n\n- ( ) \\(5\\times128\\)\n- ( ) \\(128\\times5\\times5\\)\n- ( ) \\(5\\times5\\)\n- ( ) \\(128\\times128\\)",
+      "bodyMd": "If one sequence has five positions and \\(d_{\\text{model}}=128\\), what is the shape of its position-embedding matrix before adding it to token embeddings?",
       "options": [
         {
           "id": "A",
@@ -142,7 +142,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "What is the attention-mask shape for one five-token self-attention sequence before broadcasting over batch and heads?",
-      "bodyMd": "What is the attention-mask shape for one five-token self-attention sequence before broadcasting over batch and heads?\n\n- ( ) \\(5\\times128\\)\n- ( ) \\(5\\times5\\)\n- ( ) \\(4\\times32\\)\n- ( ) \\(128\\times128\\)",
+      "bodyMd": "What is the attention-mask shape for one five-token self-attention sequence before broadcasting over batch and heads?",
       "options": [
         {
           "id": "A",
@@ -201,7 +201,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "If the written language is right-to-left but tokens are stored in their natural generation order, what happens to the causal-mask rule?",
-      "bodyMd": "If the written language is right-to-left but tokens are stored in their natural generation order, what happens to the causal-mask rule?\n\n- ( ) The mask must always be flipped visually\n- ( ) The rule is still “allow earlier generated positions, block later ones”\n- ( ) Causal masking is unnecessary\n- ( ) The model must use an encoder only",
+      "bodyMd": "If the written language is right-to-left but tokens are stored in their natural generation order, what happens to the causal-mask rule?",
       "options": [
         {
           "id": "A",
@@ -240,7 +240,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Which transformer stack is GPT fundamentally based on?",
-      "bodyMd": "Which transformer stack is GPT fundamentally based on?\n\n- ( ) Encoder-only, bidirectional attention\n- ( ) Decoder-only, masked self-attention\n- ( ) Encoder followed by a separate decoder for every token\n- ( ) A recurrent network with no attention",
+      "bodyMd": "Which transformer stack is GPT fundamentally based on?",
       "options": [
         {
           "id": "A",
@@ -279,7 +279,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Teacher-forced input is \\([\\text{BOS},x_1,x_2,x_3]\\) and the desired continuation is \\([x_1,x_2,x_3,\\text{EOS}]\\). What is the training target for the state at the input position containing \\(x_3\\)?",
-      "bodyMd": "Teacher-forced input is \\([\\text{BOS},x_1,x_2,x_3]\\) and the desired continuation is \\([x_1,x_2,x_3,\\text{EOS}]\\). What is the training target for the state at the input position containing \\(x_3\\)?\n\n- ( ) \\(x_2\\)\n- ( ) \\(x_3\\)\n- ( ) \\(\\text{BOS}\\)\n- ( ) \\(\\text{EOS}\\)",
+      "bodyMd": "Teacher-forced input is \\([\\text{BOS},x_1,x_2,x_3]\\) and the desired continuation is \\([x_1,x_2,x_3,\\text{EOS}]\\). What is the training target for the state at the input position containing \\(x_3\\)?",
       "options": [
         {
           "id": "A",
@@ -318,7 +318,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which statements correctly compare teacher-forced training with inference?",
-      "bodyMd": "Which statements correctly compare teacher-forced training with inference?\n\n- ( ) During training, the true previous tokens can be supplied as context.\n- ( ) During inference, a generated token becomes context for the next step.\n- ( ) During inference, the model sees all future ground-truth tokens.\n- ( ) Exposure to its own earlier errors is an inference challenge.",
+      "bodyMd": "Which statements correctly compare teacher-forced training with inference?",
       "options": [
         {
           "id": "A",
@@ -359,7 +359,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "If the input embedding matrix and output vocabulary classifier are tied, why can a rare token receive a useful gradient even when it is not the correct next token?",
-      "bodyMd": "If the input embedding matrix and output vocabulary classifier are tied, why can a rare token receive a useful gradient even when it is not the correct next token?\n\n- ( ) Tying creates an extra vocabulary\n- ( ) It appears in the softmax denominator as a competing output class\n- ( ) It turns attention into convolution\n- ( ) It prevents any gradients from reaching embeddings",
+      "bodyMd": "If the input embedding matrix and output vocabulary classifier are tied, why can a rare token receive a useful gradient even when it is not the correct next token?",
       "options": [
         {
           "id": "A",
@@ -418,7 +418,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which statements are correct?",
-      "bodyMd": "Which statements are correct?\n\n- ( ) GPT-style pretraining can learn next-token prediction from raw text.\n- ( ) Fine-tuning adapts pretrained parameters to a downstream task or instruction behavior.\n- ( ) Fine-tuning means discarding the pretrained model and starting with random weights.\n- ( ) Both stages can use gradients to update parameters.",
+      "bodyMd": "Which statements are correct?",
       "options": [
         {
           "id": "A",
@@ -479,7 +479,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "A student says: “At generation step 4, GPT can use the true step-5 word because it saw it during teacher-forced training.” Which corrections are valid?",
-      "bodyMd": "A student says: “At generation step 4, GPT can use the true step-5 word because it saw it during teacher-forced training.” Which corrections are valid?\n\n- ( ) At inference, there is no true future word available to provide.\n- ( ) The causal mask prevents step 4 from reading a later token even if a full training sequence is present.\n- ( ) The token generated at step 4 becomes part of the prefix used at step 5.\n- ( ) Teacher forcing makes a future-token leak correct at inference.",
+      "bodyMd": "A student says: “At generation step 4, GPT can use the true step-5 word because it saw it during teacher-forced training.” Which corrections are valid?",
       "options": [
         {
           "id": "A",

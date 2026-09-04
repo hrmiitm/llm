@@ -22,7 +22,7 @@
       "num": "Q2",
       "title": "Identify every Add & Norm layer (Short Answer)",
       "type": "text",
-      "context": "The reference diagram below is a faithful rendering of the lettered architecture in the source `.tex` for one ($N=1$) Transformer encoder-decoder block. The component letters are intentionally left as letters; infer each function from its position and connections.\n\n![Lettered Transformer encoder-decoder architecture from the source paper](assets/transformer-lettered-architecture.svg)",
+      "context": "The reference diagram below is a faithful rendering of the lettered architecture in the source `.tex` for one ($N=1$) Transformer encoder-decoder block. The component letters are intentionally left as letters; infer each function from its position and connections.\n\n![Lettered Transformer encoder-decoder architecture from the source paper](assets/transformer-lettered-architecture.mmd)",
       "questionText": "Identify every Add & Norm layer in the labeled architecture. Submit the component letters in alphabetical order as one uppercase string without spaces or punctuation.",
       "bodyMd": "**Identify every Add & Norm layer in the labeled architecture. Submit the component letters in alphabetical order as one uppercase string without spaces or punctuation.**\n\n*(Example: if the components are Q, G, and S, answer `GQS`.)*",
       "options": [],
@@ -42,9 +42,9 @@
       "num": "Q3",
       "title": "Function of component L (MCQ)",
       "type": "single_choice",
-      "context": "The reference diagram below is a faithful rendering of the lettered architecture in the source `.tex` for one ($N=1$) Transformer encoder-decoder block. The component letters are intentionally left as letters; infer each function from its position and connections.\n\n![Lettered Transformer encoder-decoder architecture from the source paper](assets/transformer-lettered-architecture.svg)",
+      "context": "The reference diagram below is a faithful rendering of the lettered architecture in the source `.tex` for one ($N=1$) Transformer encoder-decoder block. The component letters are intentionally left as letters; infer each function from its position and connections.\n\n![Lettered Transformer encoder-decoder architecture from the source paper](assets/transformer-lettered-architecture.mmd)",
       "questionText": "Identify the function of component `L`.",
-      "bodyMd": "**Identify the function of component `L`.**\n\n- ( ) Positional encoding\n- ( ) Feed-forward network\n- ( ) Masked multi-head self-attention\n- ( ) Multi-head cross-attention\n- ( ) Linear output projection",
+      "bodyMd": "**Identify the function of component `L`.**",
       "options": [
         {
           "id": "A",
@@ -85,9 +85,9 @@
       "num": "Q4",
       "title": "Components appearing more than once (MSQ)",
       "type": "multiple_select",
-      "context": "The reference diagram below is a faithful rendering of the lettered architecture in the source `.tex` for one ($N=1$) Transformer encoder-decoder block. The component letters are intentionally left as letters; infer each function from its position and connections.\n\n![Lettered Transformer encoder-decoder architecture from the source paper](assets/transformer-lettered-architecture.svg)",
+      "context": "The reference diagram below is a faithful rendering of the lettered architecture in the source `.tex` for one ($N=1$) Transformer encoder-decoder block. The component letters are intentionally left as letters; infer each function from its position and connections.\n\n![Lettered Transformer encoder-decoder architecture from the source paper](assets/transformer-lettered-architecture.mmd)",
       "questionText": "Assume exactly one encoder block and one decoder block. Identify all listed components that appear more than once. (Select all that apply.)",
-      "bodyMd": "**Assume exactly one encoder block and one decoder block. Identify all listed components that appear more than once. (Select all that apply.)**\n\n- ( ) Positional encoding\n- ( ) Feed-forward network\n- ( ) Masked multi-head self-attention\n- ( ) Multi-head cross-attention\n- ( ) Tokenizer\n- ( ) Add & Norm",
+      "bodyMd": "**Assume exactly one encoder block and one decoder block. Identify all listed components that appear more than once. (Select all that apply.)**",
       "options": [
         {
           "id": "A",
@@ -136,7 +136,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "A binary lower-triangular mask $M$ has $M_{ij}=1$ for $j\\leq i$ and $0$ otherwise. It is applied **after** softmax as",
-      "bodyMd": "A binary lower-triangular mask $M$ has $M_{ij}=1$ for $j\\leq i$ and $0$ otherwise. It is applied **after** softmax as\n\n$$\\operatorname{softmax}(A)\\odot M.$$\n\n**Identify the correct statements. (Select all that apply.)**\n\n- ( ) The approach violates the autoregressive property.\n- ( ) The approach preserves the autoregressive property by making final attention weights for future tokens zero.\n- ( ) The final attention weights in the new approach will be greater than or equal to those of the original approach.\n- ( ) The attention weights for the final token will always be the same for both approaches.",
+      "bodyMd": "A binary lower-triangular mask $M$ has $M_{ij}=1$ for $j\\leq i$ and $0$ otherwise. It is applied **after** softmax as\n\n$$\\operatorname{softmax}(A)\\odot M.$$\n\n**Identify the correct statements. (Select all that apply.)**",
       "options": [
         {
           "id": "A",
@@ -162,7 +162,7 @@
           "D"
         ]
       },
-      "solutionMd": "**Answer:** B and D\n\n#### Step-by-step solution\n\n![Kroki-style causal masking flow](assets/causal-mask.svg)\n\n**Step 1 — Compare the two masking locations.**\n\nIn the standard method, future logits receive $-\\infty$ **before** softmax:\n\n$$a_j^{\\text{before}}=\\frac{\\exp(A_j)\\,\\mathbf{1}[j\\leq i]}{\\sum_{k\\leq i}\\exp(A_k)}.$$\n\nIn the proposed method, softmax is computed over every position first and then future entries are zeroed:\n\n$$a_j^{\\text{after}}=\\frac{\\exp(A_j)}{\\sum_k\\exp(A_k)}\\mathbf{1}[j\\leq i].$$\n\n**Step 2 — Check autoregressive visibility.**\n\nFor $j>i$, the final value is exactly zero. Thus the query cannot use future tokens, so the autoregressive property is not violated. Statement B is true.\n\n**Step 3 — Compare allowed weights.**\n\nThe after-softmax method leaves probability mass on masked positions before deleting it, so its surviving weights are generally **smaller** than the renormalized before-softmax weights. Also, the new row may sum to less than 1. Statement C is false.\n\n**Step 4 — Check the final row.**\n\nFor the final token, there are no future positions. Its mask row contains only ones, so both methods apply the same softmax to that row. Statement D is true.\n\n$$\\boxed{\\text{B, D}}.$$",
+      "solutionMd": "**Answer:** B and D\n\n#### Step-by-step solution\n\n![Causal masking flow](assets/causal-mask.mmd)\n\n**Step 1 — Compare the two masking locations.**\n\nIn the standard method, future logits receive $-\\infty$ **before** softmax:\n\n$$a_j^{\\text{before}}=\\frac{\\exp(A_j)\\,\\mathbf{1}[j\\leq i]}{\\sum_{k\\leq i}\\exp(A_k)}.$$\n\nIn the proposed method, softmax is computed over every position first and then future entries are zeroed:\n\n$$a_j^{\\text{after}}=\\frac{\\exp(A_j)}{\\sum_k\\exp(A_k)}\\mathbf{1}[j\\leq i].$$\n\n**Step 2 — Check autoregressive visibility.**\n\nFor $j>i$, the final value is exactly zero. Thus the query cannot use future tokens, so the autoregressive property is not violated. Statement B is true.\n\n**Step 3 — Compare allowed weights.**\n\nThe after-softmax method leaves probability mass on masked positions before deleting it, so its surviving weights are generally **smaller** than the renormalized before-softmax weights. Also, the new row may sum to less than 1. Statement C is false.\n\n**Step 4 — Check the final row.**\n\nFor the final token, there are no future positions. Its mask row contains only ones, so both methods apply the same softmax to that row. Statement D is true.\n\n$$\\boxed{\\text{B, D}}.$$",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -176,7 +176,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "Which statements correctly describe internal state updates during a Byte Pair Encoding (BPE) training iteration? (Select all that apply.)",
-      "bodyMd": "**Which statements correctly describe internal state updates during a Byte Pair Encoding (BPE) training iteration? (Select all that apply.)**\n\n- ( ) After a pair is chosen for merging, it is permanently added to the active vocabulary list.\n- ( ) The algorithm recalculates the log probability of the entire corpus before the next iteration.\n- ( ) The independent frequencies of the two constituent tokens are reduced by the frequency of the merged token.\n- ( ) The original constituent tokens are removed from the vocabulary to optimize dictionary size.",
+      "bodyMd": "**Which statements correctly describe internal state updates during a Byte Pair Encoding (BPE) training iteration? (Select all that apply.)**",
       "options": [
         {
           "id": "A",
@@ -216,7 +216,7 @@
       "type": "multiple_select",
       "context": null,
       "questionText": "The phrase is **“life is like a box of chocolates”**. The word `life` and the span `box of chocolates` are corrupted.",
-      "bodyMd": "The phrase is **“life is like a box of chocolates”**. The word `life` and the span `box of chocolates` are corrupted.\n\n**Which statements correctly describe training? (Select all that apply.)**\n\n- ( ) The input becomes `<X> is like a <Y>` using unique sentinel tokens.\n- ( ) The target is `<X> life <Y> box of chocolates <Z>`, where the final sentinel marks completion.\n- ( ) Loss is calculated over the generated sentinel tokens and missing text.\n- ( ) The decoder reconstructs the entire original sequence autoregressively and calculates loss over every original position.",
+      "bodyMd": "The phrase is **“life is like a box of chocolates”**. The word `life` and the span `box of chocolates` are corrupted.\n\n**Which statements correctly describe training? (Select all that apply.)**",
       "options": [
         {
           "id": "A",
@@ -257,7 +257,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "During GPT-1 fine-tuning for textual entailment, what is the purpose of the delimiter token `$`?",
-      "bodyMd": "**During GPT-1 fine-tuning for textual entailment, what is the purpose of the delimiter token `$`?**\n\n- ( ) Trigger the softmax function\n- ( ) Separate the premise and hypothesis\n- ( ) Mark the end of the sentence\n- ( ) Initialize the linear head",
+      "bodyMd": "**During GPT-1 fine-tuning for textual entailment, what is the purpose of the delimiter token `$`?**",
       "options": [
         {
           "id": "A",
@@ -296,7 +296,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Why is the hidden representation of the final input token used as input to the classification layer in a decoder-only Transformer?",
-      "bodyMd": "**Why is the hidden representation of the final input token used as input to the classification layer in a decoder-only Transformer?**\n\n- ( ) The first token only has positional information and lacks semantic context.\n- ( ) The final token is computed independently of self-attention, giving more stable gradients.\n- ( ) It aligns with autoregressive training and eliminates teacher forcing.\n- ( ) Causal self-attention lets the final token aggregate information from all preceding tokens.",
+      "bodyMd": "**Why is the hidden representation of the final input token used as input to the classification layer in a decoder-only Transformer?**",
       "options": [
         {
           "id": "A",
@@ -335,7 +335,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "With temperature $\\tau=5$ applied to logits before top-$p$ sampling, what is the impact on the subsequent sampling step?",
-      "bodyMd": "**With temperature $\\tau=5$ applied to logits before top-$p$ sampling, what is the impact on the subsequent sampling step?**\n\n- ( ) It increases the required number of candidate tokens and expands the nucleus.\n- ( ) It decreases the required number of candidate tokens and shrinks the nucleus.\n- ( ) It truncates the tail, making sampling similar to top-$k$.\n- ( ) Nucleus size is unaffected because temperature changes only token order.",
+      "bodyMd": "**With temperature $\\tau=5$ applied to logits before top-$p$ sampling, what is the impact on the subsequent sampling step?**",
       "options": [
         {
           "id": "A",
@@ -374,7 +374,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "How does the WordPiece scoring formula prioritize token merges?",
-      "bodyMd": "**How does the WordPiece scoring formula prioritize token merges?**\n\n- ( ) It evaluates the log-probability of the pair and chooses the highest transition.\n- ( ) It merges the pair with the highest absolute frequency.\n- ( ) It prioritizes pairs that occur together frequently but rarely appear independently.\n- ( ) None of these.",
+      "bodyMd": "**How does the WordPiece scoring formula prioritize token merges?**",
       "options": [
         {
           "id": "A",
@@ -413,7 +413,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "How does T5 process tasks such as semantic similarity regression and sentiment classification during fine-tuning?",
-      "bodyMd": "**How does T5 process tasks such as semantic similarity regression and sentiment classification during fine-tuning?**\n\n- ( ) Encoder outputs regression and decoder outputs classification tokens, selected by prompt.\n- ( ) Separate regression and classification heads are appended to the decoder.\n- ( ) Both tasks are treated as sequence generation with task-specific prefixes and string outputs.\n- ( ) None of these.",
+      "bodyMd": "**How does T5 process tasks such as semantic similarity regression and sentiment classification during fine-tuning?**",
       "options": [
         {
           "id": "A",
@@ -452,7 +452,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "How does BART handle corrupted inputs compared with its output?",
-      "bodyMd": "**How does BART handle corrupted inputs compared with its output?**\n\n- ( ) The decoder ignores the encoder and performs standard causal language modeling.\n- ( ) The encoder processes the original sequence and the decoder predicts corrupted tokens.\n- ( ) The encoder processes the corrupted sequence and the decoder predicts the entire original sequence.\n- ( ) Both encoder and decoder process the corrupted sequence to calculate masked loss.",
+      "bodyMd": "**How does BART handle corrupted inputs compared with its output?**",
       "options": [
         {
           "id": "A",
@@ -491,7 +491,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "When comparing C4 with an “Unfiltered-C4” dataset about eight times larger, what was the observed effect on downstream performance?",
-      "bodyMd": "**When comparing C4 with an “Unfiltered-C4” dataset about eight times larger, what was the observed effect on downstream performance?**\n\n- ( ) Performance remained identical, showing saturation.\n- ( ) Performance improved only for high-resource translation tasks.\n- ( ) Performance improved significantly because of increased data diversity.\n- ( ) Performance degraded across tasks despite the larger scale.",
+      "bodyMd": "**When comparing C4 with an “Unfiltered-C4” dataset about eight times larger, what was the observed effect on downstream performance?**",
       "options": [
         {
           "id": "A",
@@ -530,7 +530,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Which description matches the Adapter Layers fine-tuning strategy?",
-      "bodyMd": "**Which description matches the Adapter Layers fine-tuning strategy?**\n\n- ( ) Randomly freeze half of the attention heads.\n- ( ) Add small dense-ReLU-dense blocks after FFN layers and update only them and Layer Norm parameters.\n- ( ) Update all parameters with a much smaller learning rate.\n- ( ) Increase $d_{model}$ of existing feed-forward networks.",
+      "bodyMd": "**Which description matches the Adapter Layers fine-tuning strategy?**",
       "options": [
         {
           "id": "A",
@@ -569,7 +569,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "Which is a reported negative effect of significantly duplicated content in LLM training data?",
-      "bodyMd": "**Which is a reported negative effect of significantly duplicated content in LLM training data?**\n\n- ( ) It decreases inference speed during deployment.\n- ( ) It causes repeated sequences to be generated much more frequently.\n- ( ) It permanently reduces the maximum context window.\n- ( ) It removes the ability to process multilingual input.",
+      "bodyMd": "**Which is a reported negative effect of significantly duplicated content in LLM training data?**",
       "options": [
         {
           "id": "A",
@@ -608,7 +608,7 @@
       "type": "single_choice",
       "context": null,
       "questionText": "With fixed compute $C$, what is likely if an extraordinarily large model (large $N$) is trained on a relatively small dataset (small $D$)?",
-      "bodyMd": "**With fixed compute $C$, what is likely if an extraordinarily large model (large $N$) is trained on a relatively small dataset (small $D$)?**\n\n- ( ) The model is over-trained and memorizes the dataset.\n- ( ) The model is under-trained and less capable than a smaller model trained on more data with the same compute.\n- ( ) The model perfectly memorizes and generalizes flawlessly.\n- ( ) Inference speed increases dramatically.",
+      "bodyMd": "**With fixed compute $C$, what is likely if an extraordinarily large model (large $N$) is trained on a relatively small dataset (small $D$)?**",
       "options": [
         {
           "id": "A",
@@ -647,7 +647,7 @@
       "type": "multiple_select",
       "context": "Consider the corpus **“there is no spoon”**, ignoring spaces and punctuation. Build a vocabulary from the four whole-word tokens and all distinct individual characters. The resulting vocabulary has 13 tokens.\n\nWhole words: `there`, `is`, `no`, `spoon`\nCharacter tokens: `t`, `h`, `e`, `r`, `i`, `s`, `n`, `o`, `p`",
       "questionText": "Using this vocabulary, which proposed segmentations of `prison` and `rhino` are valid? (Select all that apply.)",
-      "bodyMd": "**Using this vocabulary, which proposed segmentations of `prison` and `rhino` are valid? (Select all that apply.)**\n\n- ( ) `prison`\n- ( ) `p, r, is, o, n`\n- ( ) `p, r, is, on`\n- ( ) `r, h, i, n, o`\n- ( ) `r, h, i, no`",
+      "bodyMd": "**Using this vocabulary, which proposed segmentations of `prison` and `rhino` are valid? (Select all that apply.)**",
       "options": [
         {
           "id": "A",
@@ -692,7 +692,7 @@
       "type": "single_choice",
       "context": "Consider the corpus **“there is no spoon”**, ignoring spaces and punctuation. Build a vocabulary from the four whole-word tokens and all distinct individual characters. The resulting vocabulary has 13 tokens.\n\nWhole words: `there`, `is`, `no`, `spoon`\nCharacter tokens: `t`, `h`, `e`, `r`, `i`, `s`, `n`, `o`, `p`",
       "questionText": "Using a unigram language model, identify the segment with the highest probability.",
-      "bodyMd": "**Using a unigram language model, identify the segment with the highest probability.**\n\n- ( ) `n, o, i, s, e, s`\n- ( ) `no, is, e, s`\n- ( ) `nois, e, s`\n- ( ) `no, i, s, e, s`",
+      "bodyMd": "**Using a unigram language model, identify the segment with the highest probability.**",
       "options": [
         {
           "id": "A",
