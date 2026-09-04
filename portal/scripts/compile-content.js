@@ -19,6 +19,7 @@ const GA_ASSETS = join(GA_DIR, 'assets');
 const PYQ_ASSETS = join(PYQ_DIR, 'assets');
 const LEARNING_ASSETS = join(LEARNING_DIR, 'assets');
 const OUT_ASSETS = join(ROOT, 'public', 'assets');
+const DIAGRAM_ASSET_DIRS = [PYQ_ASSETS, LEARNING_ASSETS, GA_ASSETS];
 
 if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
 
@@ -191,6 +192,42 @@ function optionText(line) {
   return line.match(OPTION_LINE)?.[1]?.trim() ?? null;
 }
 
+function escapeHtmlAttribute(value) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function readDiagramSource(file) {
+  for (const assetDir of DIAGRAM_ASSET_DIRS) {
+    const path = join(assetDir, file);
+    if (existsSync(path)) return readFileSync(path, 'utf-8');
+  }
+  throw new Error(`Diagram source not found: ${file}`);
+}
+
+/**
+ * Embed Kroki-compatible Mermaid source in the compiled question content.
+ *
+ * Fetching .mmd files from the browser is brittle on static hosts: an unknown
+ * extension is commonly rewritten to index.html or omitted from a deployment.
+ * Keeping the source beside the question makes diagram rendering independent of
+ * the host's MIME and SPA-fallback rules.
+ */
+function inlineKrokiDiagrams(markdown) {
+  if (!markdown) return markdown;
+  return markdown.replace(
+    /!\[([^\]]*)\]\((?:\.?\/)?assets\/([^\s)]+\.mmd)\)/g,
+    (_match, alt, file) => {
+      const source = readDiagramSource(file);
+      const encodedSource = Buffer.from(source, 'utf-8').toString('base64');
+      return `<div class="kroki-diagram" data-kroki-source="${encodedSource}" role="img" aria-label="${escapeHtmlAttribute(alt)}"></div>`;
+    },
+  );
+}
+
 function extractOptions(lines) {
   const opts = [];
   for (const line of lines) {
@@ -359,12 +396,12 @@ function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
         num: qNum,
         title: qTitle,
         type: qType,
-        context: contextForQuestion,
+        context: inlineKrokiDiagrams(contextForQuestion),
         questionText: questionText,
-        bodyMd: bodyText,
+        bodyMd: inlineKrokiDiagrams(bodyText),
         options,
         answer,
-        solutionMd: solutionText,
+        solutionMd: inlineKrokiDiagrams(solutionText),
         marks: { correct: 1, incorrect: 0, unanswered: 0 },
       });
       continue;

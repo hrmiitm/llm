@@ -3,9 +3,9 @@ flowchart LR
     Mask --> Softmax[Row-wise softmax]
     Softmax --> Weights[Attention weights A]
 
-    Allowed[Keys j <= i keep score: M_ij = 0] --> Mask
-    Future[Keys j > i are future: M_ij = -infinity] --> Mask
-    Weights --> Result[Only j <= i have nonzero weight; each row sums to 1]
+    Allowed["Keys j ≤ i: keep score M_ij = 0"] --> Mask
+    Future["Keys j > i: future token, M_ij = −∞"] --> Mask
+    Weights --> Result["Only j ≤ i have nonzero weight; each row sums to 1"]
 
     classDef op fill:#fff4e5,stroke:#d97706,color:#5b3500;
     classDef result fill:#ecfdf5,stroke:#15803d,color:#14532d;

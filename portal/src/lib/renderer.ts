@@ -56,26 +56,30 @@ function fixAssetPaths(src: string): string {
   return src.replace(/!\[([^\]]*)\]\((?:\.?\/)?assets\/([^)]+)\)/g, `![$1](${ASSETS_PREFIX}$2)`);
 }
 
-function replaceKrokiDiagramRefs(src: string): string {
-  // A .mmd file is Kroki-compatible Mermaid source. MarkdownContent renders it
-  // locally, so course diagrams do not rely on a remote renderer or static SVG.
-  return src.replace(
-    /!\[([^\]]*)\]\((?:\.?\/)?assets\/([^)]+\.mmd)\)/g,
-    (_match, alt: string, file: string) => (
-      `<div class="kroki-diagram" data-kroki-src="${ASSETS_PREFIX}${file}" role="img" aria-label="${alt}"></div>`
-    ),
-  );
-}
-
 export function renderMarkdown(src: string): string {
   if (!src) return '';
-  let processed = replaceKrokiDiagramRefs(src);
-  processed = fixAssetPaths(processed);
+  let processed = fixAssetPaths(src);
   processed = processLatex(processed);
   const html = marked.parse(processed) as string;
   return DOMPurify.sanitize(html, {
-    ADD_TAGS: ['mjx-container', 'svg', 'use'],
-    ADD_ATTR: ['class', 'style', 'xmlns', 'viewBox', 'fill', 'stroke', 'stroke-width', 'aria-hidden'],
+    // Allow SVG tags that KaTeX and mermaid-compiled diagram placeholders use
+    ADD_TAGS: ['mjx-container', 'svg', 'use', 'marker', 'defs', 'path', 'g', 'line', 'polyline', 'polygon', 'circle', 'ellipse', 'rect', 'text', 'tspan', 'foreignObject'],
+    // Allow all attributes needed by KaTeX, mermaid SVGs, and the kroki diagram placeholder
+    ADD_ATTR: [
+      'class', 'style', 'xmlns', 'xmlns:xlink',
+      'viewBox', 'width', 'height',
+      'fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'stroke-linecap', 'stroke-linejoin',
+      'transform', 'transform-origin', 'd', 'points', 'r', 'rx', 'ry', 'cx', 'cy',
+      'x', 'y', 'x1', 'x2', 'y1', 'y2',
+      'text-anchor', 'dominant-baseline', 'font-size', 'font-family', 'font-weight',
+      'marker-end', 'marker-start', 'marker-mid',
+      'refX', 'refY', 'markerWidth', 'markerHeight', 'markerUnits', 'orient',
+      'aria-hidden', 'role', 'aria-label',
+      // kroki diagram placeholder data attribute
+      'data-kroki-source',
+    ],
+    // Keep data-* attributes (they are allowed by default but explicit here for clarity)
+    ALLOW_DATA_ATTR: true,
   });
 }
 

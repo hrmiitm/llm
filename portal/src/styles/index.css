@@ -546,9 +546,11 @@ code, pre {
 .question-text code { background: #f1f5f9; color: #0f172a; padding: 0.15em 0.35em; border-radius: 4px; }
 .question-text pre { background: #0f172a; color: #e2e8f0; padding: 1rem; border-radius: var(--radius-sm); overflow-x: auto; margin: 0.75rem 0; }
 .question-text pre code { background: transparent; color: inherit; padding: 0; }
-.kroki-diagram { background: #fffef8; border: 1px solid #dbe4f0; border-radius: var(--radius-sm); margin: 0.9rem 0; min-height: 4rem; overflow-x: auto; padding: 0.75rem; text-align: center; }
+.kroki-diagram { background: #fffef8; border: 1px solid #dbe4f0; border-radius: var(--radius-sm); margin: 0.9rem 0; min-height: 5rem; overflow-x: auto; padding: 0.75rem; text-align: center; display: flex; align-items: center; justify-content: center; }
+.kroki-diagram[aria-busy="true"] { color: var(--text-muted); font-size: 0.85rem; font-style: italic; animation: pulse 1.5s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 .kroki-diagram svg { display: block; height: auto; margin: 0 auto; max-width: 100%; }
-.kroki-diagram-error { color: #991b1b; font-size: 0.875rem; text-align: left; }
+.kroki-diagram-error { color: #991b1b; font-size: 0.85rem; text-align: center; padding: 0.5rem; }
 .question-text blockquote { border-left: 3px solid var(--primary-light); padding-left: 0.875rem; color: var(--text-secondary); margin: 0.75rem 0; }
 
 /* Options */
