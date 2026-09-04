@@ -32,7 +32,7 @@ export function ResultsPage() {
   if (loading) return <div className="loading-center"><div className="spinner"/><p>Loading results…</p></div>;
   if (!result) return <div className="error-box">Results not found. They may have been cleared.</div>;
 
-  const gaTitle = location.state?.gaTitle ?? result.gaId;
+  const gaTitle = location.state?.gaTitle ?? pack?.title ?? result.gaId;
   const pct = result.totalQuestions > 0 ? Math.round((result.correct / result.totalQuestions) * 100) : 0;
   const scoreColor = pct >= 80 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#ef4444';
 

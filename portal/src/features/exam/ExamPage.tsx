@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import type { GAPack } from '../../types';
 import { fetchPack } from '../../lib/content';
 import { loadActiveAttemptForGA } from '../../storage/db';
@@ -108,25 +108,25 @@ export function ExamPage() {
     <div className="exam-shell">
       {/* Header */}
       <header className="exam-header">
-        <span className="exam-title" title={pack.title}>
-          {pack.title}
-        </span>
-        <Timer
-          remainingSeconds={remaining}
-          totalSeconds={attempt.durationSeconds}
-        />
-        <button
-          className="btn btn-ghost btn-sm"
-          onClick={() => setShowPaletteMobile(prev => !prev)}
-          aria-label="Toggle question palette"
-          style={{ color: 'white', borderColor: 'rgba(255,255,255,.35)' }}
-        >
-          ☰ Palette
-        </button>
-        <button className="btn btn-danger btn-sm" onClick={() => setShowSubmitModal(true)}>
-          Submit Test
-        </button>
+        <Link to="/" className="exam-brand" aria-label="Back to home">
+          <span className="exam-brand-mark">LLM</span>
+          <span className="exam-brand-copy"><strong>Exam Console</strong><small>{pack.title}</small></span>
+        </Link>
+        <div className="exam-session-meta">
+          <span className="session-label">Section</span>
+          <strong>All Questions</strong>
+          <span className="session-divider" />
+          <span><strong>{pack.questions.length}</strong> questions</span>
+        </div>
+        <Timer remainingSeconds={remaining} totalSeconds={attempt.durationSeconds} />
+        <button className="btn btn-ghost btn-sm mobile-palette-toggle" onClick={() => setShowPaletteMobile(prev => !prev)} aria-label="Toggle question palette">☰ Palette</button>
+        <button className="btn btn-danger btn-sm" onClick={() => setShowSubmitModal(true)}>Submit Test</button>
       </header>
+
+      <div className="exam-subheader">
+        <div><span className="subheader-label">Question paper</span><strong>{pack.title}</strong></div>
+        <div className="exam-subheader-right"><span>Auto-save on</span><span className="save-dot" /> <span>Time remaining <strong>{formatTime(remaining)}</strong></span></div>
+      </div>
 
       {/* Body */}
       <div className="exam-body">
@@ -134,17 +134,9 @@ export function ExamPage() {
         <main className="question-pane">
           <div className="question-pane-header">
             <div className="question-number-badge">{currentIdx + 1}</div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontWeight: 600, fontSize: '0.875rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {currentQ.num} — {currentQ.title}
-              </div>
-            </div>
+            <div className="question-heading-copy"><span>Question {currentIdx + 1} of {pack.questions.length}</span><strong>{currentQ.title || currentQ.num}</strong></div>
             <span className="question-type-badge">{currentQ.type.replace('_', ' ')}</span>
-            {currentQState?.markedForReview && (
-              <span style={{ fontSize: '0.75rem', background: '#f3e8ff', color: '#7c3aed', borderRadius: '12px', padding: '0.15rem 0.55rem', fontWeight: 600 }}>
-                🔖 Marked
-              </span>
-            )}
+            {currentQState?.markedForReview && <span className="practice-checked-badge marked-badge">🔖 Marked</span>}
           </div>
 
           <div className="question-pane-scroll">
@@ -165,11 +157,7 @@ export function ExamPage() {
               ← Previous
             </button>
 
-            <button
-              className="btn btn-ghost btn-sm"
-              onClick={() => { toggleMarkForReview(currentQ.id); }}
-              style={{ color: currentQState?.markedForReview ? '#7c3aed' : undefined }}
-            >
+            <button className={`btn btn-ghost btn-sm ${currentQState?.markedForReview ? 'is-marked' : ''}`} onClick={() => { toggleMarkForReview(currentQ.id); }}>
               🔖 {currentQState?.markedForReview ? 'Unmark' : 'Mark for Review'} & Next
             </button>
 
@@ -182,7 +170,7 @@ export function ExamPage() {
 
             <div className="spacer" />
 
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            <span className="footer-progress">
               {currentIdx + 1} / {pack.questions.length}
             </span>
 
@@ -212,19 +200,7 @@ export function ExamPage() {
         />
 
         {/* Mobile overlay */}
-        {showPaletteMobile && (
-          <div
-            onClick={() => setShowPaletteMobile(false)}
-            style={{
-              display: 'none',
-              position: 'fixed',
-              inset: 0,
-              background: 'rgba(0,0,0,.4)',
-              zIndex: 199,
-            }}
-            aria-hidden="true"
-          />
-        )}
+        {showPaletteMobile && <div className="palette-mobile-backdrop" onClick={() => setShowPaletteMobile(false)} aria-hidden="true" />}
       </div>
 
       {/* Submit Modal */}

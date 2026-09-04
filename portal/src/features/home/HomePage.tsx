@@ -55,8 +55,13 @@ export function HomePage() {
     <div className="page-home">
       {/* Hero */}
       <div className="home-hero">
-        <h2>LLM Graded Assignments</h2>
-        <p>NPTEL · IIT Madras · Large Language Models — Practice all 9 graded assignments in a computer-based test environment.</p>
+        <div className="hero-kicker">Candidate dashboard <span>•</span> Large Language Models</div>
+        <h2>Prepare like the real test.</h2>
+        <p>NPTEL · IIT Madras — take timed computer-based exams, practise with instant feedback, or create a custom test from any available assignment.</p>
+        <div className="hero-actions">
+          <Link to="/custom" className="btn btn-accent">＋ Create Custom Test</Link>
+          <a href="#assignments" className="btn btn-hero-ghost">Browse Assignments</a>
+        </div>
         <div className="home-stats">
           <div className="stat-item">
             <span className="stat-value">{catalog.length}</span>
@@ -111,7 +116,13 @@ export function HomePage() {
       )}
 
       {/* GA Grid */}
-      <div className="section-title">All Assignments</div>
+      <div id="assignments" className="home-section-heading">
+        <div>
+          <div className="section-eyebrow">Available question papers</div>
+          <div className="section-title">All Assignments</div>
+        </div>
+        <span className="home-section-note">Select an assignment to begin</span>
+      </div>
       <div className="ga-grid">
         {catalog.map(ga => (
           <GaCard key={ga.id} ga={ga} hasActiveAttempt={activeAttempts[ga.id]} />

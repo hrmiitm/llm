@@ -4,16 +4,17 @@ import { ExamPage } from './features/exam/ExamPage';
 import { PracticePage } from './features/practice/PracticePage';
 import { ResultsPage } from './features/results/ResultsPage';
 import { HistoryPage } from './features/history/HistoryPage';
+import { CustomExamPage } from './features/custom/CustomExamPage';
 import './styles/index.css';
 
 function AppShell() {
   const location = useLocation();
-  // Don't show site header in exam mode (it has its own header)
-  const isExamPage = location.pathname.startsWith('/exam/');
+  // The timed and practice consoles provide their own candidate header.
+  const isConsolePage = location.pathname.startsWith('/exam/') || location.pathname.startsWith('/practice/');
 
   return (
     <>
-      {!isExamPage && (
+      {!isConsolePage && (
         <header className="site-header">
           <NavLink to="/" className="logo" aria-label="LLM Exam Portal Home">
             <div className="logo-icon" aria-hidden="true">LLM</div>
@@ -30,6 +31,9 @@ function AppShell() {
             <NavLink to="/history" className={({ isActive }) => isActive ? 'active' : ''}>
               History
             </NavLink>
+            <NavLink to="/custom" className={({ isActive }) => isActive ? 'active' : ''}>
+              Custom Test
+            </NavLink>
           </nav>
         </header>
       )}
@@ -38,6 +42,7 @@ function AppShell() {
         <Route path="/" element={<HomePage />} />
         <Route path="/exam/:gaId" element={<ExamPage />} />
         <Route path="/practice/:gaId" element={<PracticePage />} />
+        <Route path="/custom" element={<CustomExamPage />} />
         <Route path="/results/:attemptId" element={<ResultsPage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="*" element={

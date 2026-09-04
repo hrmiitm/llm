@@ -2,13 +2,24 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { AttemptResult } from '../../types';
 import { loadAllResults } from '../../storage/db';
+import { loadCustomPack } from '../../lib/content';
 
 export function HistoryPage() {
   const [results, setResults] = useState<AttemptResult[]>([]);
+  const [titles, setTitles] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadAllResults().then(r => { setResults(r); setLoading(false); });
+    loadAllResults().then(async r => {
+      setResults(r);
+      const customTitles: Record<string, string> = {};
+      r.filter(item => item.gaId.startsWith('custom-')).forEach(item => {
+        const pack = loadCustomPack(item.gaId);
+        if (pack) customTitles[item.gaId] = pack.title;
+      });
+      setTitles(customTitles);
+      setLoading(false);
+    });
   }, []);
 
   if (loading) return <div className="loading-center"><div className="spinner"/></div>;
@@ -62,7 +73,7 @@ export function HistoryPage() {
 
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontWeight: 700, marginBottom: '0.15rem' }}>
-                    {r.gaId.toUpperCase()}
+                    {titles[r.gaId] ?? r.gaId.toUpperCase()}
                   </div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                     {r.correct}/{r.totalQuestions} correct · {new Date(r.completedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
