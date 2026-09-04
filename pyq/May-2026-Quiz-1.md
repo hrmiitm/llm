@@ -26,15 +26,15 @@ This paper is presented in the same learning-oriented format as the graded assig
 
 **Step 1 — Identify the objects in encoder-decoder attention.**
 
-The encoder produces hidden states $h_1,h_2,ldots,h_T$. At decoder step $t$, the decoder state supplies a query that scores how relevant each encoder state is:
+The encoder produces hidden states $h_1,h_2,\ldots,h_T$. At decoder step $t$, the decoder state supplies a query that scores how relevant each encoder state is:
 
-$$e_{t,j} = operatorname{score}(s_{t-1},h_j),\qquad a_{t,j}=operatorname{softmax}(e_{t,j}).$$
+$$e_{t,j} = \operatorname{score}(s_{t-1},h_j),\qquad a_{t,j}=\operatorname{softmax}(e_{t,j}).$$
 
 **Step 2 — Form the context vector.**
 
 The context passed to the decoder is the weighted sum
 
-$$c_t=sum_{j=1}^{T}a_{t,j}h_j.$$
+$$c_t=\sum_{j=1}^{T}a_{t,j}h_j.$$
 
 So the decoder does decide which encoder states matter, and the context vector is a weighted sum of them.
 

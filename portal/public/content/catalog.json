@@ -313,5 +313,41 @@
     "submittedDate": null,
     "questionCount": 15,
     "durationMinutes": 45
+  },
+  {
+    "id": "learning-08-architecture-diagrams",
+    "week": 8,
+    "title": "Learning 08 — Read a Transformer Architecture Diagram",
+    "category": "LEARNING",
+    "label": "Learning 08 — Diagram Literacy",
+    "topics": [
+      "Encoder-Decoder Diagram",
+      "Residual Paths",
+      "Cross-Attention",
+      "Output Head"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 15,
+    "durationMinutes": 45
+  },
+  {
+    "id": "learning-09-diagram-execution",
+    "week": 9,
+    "title": "Learning 09 — From Diagram to Computation",
+    "category": "LEARNING",
+    "label": "Learning 09 — Diagram to Execution",
+    "topics": [
+      "Attention Shapes",
+      "Causal Masks",
+      "Parameter Counting",
+      "Teacher Forcing"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 15,
+    "durationMinutes": 45
   }
 ]

@@ -324,22 +324,32 @@ The dense padded tensor still allocates $4\times6^2=144$ score locations, but th
 
 </details>
 
-### Q13 — Name the three axes (Short Answer)
+### Q13 — Read the input side of an architecture diagram (MSQ)
 
-**Write the standard batch-first hidden-state axes in order, separated by commas.**
+The lettered diagram below is used again in Learning 08. Which statements about its two input additions are correct? (Select all that apply.)
+
+![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)
+
+- ( ) A is the source-token embedding path and B supplies source positional information.
+- ( ) C is the shifted-right target embedding path and D supplies target positional information.
+- ( ) The two circular `+` nodes are causal masks that erase future tokens.
+- ( ) E and L begin the encoder and decoder's learned attention processing after their input additions.
 
 <details>
 <summary><b>Answer & Solution</b></summary>
 
-**Answer:** `B, T, d_model`
+**Answer:** A, B and D
 
 #### Step-by-step solution
 
-$$\text{hidden states}\in\mathbb{R}^{B\times T\times d_{model}}.$$
+1. On the encoder side, inputs flow through A, while B enters the same addition node. This is the standard **source embedding + positional signal** construction.
+2. On the decoder side, shifted-right outputs flow through C and meet D at its addition node. This is the matching target-side representation.
+3. The circles are ordinary vector additions. Causal masking occurs later inside decoder self-attention, not at the embedding addition.
+4. The resulting source representation enters E; the resulting target representation enters L. Both are learned attention sublayers.
 
-$B$ counts sequences, $T$ counts positions per padded sequence, and $d_{model}$ counts features per token.
+$$H^{(0)}=\text{token embedding}+\text{position information}.$$
 
-**Memory hook:** **B-T-D = Batch, Tokens, Dimensions.**
+**Memory hook:** the bottom `+` means **what token + where token**, not “mask.”
 
 </details>
 

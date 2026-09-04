@@ -1,0 +1,539 @@
+{
+  "id": "learning-08-architecture-diagrams",
+  "week": 8,
+  "title": "Learning 08 — Read a Transformer Architecture Diagram",
+  "category": "LEARNING",
+  "label": "Learning 08 — Diagram Literacy",
+  "topics": [
+    "Encoder-Decoder Diagram",
+    "Residual Paths",
+    "Cross-Attention",
+    "Output Head"
+  ],
+  "notesFile": "GA/week1-week2-learning-notes.md",
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 15,
+  "durationMinutes": 45,
+  "questions": [
+    {
+      "id": "learning-08-architecture-diagrams-q1",
+      "num": "Q1",
+      "title": "Source-side input addition (MCQ)",
+      "type": "single_choice",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "What does the lower-left addition node combine before information enters component E?",
+      "bodyMd": "What does the lower-left addition node combine before information enters component E?\n\n- ( ) Source token embeddings and positional encoding\n- ( ) Encoder states and decoder states\n- ( ) Vocabulary logits and softmax probabilities\n- ( ) The causal mask and attention weights",
+      "options": [
+        {
+          "id": "A",
+          "text": "Source token embeddings and positional encoding"
+        },
+        {
+          "id": "B",
+          "text": "Encoder states and decoder states"
+        },
+        {
+          "id": "C",
+          "text": "Vocabulary logits and softmax probabilities"
+        },
+        {
+          "id": "D",
+          "text": "The causal mask and attention weights"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "Trace the arrows: `Inputs → A → + → E`, while `B → +`. Before any encoder sublayer, a Transformer combines source-token content with a position signal:\n\n\\[\nH_s^{(0)}=\\operatorname{Embed}_{source}(x)+PE.\n\\]\n\nThe two inputs must have the same width so addition is defined.\n\n**Memory hook:** at the bottom of each stack, **content + place** comes first.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q2",
+      "num": "Q2",
+      "title": "Decoder-side input addition (MCQ)",
+      "type": "single_choice",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "What does the lower-right addition node combine before component L?",
+      "bodyMd": "What does the lower-right addition node combine before component L?\n\n- ( ) Raw source tokens and encoder logits\n- ( ) Shifted-right target embeddings and positional encoding\n- ( ) Final decoder probabilities and a causal mask\n- ( ) Encoder keys, encoder values, and decoder queries",
+      "options": [
+        {
+          "id": "A",
+          "text": "Raw source tokens and encoder logits"
+        },
+        {
+          "id": "B",
+          "text": "Shifted-right target embeddings and positional encoding"
+        },
+        {
+          "id": "C",
+          "text": "Final decoder probabilities and a causal mask"
+        },
+        {
+          "id": "D",
+          "text": "Encoder keys, encoder values, and decoder queries"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "The caption says `Outputs (shifted right) → C → + → L`, and D also enters the plus node. In a standard decoder, C is the shifted target-token embedding path and D supplies positional information.\n\nThe right shift makes the input at a position contain only earlier target tokens while the label is the next token.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q3",
+      "num": "Q3",
+      "title": "First encoder sublayer (MCQ)",
+      "type": "single_choice",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Which operation is component E?",
+      "bodyMd": "Which operation is component E?\n\n- ( ) Encoder self-attention\n- ( ) Encoder-decoder cross-attention\n- ( ) Feed-forward network\n- ( ) Vocabulary softmax",
+      "options": [
+        {
+          "id": "A",
+          "text": "Encoder self-attention"
+        },
+        {
+          "id": "B",
+          "text": "Encoder-decoder cross-attention"
+        },
+        {
+          "id": "C",
+          "text": "Feed-forward network"
+        },
+        {
+          "id": "D",
+          "text": "Vocabulary softmax"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "The encoder order is\n\n\\[\n\\text{input} \\to \\text{self-attention} \\to \\text{Add \\& Norm} \\to \\text{FFN} \\to \\text{Add \\& Norm}.\n\\]\n\nE is the first learned box after source input addition, so it is encoder self-attention. Its residual bypass joins at F.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q4",
+      "num": "Q4",
+      "title": "Find every Add & Norm layer (Short Answer)",
+      "type": "text",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Submit the letters of every Add & Norm block in alphabetical order, with no spaces.",
+      "bodyMd": "Submit the letters of every Add & Norm block in alphabetical order, with no spaces.",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "FHMPR"
+      },
+      "solutionMd": "An encoder has two sublayers, so its post-sublayer Add & Norm blocks are F and H. A decoder has three sublayers, so its Add & Norm blocks are M, P, and R.\n\n\\[\n\\{F,H,M,P,R\\}\\longrightarrow\\texttt{FHMPR}.\n\\]\n\nDo not include the circular \\(+\\) nodes: they are the raw residual additions before the labelled normalization blocks.\n\n**Answer:** `FHMPR`",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q5",
+      "num": "Q5",
+      "title": "First decoder sublayer (MCQ)",
+      "type": "single_choice",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Which operation is component L?",
+      "bodyMd": "Which operation is component L?\n\n- ( ) Encoder self-attention\n- ( ) Masked decoder self-attention\n- ( ) Cross-attention over source states\n- ( ) Linear output projection",
+      "options": [
+        {
+          "id": "A",
+          "text": "Encoder self-attention"
+        },
+        {
+          "id": "B",
+          "text": "Masked decoder self-attention"
+        },
+        {
+          "id": "C",
+          "text": "Cross-attention over source states"
+        },
+        {
+          "id": "D",
+          "text": "Linear output projection"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "L is the first decoder sublayer after shifted-right target input. It must be masked self-attention so a target position cannot read future target tokens. The residual bypass from the decoder input joins after L at M.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q6",
+      "num": "Q6",
+      "title": "Find cross-attention from the arrows (MCQ)",
+      "type": "single_choice",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Which component is encoder-decoder cross-attention?",
+      "bodyMd": "Which component is encoder-decoder cross-attention?\n\n- ( ) G\n- ( ) L\n- ( ) O\n- ( ) T",
+      "options": [
+        {
+          "id": "A",
+          "text": "G"
+        },
+        {
+          "id": "B",
+          "text": "L"
+        },
+        {
+          "id": "C",
+          "text": "O"
+        },
+        {
+          "id": "D",
+          "text": "T"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "The arrow from encoder output H enters O. That extra source-side input is the signature of cross-attention:\n\n\\[\nQ\\text{ from decoder},\\qquad K,V\\text{ from encoder states }H.\n\\]\n\nG is the encoder FFN, L is masked decoder self-attention, and T is after the decoder block.\n\n**Answer:** C",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q7",
+      "num": "Q7",
+      "title": "Decoder feed-forward component (MCQ)",
+      "type": "single_choice",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Which labelled component is the decoder's position-wise feed-forward network?",
+      "bodyMd": "Which labelled component is the decoder's position-wise feed-forward network?\n\n- ( ) L\n- ( ) O\n- ( ) Q\n- ( ) R",
+      "options": [
+        {
+          "id": "A",
+          "text": "L"
+        },
+        {
+          "id": "B",
+          "text": "O"
+        },
+        {
+          "id": "C",
+          "text": "Q"
+        },
+        {
+          "id": "D",
+          "text": "R"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "The decoder sequence is\n\n\\[\nL\\,(\\text{masked self-attention})\\to M\\,(\\text{Add \\& Norm})\n\\to O\\,(\\text{cross-attention})\\to P\\,(\\text{Add \\& Norm})\n\\to Q\\,(\\text{FFN})\\to R\\,(\\text{Add \\& Norm}).\n\\]\n\nThe FFN transforms each target position independently after attention has communicated across positions/source tokens.\n\n**Answer:** C",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q8",
+      "num": "Q8",
+      "title": "Output head order (MCQ)",
+      "type": "single_choice",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "After the decoder block, the diagram has R → S → T → U. Which interpretation is correct?",
+      "bodyMd": "After the decoder block, the diagram has R → S → T → U. Which interpretation is correct?\n\n- ( ) S is linear vocabulary projection, T is softmax, U is the output distribution\n- ( ) S is cross-attention, T is FFN, U is layer norm\n- ( ) S is positional encoding, T is causal masking, U is a source embedding\n- ( ) S is a residual addition, T is a decoder state, U is an encoder state",
+      "options": [
+        {
+          "id": "A",
+          "text": "S is linear vocabulary projection, T is softmax, U is the output distribution"
+        },
+        {
+          "id": "B",
+          "text": "S is cross-attention, T is FFN, U is layer norm"
+        },
+        {
+          "id": "C",
+          "text": "S is positional encoding, T is causal masking, U is a source embedding"
+        },
+        {
+          "id": "D",
+          "text": "S is a residual addition, T is a decoder state, U is an encoder state"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "Once the decoder stack has produced a contextual state, a linear map creates one logit per vocabulary item, then softmax turns logits into probabilities:\n\n\\[\nh_t\\xrightarrow{\\text{linear}}z_t\\xrightarrow{\\text{softmax}}P(y_t\\mid y_{<t},x).\n\\]\n\nThe upward U arrow denotes the resulting output distribution/token decision.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q9",
+      "num": "Q9",
+      "title": "Count Add & Norm blocks (Numeric Input)",
+      "type": "numeric",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "For one encoder block and one decoder block, how many labelled Add & Norm blocks are present?",
+      "bodyMd": "For one encoder block and one decoder block, how many labelled Add & Norm blocks are present?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "5"
+      },
+      "solutionMd": "The encoder has two: F and H. The decoder has three: M, P, and R.\n\n\\[\n2+3=\\boxed{5}.\n\\]\n\nThe five count follows the number of attention/FFN sublayers, not the number of input-position additions.\n\n**Answer:** \\(\\boxed{5}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q10",
+      "num": "Q10",
+      "title": "Repeated-stack count (Numeric Input)",
+      "type": "numeric",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "If both rounded frames are repeated \\(N=4\\) times with independent parameters, how many Add & Norm blocks are executed along one source-to-target pass through all encoder and decoder layers?",
+      "bodyMd": "If both rounded frames are repeated \\(N=4\\) times with independent parameters, how many Add & Norm blocks are executed along one source-to-target pass through all encoder and decoder layers?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "20"
+      },
+      "solutionMd": "Each encoder-decoder layer pair contributes 5 Add & Norm blocks from Q9. Repeating each stack four times gives\n\n\\[\n4(2)+4(3)=4(5)=\\boxed{20}.\n\\]\n\nThis counts the labelled normalization blocks in the repeated stacks; it does not count the two embedding-plus-position additions at the bottom.\n\n**Answer:** \\(\\boxed{20}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q11",
+      "num": "Q11",
+      "title": "Residual-path reasoning (MSQ)",
+      "type": "multiple_select",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Which statements correctly interpret the curved bypass arrows?",
+      "bodyMd": "Which statements correctly interpret the curved bypass arrows?\n\n- ( ) The source input representation bypasses E and joins E's output before F.\n- ( ) The output of F bypasses G and joins G's output before H.\n- ( ) The encoder output H directly bypasses every decoder sublayer.\n- ( ) The decoder has one residual bypass around each of L, O, and Q.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The source input representation bypasses E and joins E's output before F."
+        },
+        {
+          "id": "B",
+          "text": "The output of F bypasses G and joins G's output before H."
+        },
+        {
+          "id": "C",
+          "text": "The encoder output H directly bypasses every decoder sublayer."
+        },
+        {
+          "id": "D",
+          "text": "The decoder has one residual bypass around each of L, O, and Q."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "D"
+        ]
+      },
+      "solutionMd": "Residual paths preserve the input to a sublayer and add it back to that sublayer's result. The diagram shows two encoder bypasses (into F and H) and three decoder bypasses (into M, P, and R). The arrow from H to O is **cross-attention memory**, not a residual bypass through the decoder.\n\n**Memory hook:** residual arrows go around a local sublayer; cross-attention arrows cross stacks.\n\n**Answer:** A, B and D",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q12",
+      "num": "Q12",
+      "title": "Components appearing more than once (MSQ)",
+      "type": "multiple_select",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "For one encoder and one decoder block, which component types appear more than once?",
+      "bodyMd": "For one encoder and one decoder block, which component types appear more than once?\n\n- ( ) Positional encoding\n- ( ) Feed-forward network\n- ( ) Masked self-attention\n- ( ) Cross-attention\n- ( ) Add & Norm",
+      "options": [
+        {
+          "id": "A",
+          "text": "Positional encoding"
+        },
+        {
+          "id": "B",
+          "text": "Feed-forward network"
+        },
+        {
+          "id": "C",
+          "text": "Masked self-attention"
+        },
+        {
+          "id": "D",
+          "text": "Cross-attention"
+        },
+        {
+          "id": "E",
+          "text": "Add & Norm"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "E"
+        ]
+      },
+      "solutionMd": "There is a source positional signal and a target positional signal, so positional encoding appears twice. There is one FFN in each stack, so FFN appears twice. Add & Norm appears five times. Masked self-attention and cross-attention occur only once each in this one-block architecture.\n\n**Answer:** A, B and E",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q13",
+      "num": "Q13",
+      "title": "Where source information enters the decoder (MCQ)",
+      "type": "single_choice",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "At which labelled component does the decoder first receive the encoder's final state H as keys and values?",
+      "bodyMd": "At which labelled component does the decoder first receive the encoder's final state H as keys and values?\n\n- ( ) L\n- ( ) M\n- ( ) O\n- ( ) Q",
+      "options": [
+        {
+          "id": "A",
+          "text": "L"
+        },
+        {
+          "id": "B",
+          "text": "M"
+        },
+        {
+          "id": "C",
+          "text": "O"
+        },
+        {
+          "id": "D",
+          "text": "Q"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "The cross-stack arrow terminates at O. In cross-attention, each decoder state asks a question (Q), while H supplies the source-side keys and values. This lets the target representation focus on source tokens relevant to its current generation step.\n\n**Answer:** C",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q14",
+      "num": "Q14",
+      "title": "Decoder execution trace (Short Answer)",
+      "type": "text",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Write the labelled decoder path from the shifted-right output input C through the final output U. Include D at the input addition and use arrows between labels.",
+      "bodyMd": "Write the labelled decoder path from the shifted-right output input C through the final output U. Include D at the input addition and use arrows between labels.",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "C + D -> L -> M -> O -> P -> Q -> R -> S -> T -> U"
+      },
+      "solutionMd": "Follow the arrows from bottom to top. C and D meet at the input addition, then the decoder sublayers and output head proceed in order:\n\n\\[\nC + D \\to L \\to M \\to O \\to P \\to Q \\to R \\to S \\to T \\to U.\n\\]\n\nThis trace is a powerful debugging tool: a causal mask belongs at L, encoder memory enters O, and vocabulary probabilities appear only after S and T.\n\n**Answer:** `C + D -> L -> M -> O -> P -> Q -> R -> S -> T -> U`",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-08-architecture-diagrams-q15",
+      "num": "Q15",
+      "title": "Diagram-debugging checkpoint (MSQ)",
+      "type": "multiple_select",
+      "context": "This is the faithful A–U diagram used in the PYQ source. It shows one encoder and one decoder block; the rounded frames marked \\(N\\times\\) mean that each block can be repeated.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "A learner makes the following claims about the diagram. Which claims should be corrected?",
+      "bodyMd": "A learner makes the following claims about the diagram. Which claims should be corrected?\n\n- ( ) “Q receives encoder states H directly as keys and values.”\n- ( ) “L needs a causal mask because it is decoder self-attention.”\n- ( ) “F and H are the two encoder Add & Norm blocks.”\n- ( ) “T produces vocabulary logits before S applies softmax.”",
+      "options": [
+        {
+          "id": "A",
+          "text": "“Q receives encoder states H directly as keys and values.”"
+        },
+        {
+          "id": "B",
+          "text": "“L needs a causal mask because it is decoder self-attention.”"
+        },
+        {
+          "id": "C",
+          "text": "“F and H are the two encoder Add & Norm blocks.”"
+        },
+        {
+          "id": "D",
+          "text": "“T produces vocabulary logits before S applies softmax.”"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "D"
+        ]
+      },
+      "solutionMd": "O—not Q—receives encoder states for cross-attention, so the first claim is incorrect. L is indeed the masked self-attention sublayer, and F/H are correctly identified. The output order is S (linear logits) then T (softmax), so the final claim reverses them.\n\n**Answer:** A and D",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

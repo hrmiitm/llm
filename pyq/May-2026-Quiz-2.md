@@ -10,11 +10,9 @@ Attempt each question before opening the solution. The explanations emphasize th
 
 ## Context for Q2–Q4
 
-The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.
+The reference diagram below is a faithful rendering of the lettered architecture in the source `.tex` for one ($N=1$) Transformer encoder-decoder block. The component letters are intentionally left as letters; infer each function from its position and connections.
 
-![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)
-
-The encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.
+![Lettered Transformer encoder-decoder architecture from the source paper](assets/transformer-lettered-architecture.svg)
 
 ### Q2 — Identify every Add & Norm layer (Short Answer)
 

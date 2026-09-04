@@ -395,17 +395,38 @@
     {
       "id": "learning-01-foundations-q13",
       "num": "Q13",
-      "title": "Name the three axes (Short Answer)",
-      "type": "text",
+      "title": "Read the input side of an architecture diagram (MSQ)",
+      "type": "multiple_select",
       "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
-      "questionText": "Write the standard batch-first hidden-state axes in order, separated by commas.",
-      "bodyMd": "**Write the standard batch-first hidden-state axes in order, separated by commas.**",
-      "options": [],
+      "questionText": "The lettered diagram below is used again in Learning 08. Which statements about its two input additions are correct? (Select all that apply.)",
+      "bodyMd": "The lettered diagram below is used again in Learning 08. Which statements about its two input additions are correct? (Select all that apply.)\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)\n\n- ( ) A is the source-token embedding path and B supplies source positional information.\n- ( ) C is the shifted-right target embedding path and D supplies target positional information.\n- ( ) The two circular `+` nodes are causal masks that erase future tokens.\n- ( ) E and L begin the encoder and decoder's learned attention processing after their input additions.",
+      "options": [
+        {
+          "id": "A",
+          "text": "A is the source-token embedding path and B supplies source positional information."
+        },
+        {
+          "id": "B",
+          "text": "C is the shifted-right target embedding path and D supplies target positional information."
+        },
+        {
+          "id": "C",
+          "text": "The two circular `+` nodes are causal masks that erase future tokens."
+        },
+        {
+          "id": "D",
+          "text": "E and L begin the encoder and decoder's learned attention processing after their input additions."
+        }
+      ],
       "answer": {
-        "type": "text",
-        "value": "B, T, d_model"
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "D"
+        ]
       },
-      "solutionMd": "**Answer:** `B, T, d_model`\n\n#### Step-by-step solution\n\n$$\\text{hidden states}\\in\\mathbb{R}^{B\\times T\\times d_{model}}.$$\n\n$B$ counts sequences, $T$ counts positions per padded sequence, and $d_{model}$ counts features per token.\n\n**Memory hook:** **B-T-D = Batch, Tokens, Dimensions.**",
+      "solutionMd": "**Answer:** A, B and D\n\n#### Step-by-step solution\n\n1. On the encoder side, inputs flow through A, while B enters the same addition node. This is the standard **source embedding + positional signal** construction.\n2. On the decoder side, shifted-right outputs flow through C and meet D at its addition node. This is the matching target-side representation.\n3. The circles are ordinary vector additions. Causal masking occurs later inside decoder self-attention, not at the embedding addition.\n4. The resulting source representation enters E; the resulting target representation enters L. Both are learned attention sublayers.\n\n$$H^{(0)}=\\text{token embedding}+\\text{position information}.$$\n\n**Memory hook:** the bottom `+` means **what token + where token**, not “mask.”",
       "marks": {
         "correct": 1,
         "incorrect": 0,

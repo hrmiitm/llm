@@ -50,7 +50,7 @@
           "C"
         ]
       },
-      "solutionMd": "**Answer:** A and C\n\n#### Step-by-step solution\n\n**Step 1 — Identify the objects in encoder-decoder attention.**\n\nThe encoder produces hidden states $h_1,h_2,ldots,h_T$. At decoder step $t$, the decoder state supplies a query that scores how relevant each encoder state is:\n\n$$e_{t,j} = operatorname{score}(s_{t-1},h_j),\\qquad a_{t,j}=operatorname{softmax}(e_{t,j}).$$\n\n**Step 2 — Form the context vector.**\n\nThe context passed to the decoder is the weighted sum\n\n$$c_t=sum_{j=1}^{T}a_{t,j}h_j.$$\n\nSo the decoder does decide which encoder states matter, and the context vector is a weighted sum of them.\n\n![Kroki-style attention pipeline](assets/attention-pipeline.svg)\n\n**Step 3 — Eliminate the false statements.**\n\n- **B is false:** attention weights are computed over encoder states (the keys/values), not over all decoder hidden states.\n- **D is false:** encoder states are precisely what attention uses after the encoder has finished.\n\nTherefore, the correct selections are $\\boxed{\\text{A, C}}$.",
+      "solutionMd": "**Answer:** A and C\n\n#### Step-by-step solution\n\n**Step 1 — Identify the objects in encoder-decoder attention.**\n\nThe encoder produces hidden states $h_1,h_2,\\ldots,h_T$. At decoder step $t$, the decoder state supplies a query that scores how relevant each encoder state is:\n\n$$e_{t,j} = \\operatorname{score}(s_{t-1},h_j),\\qquad a_{t,j}=\\operatorname{softmax}(e_{t,j}).$$\n\n**Step 2 — Form the context vector.**\n\nThe context passed to the decoder is the weighted sum\n\n$$c_t=\\sum_{j=1}^{T}a_{t,j}h_j.$$\n\nSo the decoder does decide which encoder states matter, and the context vector is a weighted sum of them.\n\n![Kroki-style attention pipeline](assets/attention-pipeline.svg)\n\n**Step 3 — Eliminate the false statements.**\n\n- **B is false:** attention weights are computed over encoder states (the keys/values), not over all decoder hidden states.\n- **D is false:** encoder states are precisely what attention uses after the encoder has finished.\n\nTherefore, the correct selections are $\\boxed{\\text{A, C}}$.",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -125,7 +125,7 @@
       "num": "Q5",
       "title": "Additional attention scores (Short Answer)",
       "type": "numeric",
-      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "context": null,
       "questionText": "A Transformer processes a sequence containing 6 tokens using Multi-Head Attention. It initially uses 4 heads. If the number of heads is doubled to 8 while the sequence length remains unchanged, how many additional attention scores are computed across all heads?",
       "bodyMd": "**A Transformer processes a sequence containing 6 tokens using Multi-Head Attention. It initially uses 4 heads. If the number of heads is doubled to 8 while the sequence length remains unchanged, how many additional attention scores are computed across all heads?**\n\n*(Numeric input)*",
       "options": [],
@@ -145,7 +145,7 @@
       "num": "Q6",
       "title": "Output tensor volume (Short Answer)",
       "type": "numeric",
-      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "context": null,
       "questionText": "A batch of 8 sentences passes through a 6-layer Transformer Encoder with 8 attention heads. After padding, each sentence has maximum length 32 and $d_{model}=128$. What is the total number of elements in the output tensor produced by the final encoder layer for the entire batch?",
       "bodyMd": "**A batch of 8 sentences passes through a 6-layer Transformer Encoder with 8 attention heads. After padding, each sentence has maximum length 32 and $d_{model}=128$. What is the total number of elements in the output tensor produced by the final encoder layer for the entire batch?**\n\n*(Numeric input)*",
       "options": [],
@@ -165,7 +165,7 @@
       "num": "Q7",
       "title": "Entries masked by a causal mask (Short Answer)",
       "type": "numeric",
-      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "context": null,
       "questionText": "A masked multi-head attention layer uses context length $T=128$. How many entries in the causal mask are set to $-\\infty$?",
       "bodyMd": "**A masked multi-head attention layer uses context length $T=128$. How many entries in the causal mask are set to $-\\infty$?**\n\n*(Numeric input)*",
       "options": [],
@@ -185,7 +185,7 @@
       "num": "Q8",
       "title": "Positional-encoding norm (Short Answer)",
       "type": "numeric",
-      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "context": null,
       "questionText": "For $d_{model}=512$, compute the squared Euclidean norm of the sinusoidal positional-encoding vector for $pos=3$.",
       "bodyMd": "**For $d_{model}=512$, compute the squared Euclidean norm of the sinusoidal positional-encoding vector for $pos=3$.**\n\n*(Numeric input)*",
       "options": [],
@@ -205,7 +205,7 @@
       "num": "Q9",
       "title": "Teacher forcing (MCQ)",
       "type": "single_choice",
-      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "context": null,
       "questionText": "Consider the following statements about teacher forcing in autoregressive sequence-to-sequence training.",
       "bodyMd": "**Consider the following statements about teacher forcing in autoregressive sequence-to-sequence training.**\n\n**Statement 1:** Teacher forcing passes the input token to a larger Teacher model whose output becomes the next token.\n**Statement 2:** Teacher forcing helps prevent compounding early incorrect predictions that can destabilize training.\n\n- ( ) Statement 1 is true but Statement 2 is false.\n- ( ) Statement 1 is false but Statement 2 is true.\n- ( ) Both statements are true.\n- ( ) Both statements are false.",
       "options": [
@@ -327,7 +327,7 @@
       "num": "Q13",
       "title": "GPT decoder-layer components (MSQ)",
       "type": "multiple_select",
-      "context": "The language model generates three word tokens after `<START>`. The table shows the relevant conditional probabilities; the actual vocabulary may be larger.\n\n| From | To | Probability |\n|---|---|---:|\n| `<START>` | i | 0.5 |\n| `<START>` | you | 0.4 |\n| i | like | 0.6 |\n| i | eat | 0.3 |\n| you | like | 0.4 |\n| you | eat | 0.5 |\n| i like | apples | 0.7 |\n| i like | bananas | 0.2 |\n| i eat | apples | 0.4 |\n| i eat | bananas | 0.6 |\n| you like | apples | 0.4 |\n| you like | bananas | 0.5 |\n| you eat | apples | 0.9 |\n| you eat | bananas | 0.1 |\n\n![Kroki-style language-model probability tree](assets/decoder-search.svg)",
+      "context": null,
       "questionText": "Which components are found within a GPT decoder layer? (Select all that apply.)",
       "bodyMd": "**Which components are found within a GPT decoder layer? (Select all that apply.)**\n\n- ( ) Causal (masked) multi-head self-attention\n- ( ) Position-wise feed-forward network\n- ( ) Multi-head cross-attention\n- ( ) Recurrent neural network (RNN) layer\n- ( ) Add & Norm layer",
       "options": [

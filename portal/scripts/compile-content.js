@@ -139,6 +139,24 @@ const LEARNING_META = {
     topics: ['Integrated Shapes', 'Attention', 'Decoding', 'BERT vs GPT'],
     notesFile: 'vid/transformer-notes.md',
   },
+  'learning-08-architecture-diagrams': {
+    sourceFile: 'Learning-08-Architecture-Diagram-Literacy.md',
+    category: 'LEARNING',
+    week: 8,
+    title: 'Learning 08 — Read a Transformer Architecture Diagram',
+    label: 'Learning 08 — Diagram Literacy',
+    topics: ['Encoder-Decoder Diagram', 'Residual Paths', 'Cross-Attention', 'Output Head'],
+    notesFile: 'GA/week1-week2-learning-notes.md',
+  },
+  'learning-09-diagram-execution': {
+    sourceFile: 'Learning-09-Diagram-to-Execution.md',
+    category: 'LEARNING',
+    week: 9,
+    title: 'Learning 09 — From Diagram to Computation',
+    label: 'Learning 09 — Diagram to Execution',
+    topics: ['Attention Shapes', 'Causal Masks', 'Parameter Counting', 'Teacher Forcing'],
+    notesFile: 'GA/week3-week4-learning-notes.md',
+  },
 };
 
 // ──────────────────────────────────────────────
@@ -237,6 +255,12 @@ function extractAnswer(detailsContent, options) {
 // Main parser
 // ──────────────────────────────────────────────
 
+function parseContextRange(label) {
+  const numbers = [...label.matchAll(/Q(\d+)/gi)].map(match => Number(match[1]));
+  if (numbers.length === 0) return null;
+  return { start: numbers[0], end: numbers[numbers.length - 1] };
+}
+
 function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
   const filePath = join(sourceDir, sourceFile);
   let raw;
@@ -253,8 +277,8 @@ function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
   while (i < lines.length) {
     const line = lines[i];
 
-    // Detect context block header (## Context for Q...)
-    const ctxMatch = line.match(/^##\s+Context for (Q[\d\s,–-]+)/i);
+    // Detect a bounded context block, e.g. “Context for Q3–Q4”.
+    const ctxMatch = line.match(/^##\s+Context for\s+(.+)$/i);
     if (ctxMatch) {
       // Collect context lines until next heading
       const ctxLines = [];
@@ -263,7 +287,10 @@ function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
         ctxLines.push(lines[i]);
         i++;
       }
-      currentContext = ctxLines.join('\n').trim();
+      currentContext = {
+        markdown: ctxLines.join('\n').trim(),
+        range: parseContextRange(ctxMatch[1]),
+      };
       continue;
     }
 
@@ -272,6 +299,12 @@ function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
     if (qHeadMatch) {
       const qNum = qHeadMatch[1];
       const qTitle = qHeadMatch[2].trim();
+      const qNumber = Number(qNum.slice(1));
+      const contextForQuestion = currentContext
+        && (!currentContext.range
+          || (qNumber >= currentContext.range.start && qNumber <= currentContext.range.end))
+        ? currentContext.markdown
+        : null;
 
       // Collect question body until <details>
       const bodyLines = [];
@@ -319,7 +352,7 @@ function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
         num: qNum,
         title: qTitle,
         type: qType,
-        context: currentContext,
+        context: contextForQuestion,
         questionText: questionText,
         bodyMd: bodyText,
         options,

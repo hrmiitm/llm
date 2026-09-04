@@ -1,0 +1,422 @@
+{
+  "id": "learning-09-diagram-execution",
+  "week": 9,
+  "title": "Learning 09 — From Diagram to Computation",
+  "category": "LEARNING",
+  "label": "Learning 09 — Diagram to Execution",
+  "topics": [
+    "Attention Shapes",
+    "Causal Masks",
+    "Parameter Counting",
+    "Teacher Forcing"
+  ],
+  "notesFile": "GA/week3-week4-learning-notes.md",
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 15,
+  "durationMinutes": 45,
+  "questions": [
+    {
+      "id": "learning-09-diagram-execution-q1",
+      "num": "Q1",
+      "title": "Source tensor at E (Short Answer)",
+      "type": "text",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "What is the batch-first shape of the tensor entering E, the encoder self-attention sublayer?",
+      "bodyMd": "What is the batch-first shape of the tensor entering E, the encoder self-attention sublayer?",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "2 × 5 × 32"
+      },
+      "solutionMd": "E receives the source input representation after A and B have been added. Its axes are batch, source positions, and model width:\n\n\\[\n\\mathbb{R}^{B\\times T_s\\times d_{model}}\n=\\mathbb{R}^{2\\times5\\times32}.\n\\]\n\nThe addition at the bottom changes the representation's content, not its shape.\n\n**Answer:** `2 × 5 × 32`",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q2",
+      "num": "Q2",
+      "title": "Encoder score tensor (Numeric Input)",
+      "type": "numeric",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "How many raw attention-score cells are produced at E across all examples and heads in one encoder layer, before any padding mask?",
+      "bodyMd": "How many raw attention-score cells are produced at E across all examples and heads in one encoder layer, before any padding mask?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "200"
+      },
+      "solutionMd": "At E, source queries compare with source keys, giving a \\(T_s\\times T_s\\) table per head/example:\n\n\\[\nB\\times h\\times T_s^2=2\\times4\\times5^2=\\boxed{200}.\n\\]\n\nDo not multiply by \\(d_h\\): that width is used inside each dot product, whereas this question counts the resulting scores.\n\n**Answer:** \\(\\boxed{200}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q3",
+      "num": "Q3",
+      "title": "Forbidden cells at L (Numeric Input)",
+      "type": "numeric",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "How many score cells are masked as future positions at L across all examples and heads in one decoder layer?",
+      "bodyMd": "How many score cells are masked as future positions at L across all examples and heads in one decoder layer?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "48"
+      },
+      "solutionMd": "L is masked decoder self-attention. One \\(T_t=4\\) causal mask has\n\n\\[\n\\frac{T_t(T_t-1)}2=\\frac{4\\cdot3}{2}=6\n\\]\n\nstrictly future cells. Repeat for 2 examples and 4 heads:\n\n\\[\n2\\times4\\times6=\\boxed{48}.\n\\]\n\n**Check:** the full decoder score tensor has \\(2\\times4\\times4^2=128\\) cells, so 80 remain allowed.\n\n**Answer:** \\(\\boxed{48}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q4",
+      "num": "Q4",
+      "title": "Compare E, L, and O (MSQ)",
+      "type": "multiple_select",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Which statements correctly compare the three attention boxes in the diagram?",
+      "bodyMd": "Which statements correctly compare the three attention boxes in the diagram?\n\n- ( ) E uses source states as Q, K, and V.\n- ( ) L uses target states as Q, K, and V and applies a causal mask.\n- ( ) O uses decoder states as Q and encoder state H as K and V.\n- ( ) O must use a square \\(T_t\\times T_t\\) score matrix.",
+      "options": [
+        {
+          "id": "A",
+          "text": "E uses source states as Q, K, and V."
+        },
+        {
+          "id": "B",
+          "text": "L uses target states as Q, K, and V and applies a causal mask."
+        },
+        {
+          "id": "C",
+          "text": "O uses decoder states as Q and encoder state H as K and V."
+        },
+        {
+          "id": "D",
+          "text": "O must use a square \\(T_t\\times T_t\\) score matrix."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "solutionMd": "E is encoder self-attention, L is masked decoder self-attention, and O is encoder-decoder cross-attention. Cross-attention compares target queries with source keys, so its score table is \\(T_t\\times T_s=4\\times5\\), not necessarily square.\n\n**Memory hook:** E = source looks at source; L = target looks at past target; O = target looks at source.\n\n**Answer:** A, B and C",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q5",
+      "num": "Q5",
+      "title": "Cross-attention scores at O (Numeric Input)",
+      "type": "numeric",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "How many raw cross-attention score cells are produced at O across all examples and heads in one decoder layer?",
+      "bodyMd": "How many raw cross-attention score cells are produced at O across all examples and heads in one decoder layer?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "160"
+      },
+      "solutionMd": "O has one query per target position and one key per source position:\n\n\\[\nB\\times h\\times T_t\\times T_s\n=2\\times4\\times4\\times5\n=\\boxed{160}.\n\\]\n\nThe output still has one row per target query, so cross-attention preserves target length \\(T_t\\).\n\n**Answer:** \\(\\boxed{160}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q6",
+      "num": "Q6",
+      "title": "Mask-shape debugging (MCQ)",
+      "type": "single_choice",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Which mask has the correct unbroadcasted shape for L in this model?",
+      "bodyMd": "Which mask has the correct unbroadcasted shape for L in this model?\n\n- ( ) \\(5\\times5\\), because the source has five tokens\n- ( ) \\(4\\times4\\), because decoder queries compare with decoder keys\n- ( ) \\(4\\times5\\), because all decoder attention is cross-attention\n- ( ) \\(2\\times4\\times8\\), because the head width is eight",
+      "options": [
+        {
+          "id": "A",
+          "text": "\\(5\\times5\\), because the source has five tokens"
+        },
+        {
+          "id": "B",
+          "text": "\\(4\\times4\\), because decoder queries compare with decoder keys"
+        },
+        {
+          "id": "C",
+          "text": "\\(4\\times5\\), because all decoder attention is cross-attention"
+        },
+        {
+          "id": "D",
+          "text": "\\(2\\times4\\times8\\), because the head width is eight"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "L is decoder **self**-attention, so every target query needs a permission decision for every target key. Before batch/head broadcasting, that is \\(T_t\\times T_t=4\\times4\\).\n\nThe \\(4\\times5\\) shape belongs to O's cross-attention score table, not L's causal mask.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q7",
+      "num": "Q7",
+      "title": "One MHA module budget (Numeric Input)",
+      "type": "numeric",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "How many parameters are in one MHA module at E, L, or O, including all four projection biases?",
+      "bodyMd": "How many parameters are in one MHA module at E, L, or O, including all four projection biases?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "4224"
+      },
+      "solutionMd": "Packed multi-head attention has Q, K, V, and output maps. Each is \\(32\\to32\\) with a 32-dimensional bias:\n\n\\[\n4(d_{model}^2+d_{model})\n=4(32^2+32)\n=4(1056)\n=\\boxed{4224}.\n\\]\n\nThe number of heads changes how vectors are partitioned, but for fixed \\(d_{model}\\) it does not change this packed-projection total.\n\n**Answer:** \\(\\boxed{4224}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q8",
+      "num": "Q8",
+      "title": "One FFN budget (Numeric Input)",
+      "type": "numeric",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "How many parameters are in either G or Q, a \\(32\\to64\\to32\\) feed-forward network with both biases?",
+      "bodyMd": "How many parameters are in either G or Q, a \\(32\\to64\\to32\\) feed-forward network with both biases?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "4192"
+      },
+      "solutionMd": "The expansion map contributes \\(32\\cdot64+64=2112\\). The contraction map contributes \\(64\\cdot32+32=2080\\). Therefore\n\n\\[\n2112+2080=\\boxed{4192}.\n\\]\n\nAttention exchanges information between positions; G/Q apply this nonlinear transformation independently at each position.\n\n**Answer:** \\(\\boxed{4192}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q9",
+      "num": "Q9",
+      "title": "Two-stack block budget (Numeric Input)",
+      "type": "numeric",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Ignoring embeddings and output projection, how many parameters are in the two encoder layers plus two decoder layers?",
+      "bodyMd": "Ignoring embeddings and output projection, how many parameters are in the two encoder layers plus two decoder layers?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "42752"
+      },
+      "solutionMd": "One encoder layer has one MHA, one FFN, and two layer norms:\n\n\\[\n4224+4192+2(64)=8544.\n\\]\n\nOne decoder layer has two MHA modules, one FFN, and three layer norms:\n\n\\[\n2(4224)+4192+3(64)=12832.\n\\]\n\nThere are two of each:\n\n\\[\n2(8544)+2(12832)=\\boxed{42752}.\n\\]\n\n**Answer:** \\(\\boxed{42752}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q10",
+      "num": "Q10",
+      "title": "Residual and normalization flow (MSQ)",
+      "type": "multiple_select",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Which statements are correct about F, H, M, P, and R?",
+      "bodyMd": "Which statements are correct about F, H, M, P, and R?\n\n- ( ) Each follows a learned sublayer and receives a residual addition.\n- ( ) They each contain learned layer-normalization scale and bias vectors.\n- ( ) They create a new attention-score matrix by themselves.\n- ( ) Their count differs because the decoder has three learned sublayers while the encoder has two.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Each follows a learned sublayer and receives a residual addition."
+        },
+        {
+          "id": "B",
+          "text": "They each contain learned layer-normalization scale and bias vectors."
+        },
+        {
+          "id": "C",
+          "text": "They create a new attention-score matrix by themselves."
+        },
+        {
+          "id": "D",
+          "text": "Their count differs because the decoder has three learned sublayers while the encoder has two."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "D"
+        ]
+      },
+      "solutionMd": "These blocks are the post-sublayer Add & Norm stages. Each combines a sublayer's output with its bypassed input, then normalizes features using learned \\(\\gamma\\) and \\(\\beta\\). Score matrices belong to E, L, and O—not to normalization blocks.\n\n**Answer:** A, B and D",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q11",
+      "num": "Q11",
+      "title": "Output-logit volume (Numeric Input)",
+      "type": "numeric",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "At T, how many vocabulary-logit scalars are produced for the whole batch before selecting/sampling a token?",
+      "bodyMd": "At T, how many vocabulary-logit scalars are produced for the whole batch before selecting/sampling a token?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "8000"
+      },
+      "solutionMd": "The output head creates one \\(V_t=1000\\)-way logit vector for every target position in every example:\n\n\\[\nB\\times T_t\\times V_t=2\\times4\\times1000=\\boxed{8000}.\n\\]\n\nThe output-projection parameters are shared across those 8 positions; volume and parameter count are different quantities.\n\n**Answer:** \\(\\boxed{8000}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q12",
+      "num": "Q12",
+      "title": "Decoder loss from the diagram's output (Numeric Input)",
+      "type": "numeric",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "At the four target positions, T assigns correct-token probabilities \\(0.5\\), \\(0.25\\), \\(0.8\\), and \\(0.4\\). What is the summed next-token negative log-likelihood, rounded to three decimals?",
+      "bodyMd": "At the four target positions, T assigns correct-token probabilities \\(0.5\\), \\(0.25\\), \\(0.8\\), and \\(0.4\\). What is the summed next-token negative log-likelihood, rounded to three decimals?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "3.219"
+      },
+      "solutionMd": "First multiply the conditional probabilities for the teacher-forced target:\n\n\\[\n0.5\\times0.25\\times0.8\\times0.4=0.04.\n\\]\n\nThen take the negative natural log:\n\n\\[\n-\\ln(0.04)=3.218876\\ldots\\approx\\boxed{3.219}.\n\\]\n\nIf a prompt asks for the **mean** loss, divide this sum by 4; it did not here.\n\n**Answer:** \\(\\boxed{3.219}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q13",
+      "num": "Q13",
+      "title": "Cross-attention diagnosis (MCQ)",
+      "type": "single_choice",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "An implementation sends the encoder output H to L as K and V, and sends the output of M to O as Q. What is wrong?",
+      "bodyMd": "An implementation sends the encoder output H to L as K and V, and sends the output of M to O as Q. What is wrong?\n\n- ( ) Nothing: this is the standard order\n- ( ) H belongs at O as K/V; L must first perform masked target self-attention\n- ( ) H should be sent to Q only after softmax\n- ( ) The decoder needs no target embeddings C",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nothing: this is the standard order"
+        },
+        {
+          "id": "B",
+          "text": "H belongs at O as K/V; L must first perform masked target self-attention"
+        },
+        {
+          "id": "C",
+          "text": "H should be sent to Q only after softmax"
+        },
+        {
+          "id": "D",
+          "text": "The decoder needs no target embeddings C"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "The diagram's order is C/D → L → M → O. L must build a causally valid target-side state. Only then does O use that decoder representation as Q to retrieve relevant information from source memory H as K and V.\n\nPutting H at L turns the first decoder sublayer into the wrong operation and loses the intended masked self-attention stage.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q14",
+      "num": "Q14",
+      "title": "Q/K/V ownership (Short Answer)",
+      "type": "text",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "For cross-attention component O, state who supplies Q and who supplies K and V.",
+      "bodyMd": "For cross-attention component O, state who supplies Q and who supplies K and V.",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "Q: decoder state; K,V: encoder state H"
+      },
+      "solutionMd": "The decoder representation coming from M supplies the queries. The encoder's final state H supplies keys and values:\n\n\\[\nQ=\\text{decoder state},\\qquad K,V=H_{\\text{encoder}}.\n\\]\n\nThis split is why cross-attention can align a target position with relevant source positions.\n\n**Answer:** `Q: decoder state; K,V: encoder state H`",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-09-diagram-execution-q15",
+      "num": "Q15",
+      "title": "End-to-end diagram checkpoint (MSQ)",
+      "type": "multiple_select",
+      "context": "Use the same lettered architecture from Learning 08. In this exercise, the model has\n\n\\[\nB=2,\\quad T_s=5,\\quad T_t=4,\\quad d_{model}=32,\\quad h=4,\\quad d_h=8,\\quad d_{ff}=64,\n\\]\n\n\\[\nV_s=800,\\qquad V_t=1000,\\qquad N_e=N_d=2.\n\\]\n\nAll Q/K/V/output projections have biases, all layer norms have learned scale and bias, and encoder/decoder stacks do not share parameters.\n\n![Lettered Transformer encoder-decoder architecture](assets/transformer-lettered-architecture.svg)",
+      "questionText": "Choose every correct statement for this model.",
+      "bodyMd": "Choose every correct statement for this model.\n\n- ( ) The source-to-target information route is A/B → E/F/G/H → O → P/Q/R → S/T/U.\n- ( ) A target position's probability at U can depend on source tokens through O and earlier target tokens through L.\n- ( ) Causal masking belongs at O because it is the only decoder attention operation.\n- ( ) During inference, a token selected from U is appended to the shifted-right target prefix before the next pass through C/D.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The source-to-target information route is A/B → E/F/G/H → O → P/Q/R → S/T/U."
+        },
+        {
+          "id": "B",
+          "text": "A target position's probability at U can depend on source tokens through O and earlier target tokens through L."
+        },
+        {
+          "id": "C",
+          "text": "Causal masking belongs at O because it is the only decoder attention operation."
+        },
+        {
+          "id": "D",
+          "text": "During inference, a token selected from U is appended to the shifted-right target prefix before the next pass through C/D."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "D"
+        ]
+      },
+      "solutionMd": "Source information flows through the encoder into H, then reaches the decoder through O. L handles target-side causal history, while O reads source context. At inference, the generated token becomes part of the next prefix; no future gold token is available.\n\nThe causal mask belongs at L, not O. Cross-attention may use all source positions because they are given input, not future target labels.\n\n**Answer:** A, B and D",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

@@ -272,7 +272,7 @@
       "num": "Q8",
       "title": "Identifying Degenerative Text Generation Models",
       "type": "single_choice",
-      "context": "**Rajesh's GPT-like model configuration:**\n\n| Parameter | Value |\n|---|:---:|\n| Vocabulary size | 1000 |\n| Sequence length | 64 |\n| Embedding dimension $d_{\\text{model}}$ | 128 |\n| Number of transformer blocks (layers) | 4 |\n| Number of attention heads per block | 4 |\n| FFN hidden layer size | 256 |\n\n---",
+      "context": null,
       "questionText": "The following GPT-based models generated text with the prompt \"I like\":",
       "bodyMd": "**The following GPT-based models generated text with the prompt \"I like\":**\n\n| Model | Generated Output |\n|---|---|\n| $M_1$ | I like to **to** like. |\n| $M_2$ | I like **like like**. |\n| $M_3$ | I like **the do because**. |\n| $M_4$ | I like to study the origin of the universe. |\n\n**Select the degenerative model(s):**\n\n- [ ] $M_1$\n- [ ] $M_2$\n- [ ] $M_3$\n- [ ] $M_4$",
       "options": [],
