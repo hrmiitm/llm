@@ -548,6 +548,7 @@ code, pre {
 .question-text pre code { background: transparent; color: inherit; padding: 0; }
 .kroki-diagram { background: #fffef8; border: 1px solid #dbe4f0; border-radius: var(--radius-sm); margin: 0.9rem 0; min-height: 5rem; overflow-x: auto; padding: 0.75rem; text-align: center; display: flex; align-items: center; justify-content: center; }
 .kroki-diagram[aria-busy="true"] { color: var(--text-muted); font-size: 0.85rem; font-style: italic; animation: pulse 1.5s ease-in-out infinite; }
+.kroki-diagram > div { width: 100%; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 .kroki-diagram svg { display: block; height: auto; margin: 0 auto; max-width: 100%; }
 .kroki-diagram-error { color: #991b1b; font-size: 0.85rem; text-align: center; padding: 0.5rem; }

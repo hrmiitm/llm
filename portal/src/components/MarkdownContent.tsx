@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { renderMarkdown } from '../lib/renderer';
 
 interface Props {
@@ -6,18 +6,31 @@ interface Props {
   className?: string;
 }
 
-let diagramNumber = 0;
 type MermaidApi = typeof import('mermaid').default;
+type RenderedDiagram = {
+  svg: string;
+  bindFunctions?: (element: Element) => void;
+};
+
+type ContentSegment =
+  | { kind: 'markdown'; html: string }
+  | { kind: 'diagram'; source: string; label: string };
+
+let diagramNumber = 0;
 let mermaidLoader: Promise<MermaidApi> | null = null;
+
+// Diagram blocks are emitted by compile-content.js. Keep them out of the
+// dangerouslySetInnerHTML tree so React never has to reconcile over an SVG
+// that Mermaid has rendered.
+const DIAGRAM_BLOCK = /<div class="kroki-diagram" data-kroki-source="([^"]+)" role="img" aria-label="([^"]*)"><\/div>/g;
 
 function loadMermaid(): Promise<MermaidApi> {
   if (!mermaidLoader) {
     mermaidLoader = import('mermaid').then(({ default: mermaid }) => {
       mermaid.initialize({
         startOnLoad: false,
-        // 'loose' allows mermaid to skip its internal DOMPurify pass on the SVG
-        // output, which can strip SVG attributes we need. Our content is from
-        // our own controlled source so this is safe.
+        // The course content is authored in this repository. Mermaid's SVG is
+        // inserted by this component, rather than being accepted from users.
         securityLevel: 'loose',
         theme: 'base',
         themeVariables: {
@@ -41,128 +54,128 @@ function loadMermaid(): Promise<MermaidApi> {
 
 function decodeDiagramSource(encodedSource: string): string {
   try {
-    // Standard base64 → UTF-8 decode
     const binary = window.atob(encodedSource);
     const bytes = Uint8Array.from(binary, (ch) => ch.charCodeAt(0));
     return new TextDecoder('utf-8').decode(bytes);
   } catch {
-    // Fallback: try direct atob (works when content is ASCII-only)
     return window.atob(encodedSource);
   }
 }
 
-/** Renders Markdown and hydrates Kroki-compatible Mermaid source blocks. */
-export function MarkdownContent({ markdown, className }: Props) {
-  const rootRef = useRef<HTMLDivElement>(null);
-  // Keep both the markup and the dangerouslySetInnerHTML prop stable while a
-  // parent (notably the exam timer) rerenders. React compares the prop object
-  // by identity and would otherwise replace Mermaid's hydrated SVG with the
-  // original placeholder HTML on every tick.
-  const html = useMemo(() => renderMarkdown(markdown), [markdown]);
+function decodeHtmlAttribute(value: string): string {
+  return value
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
+function splitContent(markdown: string): ContentSegment[] {
+  const segments: ContentSegment[] = [];
+  let cursor = 0;
+
+  for (const match of markdown.matchAll(DIAGRAM_BLOCK)) {
+    const start = match.index ?? cursor;
+    const before = markdown.slice(cursor, start);
+    if (before.trim()) {
+      segments.push({ kind: 'markdown', html: renderMarkdown(before) });
+    }
+
+    segments.push({
+      kind: 'diagram',
+      source: match[1],
+      label: decodeHtmlAttribute(match[2]),
+    });
+    cursor = start + match[0].length;
+  }
+
+  const after = markdown.slice(cursor);
+  if (after.trim() || segments.length === 0) {
+    segments.push({ kind: 'markdown', html: renderMarkdown(after) });
+  }
+
+  return segments;
+}
+
+const StaticMarkdown = memo(function StaticMarkdown({ html }: { html: string }) {
   const innerHtml = useMemo(() => ({ __html: html }), [html]);
+  return <div dangerouslySetInnerHTML={innerHtml} />;
+});
+
+const MermaidDiagram = memo(function MermaidDiagram({ source, label }: { source: string; label: string }) {
+  const [rendered, setRendered] = useState<RenderedDiagram | null>(null);
+  const [error, setError] = useState(false);
+  const [diagramId] = useState(() => `kroki-mermaid-${diagramNumber++}`);
+  const svgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let cancelled = false;
 
-    async function renderDiagrams() {
-      const root = rootRef.current;
-      if (!root) return;
-
-      const initialSlots = Array.from(root.querySelectorAll<HTMLElement>('.kroki-diagram[data-kroki-source]'));
-      if (initialSlots.length === 0) return;
-
-      let mermaid: MermaidApi;
+    async function renderDiagram() {
+      let renderHost: HTMLDivElement | null = null;
       try {
-        mermaid = await loadMermaid();
-      } catch (err) {
-        console.error('Failed to load mermaid library.', err);
-        return;
-      }
-      if (cancelled) return;
-
-      const currentRoot = rootRef.current;
-      if (!currentRoot) return;
-
-      // Re-query slots on current root after asynchronous mermaid load
-      const slots = Array.from(currentRoot.querySelectorAll<HTMLElement>('.kroki-diagram[data-kroki-source]'));
-
-      for (let i = 0; i < slots.length; i++) {
+        const mermaid = await loadMermaid();
         if (cancelled) return;
 
-        let slot = slots[i];
-        if (!currentRoot.contains(slot)) {
-          const freshSlots = Array.from(currentRoot.querySelectorAll<HTMLElement>('.kroki-diagram[data-kroki-source]'));
-          if (freshSlots[i]) {
-            slot = freshSlots[i];
-          } else {
-            continue;
-          }
+        // Mermaid needs a live, measurable DOM node while it calculates its
+        // SVG. Position it outside the viewport instead of hiding it so every
+        // browser can measure the diagram correctly.
+        renderHost = document.createElement('div');
+        renderHost.style.cssText = 'position:fixed;left:-10000px;top:-10000px;pointer-events:none;';
+        document.body.appendChild(renderHost);
+
+        const result = await mermaid.render(diagramId, decodeDiagramSource(source), renderHost);
+        if (!cancelled) {
+          setRendered({ svg: result.svg, bindFunctions: result.bindFunctions ?? undefined });
         }
-
-        const encodedSource = slot.dataset.krokiSource;
-        if (!encodedSource) continue;
-
-        if (slot.dataset.rendered === 'true' && slot.querySelector('svg')) {
-          continue;
-        }
-
-        slot.setAttribute('aria-busy', 'true');
-        slot.textContent = 'Loading diagram…';
-
-        try {
-          const source = decodeDiagramSource(encodedSource);
-          const id = `kroki-mermaid-${diagramNumber++}`;
-
-          const renderContainer = document.createElement('div');
-          renderContainer.style.position = 'absolute';
-          renderContainer.style.visibility = 'hidden';
-          renderContainer.style.pointerEvents = 'none';
-          document.body.appendChild(renderContainer);
-
-          let svg: string;
-          let bindFunctions: ((el: Element) => void) | undefined;
-          try {
-            const result = await mermaid.render(id, source, renderContainer);
-            svg = result.svg;
-            bindFunctions = result.bindFunctions ?? undefined;
-          } finally {
-            renderContainer.remove();
-          }
-
-          if (cancelled) return;
-
-          const liveRoot = rootRef.current;
-          let liveSlot = slot;
-          if (liveRoot && !liveRoot.contains(liveSlot)) {
-            const fresh = Array.from(liveRoot.querySelectorAll<HTMLElement>('.kroki-diagram[data-kroki-source]'));
-            if (fresh[i]) liveSlot = fresh[i];
-          }
-
-          liveSlot.innerHTML = svg;
-          liveSlot.dataset.rendered = 'true';
-          const svgEl = liveSlot.querySelector('svg');
-          if (svgEl) {
-            svgEl.setAttribute('role', 'img');
-            const label = liveSlot.getAttribute('aria-label') ?? 'Course diagram';
-            svgEl.setAttribute('aria-label', label);
-          }
-          bindFunctions?.(liveSlot);
-        } catch (error) {
-          console.error('Could not render course diagram.', error);
-          if (!cancelled) {
-            slot.classList.add('kroki-diagram-error');
-            slot.setAttribute('role', 'alert');
-            slot.textContent = '⚠ This diagram could not be rendered.';
-          }
-        } finally {
-          slot.removeAttribute('aria-busy');
-        }
+      } catch (renderError) {
+        console.error('Could not render course diagram.', renderError);
+        if (!cancelled) setError(true);
+      } finally {
+        renderHost?.remove();
       }
     }
 
-    void renderDiagrams();
+    void renderDiagram();
     return () => { cancelled = true; };
-  }, [html]);
+  }, [diagramId, source]);
 
-  return <div ref={rootRef} className={className} dangerouslySetInnerHTML={innerHtml} />;
+  const svgMarkup = useMemo(() => rendered ? ({ __html: rendered.svg }) : null, [rendered]);
+
+  useEffect(() => {
+    if (!rendered || !svgRef.current) return;
+    const svg = svgRef.current.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('role', 'img');
+      svg.setAttribute('aria-label', label);
+    }
+    rendered.bindFunctions?.(svgRef.current);
+  }, [label, rendered]);
+
+  if (error) {
+    return <div className="kroki-diagram kroki-diagram-error" role="alert">⚠ This diagram could not be rendered.</div>;
+  }
+
+  return (
+    <div className="kroki-diagram" role="img" aria-label={label} aria-busy={rendered ? undefined : true}>
+      {svgMarkup
+        ? <div ref={svgRef} dangerouslySetInnerHTML={svgMarkup} />
+        : 'Loading diagram…'}
+    </div>
+  );
+});
+
+/** Renders Markdown and Mermaid course diagrams without React overwriting SVGs. */
+export function MarkdownContent({ markdown, className }: Props) {
+  const segments = useMemo(() => splitContent(markdown), [markdown]);
+
+  return (
+    <div className={className}>
+      {segments.map((segment, index) => (
+        segment.kind === 'diagram'
+          ? <MermaidDiagram key={`diagram-${index}-${segment.source}`} source={segment.source} label={segment.label} />
+          : <StaticMarkdown key={`markdown-${index}`} html={segment.html} />
+      ))}
+    </div>
+  );
 }
