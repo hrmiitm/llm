@@ -1,0 +1,248 @@
+{
+  "id": "ga1",
+  "week": 1,
+  "title": "Week 1 — Graded Assignment 1",
+  "topics": [
+    "Context Length",
+    "Embedding Tensors",
+    "Self-Attention",
+    "Attention Matrix"
+  ],
+  "notesFile": "week1-week2-learning-notes.md",
+  "score": 100,
+  "maxScore": 100,
+  "submittedDate": "Sun, 21 Jun 2026",
+  "questionCount": 8,
+  "durationMinutes": 30,
+  "questions": [
+    {
+      "id": "ga1-q1",
+      "num": "Q1",
+      "title": "Minimum Context Length $T$",
+      "type": "single_choice",
+      "context": "A dataset contains **four sample sequences** of words:\n\n| # | Sequence | Word Count |\n|---|---|:---:|\n| 1 | I enjoyed the movie Transformers | 5 |\n| 2 | We live among its people now | 6 |\n| 3 | They have much to learn | 5 |\n| 4 | Freedom is the right of all sentient beings | 8 |\n\nThe sequences have **no continuity** — the order among sequences does not matter.\n\nLet the embedding dimension of each word be $\\mathbb{R}^{1 \\times 256}$.\n\n---",
+      "questionText": "Suppose we want the transformer to process each sequence in its entirety. What should be the minimum context length (window) $T$?",
+      "bodyMd": "**Suppose we want the transformer to process each sequence in its entirety. What should be the minimum context length (window) $T$?**\n\n- ( ) 5\n- ( ) 6\n- ( ) 8\n- ( ) 24",
+      "options": [
+        {
+          "id": "A",
+          "text": "5"
+        },
+        {
+          "id": "B",
+          "text": "6"
+        },
+        {
+          "id": "C",
+          "text": "8"
+        },
+        {
+          "id": "D",
+          "text": "24"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** $T=8$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand what context length means.**\n\nThe context length $T$ (also called the sequence length or window size) is the maximum number of tokens the transformer can process at once. For the transformer to handle *all* sequences without truncation, $T$ must be at least as large as the **longest sequence** in the dataset.\n\n**Step 2 — Count the words in each sequence.**\n\n$`\\displaystyle \\text{Sequence 1: } \\underbrace{\\text{I}}_1 \\ \\underbrace{\\text{enjoyed}}_2 \\ \\underbrace{\\text{the}}_3 \\ \\underbrace{\\text{movie}}_4 \\ \\underbrace{\\text{Transformers}}_5 \\quad \\Rightarrow 5 \\text{ tokens}`$\n\n$`\\displaystyle \\text{Sequence 2: } \\underbrace{\\text{We}}_1 \\ \\underbrace{\\text{live}}_2 \\ \\underbrace{\\text{among}}_3 \\ \\underbrace{\\text{its}}_4 \\ \\underbrace{\\text{people}}_5 \\ \\underbrace{\\text{now}}_6 \\quad \\Rightarrow 6 \\text{ tokens}`$\n\n$`\\displaystyle \\text{Sequence 3: } \\underbrace{\\text{They}}_1 \\ \\underbrace{\\text{have}}_2 \\ \\underbrace{\\text{much}}_3 \\ \\underbrace{\\text{to}}_4 \\ \\underbrace{\\text{learn}}_5 \\quad \\Rightarrow 5 \\text{ tokens}`$\n\n$`\\displaystyle \\text{Sequence 4: } \\underbrace{\\text{Freedom}}_1 \\ \\underbrace{\\text{is}}_2 \\ \\underbrace{\\text{the}}_3 \\ \\underbrace{\\text{right}}_4 \\ \\underbrace{\\text{of}}_5 \\ \\underbrace{\\text{all}}_6 \\ \\underbrace{\\text{sentient}}_7 \\ \\underbrace{\\text{beings}}_8 \\quad \\Rightarrow 8 \\text{ tokens}`$\n\n**Step 3 — Find the maximum.**\n\n$`\\displaystyle \\max(5,\\ 6,\\ 5,\\ 8) = 8`$\n\n**Step 4 — Conclude.**\n\nThe minimum context length must be $T = 8$ so that Sequence 4 can be fully processed without truncation. Sequences shorter than 8 are padded.\n\n$`\\displaystyle \\boxed{T = 8}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga1-q2",
+      "num": "Q2",
+      "title": "Dimension of the Encoder Input Tensor",
+      "type": "single_choice",
+      "context": "A dataset contains **four sample sequences** of words:\n\n| # | Sequence | Word Count |\n|---|---|:---:|\n| 1 | I enjoyed the movie Transformers | 5 |\n| 2 | We live among its people now | 6 |\n| 3 | They have much to learn | 5 |\n| 4 | Freedom is the right of all sentient beings | 8 |\n\nThe sequences have **no continuity** — the order among sequences does not matter.\n\nLet the embedding dimension of each word be $\\mathbb{R}^{1 \\times 256}$.\n\n---",
+      "questionText": "We pack all sequences into a batch and pass them to the encoder. The projection matrices $(W_Q, W_K, W_V) \\in \\mathbb{R}^{256 \\times 64}$. Which tensor gives the correct dimension of the input to the encoder?",
+      "bodyMd": "**We pack all sequences into a batch and pass them to the encoder. The projection matrices $(W_Q, W_K, W_V) \\in \\mathbb{R}^{256 \\times 64}$. Which tensor gives the correct dimension of the input to the encoder?**\n\n- ( ) $4 \\times 256 \\times 8$\n- ( ) $4 \\times 8 \\times 256$\n- ( ) $8 \\times 256 \\times 64$\n- ( ) $4 \\times 256 \\times 64$",
+      "options": [
+        {
+          "id": "A",
+          "text": "$4 \\times 256 \\times 8$"
+        },
+        {
+          "id": "B",
+          "text": "$4 \\times 8 \\times 256$"
+        },
+        {
+          "id": "C",
+          "text": "$8 \\times 256 \\times 64$"
+        },
+        {
+          "id": "D",
+          "text": "$4 \\times 256 \\times 64$"
+        }
+      ],
+      "answer": {
+        "type": "text",
+        "value": "$4 \\times 8 \\times 256$"
+      },
+      "solutionMd": "**Answer:** $4 \\times 8 \\times 256$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Identify each dimension's source.**\n\nThe input to a transformer encoder is a batch of token embedding matrices. Each axis corresponds to:\n\n| Axis | Meaning | Value |\n|:---:|---|:---:|\n| 0 | Batch size (number of sequences) | 4 |\n| 1 | Context length $T$ (tokens per sequence) | 8 |\n| 2 | Embedding dimension $d_{\\text{embed}}$ | 256 |\n\n**Step 2 — Recall the standard convention.**\n\nIn PyTorch and most deep learning frameworks, tensors are ordered as:\n\n$`\\displaystyle (\\text{Batch},\\ T,\\ d_{\\text{embed}})`$\n\n**Step 3 — Plug in the values.**\n\n$`\\displaystyle \\text{Input tensor shape} = (\\text{batch size},\\ T,\\ d_{\\text{embed}}) = (4,\\ 8,\\ 256)`$\n\n**Step 4 — Eliminate wrong options.**\n\n- $4 \\times 256 \\times 8$ — swaps $T$ and $d_{\\text{embed}}$, wrong order.\n- $8 \\times 256 \\times 64$ — mixes $d_k = 64$ which is the projection dim, not the input dim.\n- $4 \\times 256 \\times 64$ — again uses $d_k$ instead of $d_{\\text{embed}}$.\n\n$`\\displaystyle \\boxed{4 \\times 8 \\times 256}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga1-q3",
+      "num": "Q3",
+      "title": "Parameters in the Multi-Head Attention Sub-Layer",
+      "type": "numeric",
+      "context": "A dataset contains **four sample sequences** of words:\n\n| # | Sequence | Word Count |\n|---|---|:---:|\n| 1 | I enjoyed the movie Transformers | 5 |\n| 2 | We live among its people now | 6 |\n| 3 | They have much to learn | 5 |\n| 4 | Freedom is the right of all sentient beings | 8 |\n\nThe sequences have **no continuity** — the order among sequences does not matter.\n\nLet the embedding dimension of each word be $\\mathbb{R}^{1 \\times 256}$.\n\n---",
+      "questionText": "We use four attention heads and an additional linear mapping $W_O \\in \\mathbb{R}^{256 \\times 256}$. How many total parameters are in the multi-head attention sub-layer?",
+      "bodyMd": "**We use four attention heads and an additional linear mapping $W_O \\in \\mathbb{R}^{256 \\times 256}$. How many total parameters are in the multi-head attention sub-layer?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "262144"
+      },
+      "solutionMd": "**Answer:** $\\boxed{262144}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Recall the structure of multi-head attention.**\n\nMulti-head attention consists of:\n\n1. **Per-head projection matrices**: $W_Q^{(i)},\\ W_K^{(i)},\\ W_V^{(i)}$ for each head $i$\n2. **Output projection matrix**: $W_O$\n\n**Step 2 — Determine projection dimensions.**\n\nFrom the problem: $(W_Q, W_K, W_V) \\in \\mathbb{R}^{256 \\times 64}$.\n\nSo each of $W_Q^{(i)},\\ W_K^{(i)},\\ W_V^{(i)} \\in \\mathbb{R}^{256 \\times 64}$.\n\nParameters per matrix $= 256 \\times 64 = 16{,}384$\n\n**Step 3 — Count parameters across all 4 heads.**\n\nEach head has 3 matrices ($W_Q, W_K, W_V$):\n\n$`\\displaystyle \\text{Params per head} = 3 \\times (256 \\times 64) = 3 \\times 16{,}384 = 49{,}152`$\n\nFor 4 heads:\n\n$`\\displaystyle \\text{Total head params} = 4 \\times 49{,}152 = 196{,}608`$\n\n**Step 4 — Add the output projection $W_O$.**\n\n$`\\displaystyle W_O \\in \\mathbb{R}^{256 \\times 256} \\quad \\Rightarrow \\quad 256 \\times 256 = 65{,}536 \\text{ parameters}`$\n\n**Step 5 — Sum everything.**\n\n$`\\displaystyle \\text{Total} = 196{,}608 + 65{,}536 = \\boxed{262{,}144}`$\n\n> **Key insight:** $W_O$ maps from the concatenated head outputs back to $d_{\\text{model}}$. Since each head produces a 64-dimensional output and there are 4 heads, the input to $W_O$ is $4 \\times 64 = 256$, matching $\\mathbb{R}^{256 \\times 256}$.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga1-q4",
+      "num": "Q4",
+      "title": "Value of $m$",
+      "type": "numeric",
+      "context": "The diagram below shows attention scores from **three independent heads** $(h_1, h_2, h_3)$ for the word **\"it\\_\"**.\n\n![Attention scores for the word \"it_\" across three heads h1 (blue), h2 (orange), h3 (red)](assets/W1-F1.PNG)\n\n- Each attention head is represented by a **colour**: $h_1$ = blue, $h_2$ = orange, $h_3$ = red.\n- **Darker shade = higher attention score.**\n- The last row is the attention score for a **special token**.\n- The attention matrix in the $i$-th head: $A_i \\in \\mathbb{R}^{m \\times n}$.\n- Assume **zero-based indexing** where required.\n\nThe sentence being attended to is: *\"The\\_ animal\\_ didn\\_ '\\_ t\\_ cross\\_ the\\_ street\\_ because\\_ it\\_ was\\_ too\\_ tire\\_ d\\_\"* + 1 special token = **15 tokens total**.\n\n---",
+      "questionText": "What is the value of $m$?",
+      "bodyMd": "**What is the value of $m$?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "15"
+      },
+      "solutionMd": "**Answer:** $\\boxed{15}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand what $m$ represents.**\n\nThe attention matrix $A_i \\in \\mathbb{R}^{m \\times n}$ has:\n\n- $m$ = number of **query** positions (rows) — i.e., how many tokens are computing attention\n- $n$ = number of **key** positions (columns) — i.e., how many tokens are being attended to\n\n**Step 2 — Count the tokens from the image.**\n\nLooking at the diagram, the tokens shown are:\n\n`The_`, `animal_`, `didn_`, `'_`, `t_`, `cross_`, `the_`, `street_`, `because_`, `it_`, `was_`, `too_`, `tire_`, `d_`, and `<special>`.\n\nThat gives: $14 \\text{ regular tokens} + 1 \\text{ special token} = 15$ total tokens.\n\n**Step 3 — Determine $m$.**\n\nSince the attention is computed for all 15 tokens, each token is a query:\n\n$`\\displaystyle m = 15`$\n\n$`\\displaystyle \\boxed{m = 15}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga1-q5",
+      "num": "Q5",
+      "title": "Value of $n$",
+      "type": "numeric",
+      "context": "The diagram below shows attention scores from **three independent heads** $(h_1, h_2, h_3)$ for the word **\"it\\_\"**.\n\n![Attention scores for the word \"it_\" across three heads h1 (blue), h2 (orange), h3 (red)](assets/W1-F1.PNG)\n\n- Each attention head is represented by a **colour**: $h_1$ = blue, $h_2$ = orange, $h_3$ = red.\n- **Darker shade = higher attention score.**\n- The last row is the attention score for a **special token**.\n- The attention matrix in the $i$-th head: $A_i \\in \\mathbb{R}^{m \\times n}$.\n- Assume **zero-based indexing** where required.\n\nThe sentence being attended to is: *\"The\\_ animal\\_ didn\\_ '\\_ t\\_ cross\\_ the\\_ street\\_ because\\_ it\\_ was\\_ too\\_ tire\\_ d\\_\"* + 1 special token = **15 tokens total**.\n\n---",
+      "questionText": "What is the value of $n$?",
+      "bodyMd": "**What is the value of $n$?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "15"
+      },
+      "solutionMd": "**Answer:** $\\boxed{15}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand $n$.**\n\n$n$ is the number of **key** tokens — the tokens that each query attends over.\n\n**Step 2 — In self-attention, every token attends to every other token.**\n\nIn an encoder (non-causal) self-attention, the attention is computed over all positions:\n\n$`\\displaystyle A_i = \\text{softmax}\\left(\\frac{Q_i K_i^\\top}{\\sqrt{d_k}}\\right) \\in \\mathbb{R}^{m \\times n}`$\n\nwhere both $Q$ and $K$ come from the same sequence of 15 tokens.\n\n**Step 3 — Conclude.**\n\n$`\\displaystyle n = \\text{number of key tokens} = 15`$\n\n$`\\displaystyle A_i \\in \\mathbb{R}^{15 \\times 15}, \\quad \\boxed{n = 15}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga1-q6",
+      "num": "Q6",
+      "title": "Which Head Captures the \"it\\_\" → \"animal\\_\" Relation?",
+      "type": "single_choice",
+      "context": "The diagram below shows attention scores from **three independent heads** $(h_1, h_2, h_3)$ for the word **\"it\\_\"**.\n\n![Attention scores for the word \"it_\" across three heads h1 (blue), h2 (orange), h3 (red)](assets/W1-F1.PNG)\n\n- Each attention head is represented by a **colour**: $h_1$ = blue, $h_2$ = orange, $h_3$ = red.\n- **Darker shade = higher attention score.**\n- The last row is the attention score for a **special token**.\n- The attention matrix in the $i$-th head: $A_i \\in \\mathbb{R}^{m \\times n}$.\n- Assume **zero-based indexing** where required.\n\nThe sentence being attended to is: *\"The\\_ animal\\_ didn\\_ '\\_ t\\_ cross\\_ the\\_ street\\_ because\\_ it\\_ was\\_ too\\_ tire\\_ d\\_\"* + 1 special token = **15 tokens total**.\n\n---",
+      "questionText": "Which of these attention heads captures a strong relation between the words \"it\\_\" and \"animal\\_\"?",
+      "bodyMd": "**Which of these attention heads captures a strong relation between the words \"it\\_\" and \"animal\\_\"?**\n\n- ( ) $h_1$\n- ( ) $h_2$\n- ( ) $h_3$",
+      "options": [
+        {
+          "id": "A",
+          "text": "$h_1$"
+        },
+        {
+          "id": "B",
+          "text": "$h_2$"
+        },
+        {
+          "id": "C",
+          "text": "$h_3$"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** $h_3$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Recall the colour coding.**\n\nFrom the problem statement:\n\n- $h_1$ → blue tones\n- $h_2$ → orange tones\n- $h_3$ → **red** tones\n\n**Step 2 — Inspect the diagram.**\n\nLooking at the image, when \"it\\_\" is the query token:\n\n- The **red lines** (from $h_3$) connecting \"it\\_\" to \"animal\\_\" are the **darkest** among all heads at that position.\n- This means $h_3$ assigns the **highest attention score** to \"animal\\_\" when processing \"it\\_\".\n\n**Step 3 — Linguistic interpretation.**\n\nThis makes sense: in the sentence *\"The animal didn't cross the street because it was too tired\"*, the pronoun \"it\" **refers to** (co-references) the \"animal\". Head $h_3$ has learned to capture this **coreference relation**.\n\n$`\\displaystyle \\boxed{h_3 \\text{ captures the strong relation between \"it\\_\" and \"animal\\_\"}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga1-q7",
+      "num": "Q7",
+      "title": "More Attention to \"learning\" While Constructing $z_1$?",
+      "type": "single_choice",
+      "context": "The input embeddings for the words **\"learning\"**, **\"brings\"**, and **\"joy\"** are:\n\n```math\nh_1 = [0.5,\\ 0.25,\\ 1], \\quad h_2 = [0.1,\\ 0.25,\\ 0], \\quad h_3 = [0.1,\\ 0.1,\\ 0.9]\n```\n\nNote: embeddings are **row vectors**. The projection matrices are:\n\n```math\nW_Q = \\begin{bmatrix} 1 & 1 \\\\ -1 & 1 \\\\ 0 & 1 \\end{bmatrix}, \\quad W_K = \\begin{bmatrix} 0 & 1 \\\\ 1 & 0 \\\\ 0 & 1 \\end{bmatrix}, \\quad W_V = \\begin{bmatrix} 0 & 0 \\\\ -1 & -1 \\\\ 1 & 1 \\end{bmatrix}\n```\n\nLet $z_j$ denote the **linear combination of value vectors** for the $j$-th word.\n\n---",
+      "questionText": "While constructing $z_1$, more attention was given to the word \"learning\". The statement is:",
+      "bodyMd": "**While constructing $z_1$, more attention was given to the word \"learning\". The statement is:**\n\n- ( ) True\n- ( ) False",
+      "options": [
+        {
+          "id": "A",
+          "text": "True"
+        },
+        {
+          "id": "B",
+          "text": "False"
+        }
+      ],
+      "answer": {
+        "type": "boolean",
+        "value": "True"
+      },
+      "solutionMd": "**Answer:** True\n\n#### ✏️ Step-by-Step Solution\n\nWe need to compute the **attention weights** used when constructing $z_1$ (the output for the word \"learning\") and check which word gets the highest weight.\n\n**Step 1 — Stack the embedding matrix $H$.**\n\n$`\\displaystyle H = \\begin{bmatrix} h_1 \\\\ h_2 \\\\ h_3 \\end{bmatrix} = \\begin{bmatrix} 0.5 & 0.25 & 1 \\\\ 0.1 & 0.25 & 0 \\\\ 0.1 & 0.1 & 0.9 \\end{bmatrix}`$\n\n**Step 2 — Compute the Query matrix $Q = H W_Q$.**\n\n$`\\displaystyle Q = H W_Q = \\begin{bmatrix} 0.5 & 0.25 & 1 \\\\ 0.1 & 0.25 & 0 \\\\ 0.1 & 0.1 & 0.9 \\end{bmatrix} \\begin{bmatrix} 1 & 1 \\\\ -1 & 1 \\\\ 0 & 1 \\end{bmatrix}`$\n\nRow by row:\n\n$`\\displaystyle q_1 = [0.5(1) + 0.25(-1) + 1(0),\\quad 0.5(1) + 0.25(1) + 1(1)] = [0.25,\\ 1.75]`$\n\n$`\\displaystyle q_2 = [0.1(1) + 0.25(-1) + 0(0),\\quad 0.1(1) + 0.25(1) + 0(1)] = [-0.15,\\ 0.35]`$\n\n$`\\displaystyle q_3 = [0.1(1) + 0.1(-1) + 0.9(0),\\quad 0.1(1) + 0.1(1) + 0.9(1)] = [0.0,\\ 1.1]`$\n\n**Step 3 — Compute the Key matrix $K = H W_K$.**\n\n$`\\displaystyle K = H W_K = \\begin{bmatrix} 0.5 & 0.25 & 1 \\\\ 0.1 & 0.25 & 0 \\\\ 0.1 & 0.1 & 0.9 \\end{bmatrix} \\begin{bmatrix} 0 & 1 \\\\ 1 & 0 \\\\ 0 & 1 \\end{bmatrix}`$\n\nRow by row:\n\n$`\\displaystyle k_1 = [0.5(0) + 0.25(1) + 1(0),\\quad 0.5(1) + 0.25(0) + 1(1)] = [0.25,\\ 1.5]`$\n\n$`\\displaystyle k_2 = [0.1(0) + 0.25(1) + 0(0),\\quad 0.1(1) + 0.25(0) + 0(1)] = [0.25,\\ 0.1]`$\n\n$`\\displaystyle k_3 = [0.1(0) + 0.1(1) + 0.9(0),\\quad 0.1(1) + 0.1(0) + 0.9(1)] = [0.1,\\ 1.0]`$\n\n**Step 4 — Compute unnormalized attention scores $e_{1j} = q_1 \\cdot k_j$ (for constructing $z_1$).**\n\n> Note: Scaling by $\\sqrt{d_k}$ is **not** applied (as stated in the problem).\n\n$`\\displaystyle e_{11} = q_1 \\cdot k_1 = (0.25)(0.25) + (1.75)(1.5) = 0.0625 + 2.625 = 2.6875`$\n\n$`\\displaystyle e_{12} = q_1 \\cdot k_2 = (0.25)(0.25) + (1.75)(0.1) = 0.0625 + 0.175 = 0.2375`$\n\n$`\\displaystyle e_{13} = q_1 \\cdot k_3 = (0.25)(0.1) + (1.75)(1.0) = 0.025 + 1.75 = 1.775`$\n\n**Step 5 — Apply softmax to get attention weights $a_{1j}$.**\n\n$`\\displaystyle \\exp(e_{11}) = e^{2.6875} \\approx 14.69, \\quad \\exp(e_{12}) = e^{0.2375} \\approx 1.268, \\quad \\exp(e_{13}) = e^{1.775} \\approx 5.902`$\n\n$`\\displaystyle \\text{Sum} = 14.69 + 1.268 + 5.902 = 21.86`$\n\n$`\\displaystyle a_{11} = \\frac{14.69}{21.86} \\approx \\mathbf{0.672}, \\quad a_{12} = \\frac{1.268}{21.86} \\approx \\mathbf{0.058}, \\quad a_{13} = \\frac{5.902}{21.86} \\approx \\mathbf{0.270}`$\n\n**Step 6 — Interpret the result.**\n\n| Word | Attention Weight |\n|---|:---:|\n| \"learning\" ($j=1$) | **0.672 ← highest** |\n| \"brings\" ($j=2$) | 0.058 |\n| \"joy\" ($j=3$) | 0.270 |\n\nThe word \"learning\" receives **67.2%** of the attention weight, which is clearly the highest.\n\n$`\\displaystyle \\boxed{\\text{True — more attention is given to \"learning\" while constructing } z_1}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga1-q8",
+      "num": "Q8",
+      "title": "Equal Attention to All Words While Constructing $z_2$?",
+      "type": "single_choice",
+      "context": "The input embeddings for the words **\"learning\"**, **\"brings\"**, and **\"joy\"** are:\n\n```math\nh_1 = [0.5,\\ 0.25,\\ 1], \\quad h_2 = [0.1,\\ 0.25,\\ 0], \\quad h_3 = [0.1,\\ 0.1,\\ 0.9]\n```\n\nNote: embeddings are **row vectors**. The projection matrices are:\n\n```math\nW_Q = \\begin{bmatrix} 1 & 1 \\\\ -1 & 1 \\\\ 0 & 1 \\end{bmatrix}, \\quad W_K = \\begin{bmatrix} 0 & 1 \\\\ 1 & 0 \\\\ 0 & 1 \\end{bmatrix}, \\quad W_V = \\begin{bmatrix} 0 & 0 \\\\ -1 & -1 \\\\ 1 & 1 \\end{bmatrix}\n```\n\nLet $z_j$ denote the **linear combination of value vectors** for the $j$-th word.\n\n---",
+      "questionText": "While constructing $z_2$, all words were given equal attention. The statement is:",
+      "bodyMd": "**While constructing $z_2$, all words were given equal attention. The statement is:**\n\n- ( ) True\n- ( ) False",
+      "options": [
+        {
+          "id": "A",
+          "text": "True"
+        },
+        {
+          "id": "B",
+          "text": "False"
+        }
+      ],
+      "answer": {
+        "type": "boolean",
+        "value": "False"
+      },
+      "solutionMd": "**Answer:** False\n\n#### ✏️ Step-by-Step Solution\n\nWe compute the attention weights for $z_2$ (query is $q_2 = [-0.15,\\ 0.35]$).\n\n**Step 1 — Compute unnormalized scores $e_{2j} = q_2 \\cdot k_j$.**\n\n$`\\displaystyle e_{21} = q_2 \\cdot k_1 = (-0.15)(0.25) + (0.35)(1.5) = -0.0375 + 0.525 = 0.4875`$\n\n$`\\displaystyle e_{22} = q_2 \\cdot k_2 = (-0.15)(0.25) + (0.35)(0.1) = -0.0375 + 0.035 = -0.0025`$\n\n$`\\displaystyle e_{23} = q_2 \\cdot k_3 = (-0.15)(0.1) + (0.35)(1.0) = -0.015 + 0.35 = 0.335`$\n\n**Step 2 — Check if scores are equal.**\n\n$`\\displaystyle e_{21} = 0.4875 \\ne e_{22} = -0.0025 \\ne e_{23} = 0.335`$\n\nThe unnormalized scores are **not equal**, so after softmax the attention weights will also **not be equal**.\n\n**Step 3 — Verify with softmax.**\n\n$`\\displaystyle \\exp(0.4875) \\approx 1.628,\\quad \\exp(-0.0025) \\approx 0.9975,\\quad \\exp(0.335) \\approx 1.398`$\n\n$`\\displaystyle \\text{Sum} \\approx 4.024`$\n\n$`\\displaystyle a_{21} \\approx \\frac{1.628}{4.024} \\approx 0.405, \\quad a_{22} \\approx \\frac{0.9975}{4.024} \\approx 0.248, \\quad a_{23} \\approx \\frac{1.398}{4.024} \\approx 0.347`$\n\n**Step 4 — Conclude.**\n\nThe attention weights $(0.405,\\ 0.248,\\ 0.347)$ are clearly **not equal**. Equal attention would require all three weights to be $\\approx 0.333$.\n\n$`\\displaystyle \\boxed{\\text{False — words do NOT receive equal attention while constructing } z_2}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

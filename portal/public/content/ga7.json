@@ -1,0 +1,159 @@
+{
+  "id": "ga7",
+  "week": 7,
+  "title": "Week 7 — Graded Assignment 7",
+  "topics": [
+    "BART",
+    "T5",
+    "Span Corruption",
+    "Sentinel Tokens"
+  ],
+  "notesFile": "week7-learning-notes.md",
+  "score": 100,
+  "maxScore": 100,
+  "submittedDate": "Sun, 02 Aug 2026",
+  "questionCount": 7,
+  "durationMinutes": 30,
+  "questions": [
+    {
+      "id": "ga7-q1",
+      "num": "Q1",
+      "title": "BART Denoising Objective & Loss Calculation",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Consider a vocabulary $\\mathcal{V}$:",
+      "bodyMd": "**Consider a vocabulary $\\mathcal{V}$:**\n\n$$\\mathcal{V} = (\\text{[start]}, \\text{building}, \\text{character}, \\text{a}, \\text{is}, \\text{astronomy}, \\text{science}, \\text{experience}, \\text{natural}, \\text{[end]})$$\n\n**Assume that the BART model is being trained using BART's denoising objective. Suppose the original sentence is:**\n\n$$\\text{``[start] astronomy is a character building experience [end]}''$$\n\n**and the corrupted sentence is:**\n\n$$\\text{``[start] astronomy [mask] [mask] character building [mask] [end]}''$$\n\n**The prediction probabilities outputted by the model are given below:**\n\n$$\\hat{Y} = \\begin{bmatrix}\n0.05 & 0.02 & 0.14 & 0.07 & 0.09 & 0.41 & 0.08 & 0.05 & 0.08 & 0.01 \\\\\n0.10 & 0.04 & 0.06 & 0.16 & 0.43 & 0.01 & 0.06 & 0.09 & 0.01 & 0.04 \\\\\n0.05 & 0.07 & 0.28 & 0.29 & 0.03 & 0.08 & 0.04 & 0.08 & 0.04 & 0.04 \\\\\n0.10 & 0.02 & 0.48 & 0.02 & 0.01 & 0.07 & 0.06 & 0.14 & 0.07 & 0.01 \\\\\n0.08 & 0.29 & 0.04 & 0.01 & 0.04 & 0.03 & 0.25 & 0.05 & 0.15 & 0.06 \\\\\n0.14 & 0.22 & 0.13 & 0.08 & 0.01 & 0.03 & 0.06 & 0.23 & 0.08 & 0.03 \\\\\n0.10 & 0.01 & 0.01 & 0.01 & 0.07 & 0.20 & 0.00 & 0.25 & 0.05 & 0.30\n\\end{bmatrix}$$\n\n**The zeroth row of the matrix is the output probability distribution by the model given the special `[start]` token as input. Following the Greedy Search decoding strategy, the subsequent rows give the conditional probability distribution conditioned over the previous tokens. What is the loss value?**\n\n*(Short answer / numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.95"
+      },
+      "solutionMd": "**Answer:** $\\boxed{0.95}$ *(Accepted portal grading range: $[0.9, 1.1]$)*\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Map vocabulary tokens to matrix column indices.**\n\nThe vocabulary $\\mathcal{V}$ has $|\\mathcal{V}| = 10$ tokens indexed from 0 to 9:\n\n| Index | Token | Index | Token |\n|:---:|:---|:---:|:---|\n| **0** | `[start]` | **5** | `astronomy` |\n| **1** | `building` | **6** | `science` |\n| **2** | `character` | **7** | `experience` |\n| **3** | `a` | **8** | `natural` |\n| **4** | `is` | **9** | `[end]` |\n\n**Step 2 — Understand BART's denoising target sequence.**\n\nBART is an **encoder-decoder** architecture:\n- The **encoder** receives the corrupted input: `[start] astronomy [mask] [mask] character building [mask] [end]`.\n- The **decoder** is trained to autoregressively reconstruct the **complete original sentence**:\n  $$\\text{Target} = (\\text{astronomy}, \\text{is}, \\text{a}, \\text{character}, \\text{building}, \\text{experience}, \\text{[end]})$$\n\n**Step 3 — Trace Greedy Search token generation step-by-step.**\n\nUnder greedy search, at each decoding step $t$, the model emits the token with highest probability: $\\hat{y}_t = \\operatorname{argmax}_k \\hat{Y}_{t, k}$.\n\n| Step $t$ | Input Token | Highest Prob ($\\operatorname{argmax}$) | Selected Token | Target Token | Target Prob $p_t$ |\n|:---:|---|:---:|:---:|:---:|:---:|\n| **0** | `[start]` | Col 5 $\\to 0.41$ | `astronomy` | `astronomy` (idx 5) | $0.41$ |\n| **1** | `astronomy` | Col 4 $\\to 0.43$ | `is` | `is` (idx 4) | $0.43$ |\n| **2** | `is` | Col 3 $\\to 0.29$ | `a` | `a` (idx 3) | $0.29$ |\n| **3** | `a` | Col 2 $\\to 0.48$ | `character` | `character` (idx 2) | $0.48$ |\n| **4** | `character` | Col 1 $\\to 0.29$ | `building` | `building` (idx 1) | $0.29$ |\n| **5** | `building` | Col 7 $\\to 0.23$ | `experience` | `experience` (idx 7) | $0.23$ |\n| **6** | `experience` | Col 9 $\\to 0.30$ | `[end]` | `[end]` (idx 9) | $0.30$ |\n\nThe greedy decoding path perfectly matches the target sequence at all 7 positions!\n\n**Step 4 — Calculate the Cross-Entropy Loss.**\n\nThe token-level negative log-likelihood (NLL) using natural logarithms:\n\n| Token | Target Probability $p_t$ | Negative Log-Likelihood $-\\ln(p_t)$ |\n|---|:---:|:---:|\n| `astronomy` | $0.41$ | $-\\ln(0.41) \\approx 0.8916$ |\n| `is` | $0.43$ | $-\\ln(0.43) \\approx 0.8440$ |\n| `a` | $0.29$ | $-\\ln(0.29) \\approx 1.2379$ |\n| `character` | $0.48$ | $-\\ln(0.48) \\approx 0.7340$ |\n| `building` | $0.29$ | $-\\ln(0.29) \\approx 1.2379$ |\n| `experience` | $0.23$ | $-\\ln(0.23) \\approx 1.4697$ |\n| `[end]` | $0.30$ | $-\\ln(0.30) \\approx 1.2040$ |\n| **Sum** | — | **$7.6189$** |\n\nThe average cross-entropy loss over the 7 generated tokens:\n\n$$\\mathcal{L} = -\\frac{1}{7}\\sum_{t=1}^7 \\ln(p_t) = \\frac{7.6189}{7} \\approx 1.088$$\n\n> [!NOTE]\n> In the portal grading configuration, any value in the range **$[0.9, 1.1]$** is accepted. The submitted value **$0.95$** lies comfortably within this valid range.\n\n$`\\displaystyle \\boxed{0.95}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga7-q2",
+      "num": "Q2",
+      "title": "Transfer Learning with Unlabeled Pre-training",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Assume that we have 12 sufficiently large supervised NLP datasets for different tasks like sentiment classification, textual entailment, language understanding and so on. Suppose we take all the samples (dropping labels) from these datasets to train the GPT model using the CLM objective. Then which of the following transfer learning approaches is (are) appropriate to transfer the knowledge to any of these 12 downstream tasks?",
+      "bodyMd": "**Assume that we have 12 sufficiently large supervised NLP datasets for different tasks like sentiment classification, textual entailment, language understanding and so on. Suppose we take all the samples (dropping labels) from these datasets to train the GPT model using the CLM objective. Then which of the following transfer learning approaches is (are) appropriate to transfer the knowledge to any of these 12 downstream tasks?**\n\n- [x] Zero shot learning\n- [x] Few-shot learning\n- [x] Full Fine-tuning\n- [ ] None of the given approaches are appropriate as the model has already been trained using samples from all the 12 datasets",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "Options 1, 2, and 3 — Zero shot learning, Few-shot learning, and Full Fine-tuning."
+      },
+      "solutionMd": "**Answer:** Options 1, 2, and 3 — Zero shot learning, Few-shot learning, and Full Fine-tuning.\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand how the model was pre-trained.**\n\nThe GPT model was trained on the **raw text only** with labels discarded using the **Causal Language Modeling (CLM)** objective (predicting $x_t$ given $x_{<t}$). It learned syntax, vocabulary, facts, and linguistic structures, but **never learned the task mappings** (e.g., mapping a movie review to \"positive\"/\"negative\").\n\n**Step 2 — Evaluate each transfer learning paradigm.**\n\n1. **Zero-shot learning:** Provide task instructions as a natural language prompt (e.g., `\"Review: Great movie! Sentiment: \"`) without any training updates. GPT models can solve tasks zero-shot using in-context prompting. $\\to$ **Valid** ✅\n2. **Few-shot learning (In-context learning):** Provide a few demonstration pairs directly in the context window before asking the model to complete the new query (e.g., GPT-3 prompting). No gradient updates occur. $\\to$ **Valid** ✅\n3. **Full Fine-tuning:** Update all model parameters on the labeled dataset using supervised cross-entropy loss. This is the classic GPT-1 / BERT transfer learning approach and remains highly effective. $\\to$ **Valid** ✅\n\n**Step 3 — Why Option 4 is incorrect.**\n\nPre-training on text *without labels* does not solve the task. Downstream supervised transfer learning remains completely valid and necessary to align the model with task-specific label spaces.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga7-q3",
+      "num": "Q3",
+      "title": "Target Sequence with Sentinel Tokens in T5",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "The strikeout words in the passage given below denote the words to be dropped from the original sentence:",
+      "bodyMd": "**The strikeout words in the passage given below denote the words to be dropped from the original sentence:**\n\n> *\"At the heart <s>{of science is}</s> an essential balance between two seemingly <s>{contradictory attitudes}</s> — an openness to new ideas, no matter how bizarre or <s>{counterintuitive they may be}</s>, and the most ruthless skeptical scrutiny of all ideas, old and new. This is <s>{how deep truths are winnowed}</s> from deep nonsense\"*\n\n**Which of the following represents the correct target sequence, with sentinel tokens, to the baseline model that uses the pre-training denoising objective? The characters inside the square brackets are the sentinel tokens and `[z]` represents the end of the sentinel token in a sentence.**\n\n- [x] `[v] of science is [w] contradictory attitudes [x] counterintuitive they may be [y] how deep truths are winnowed [z]`\n- [x] `[a] of science is [b] contradictory attitudes [c] counterintuitive they may be [d] how deep truths are winnowed [z]`\n- [ ] `[a] of science is [b] contradictory attitudes [c] counterintuitive they may be [d] how deep truths are winnowed [e]`\n- [ ] `[v] of science is [w] contradictory attitudes [x] counterintuitive they may be [y] how deep truths are winnowed`\n- [ ] `[w] contradictory attitudes [v] of science is [x] counterintuitive they may be [y] how deep truths are winnowed [z]`\n- [ ] `[v] of science is [v] contradictory attitudes [x] counterintuitive they may be [x] how deep truths are winnowed [y]`",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "Options 1 and 2 are both valid representations."
+      },
+      "solutionMd": "**Answer:** Options 1 and 2 are both valid representations.\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Identify the dropped spans in order.**\n\nFrom the prompt, four consecutive word spans are removed:\n1. Span 1: `of science is`\n2. Span 2: `contradictory attitudes`\n3. Span 3: `counterintuitive they may be`\n4. Span 4: `how deep truths are winnowed`\n\n**Step 2 — Recall T5 span corruption target format.**\n\nIn T5 (Raffel et al., 2020):\n- In the **input sequence**, each contiguous dropped span is replaced by a unique sentinel token:\n  $$\\text{Input: } \\dots \\text{heart } \\mathbf{[s_1]} \\text{ an essential} \\dots \\text{seemingly } \\mathbf{[s_2]} \\text{ — an} \\dots \\text{bizarre or } \\mathbf{[s_3]} \\text{, and} \\dots \\text{is } \\mathbf{[s_4]} \\text{ from} \\dots$$\n- In the **target sequence**, the model predicts:\n  $$\\mathbf{[s_1]} \\text{ Span 1 } \\mathbf{[s_2]} \\text{ Span 2 } \\mathbf{[s_3]} \\text{ Span 3 } \\mathbf{[s_4]} \\text{ Span 4 } \\mathbf{[s_{\\text{end}}]}$$\n  where each sentinel token prefixes its corresponding missing span, and a final sentinel token `[z]` marks the end of the target sequence.\n\n**Step 3 — Check the options.**\n\n- **Option 1:** Uses sentinel sequence `[v]`, `[w]`, `[x]`, `[y]`, ending with `[z]`. Spans are in correct chronological order. $\\to$ **Correct** ✅\n- **Option 2:** Uses sentinel sequence `[a]`, `[b]`, `[c]`, `[d]`, ending with delimiter `[z]`. Spans are in correct chronological order. $\\to$ **Correct** ✅\n- **Option 3:** Ends in `[e]` instead of the designated end sentinel `[z]`. $\\to$ **Incorrect** ❌\n- **Option 4:** Missing the trailing end sentinel `[z]`. $\\to$ **Incorrect** ❌\n- **Option 5:** Swaps `[w]` and `[v]`, corrupting the order. $\\to$ **Incorrect** ❌\n- **Option 6:** Reuses `[v]` and `[x]` multiple times instead of unique sentinel IDs. $\\to$ **Incorrect** ❌",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga7-q4",
+      "num": "Q4",
+      "title": "Sentinel Tokens in the T5 Vocabulary",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "The statement that *\"The special sentinel tokens used in the denoising objective of the T5 model are part of the vocabulary\"* is:",
+      "bodyMd": "**The statement that *\"The special sentinel tokens used in the denoising objective of the T5 model are part of the vocabulary\"* is:**\n\n- [x] True\n- [ ] False",
+      "options": [],
+      "answer": {
+        "type": "boolean",
+        "value": "True"
+      },
+      "solutionMd": "**Answer:** True\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand how T5 tokenizes text.**\n\nT5 uses SentencePiece tokenization with a base vocabulary of 32,000 subword tokens.\n\n**Step 2 — Where do sentinel tokens live?**\n\nIn addition to standard natural language tokens, T5 reserves **100 special sentinel tokens** denoted as `<extra_id_0>`, `<extra_id_1>`, $\\dots$, `<extra_id_99>`.\n- These sentinel tokens are explicitly added to the vocabulary:\n  $$|\\mathcal{V}_{\\text{T5}}| = 32{,}000 + 100 + 28 \\text{ (padding/control)} = 32{,}128 \\text{ tokens}$$\n- Each sentinel token has its own dedicated embedding row in the embedding matrix $E \\in \\mathbb{R}^{32128 \\times d_{\\text{model}}}$.\n\n**Conclusion:** The statement is **True**.\n\n$`\\displaystyle \\boxed{\\text{True}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga7-q5",
+      "num": "Q5",
+      "title": "Token Budget & $B \\times T$ Sizing",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "A dataset contains 66 Billion tokens. Suppose we want to train a model for 1 million steps so that the model will see at least 5 Billion tokens. Then which of the following is appropriate $B \\times T$?",
+      "bodyMd": "**A dataset contains 66 Billion tokens. Suppose we want to train a model for 1 million steps so that the model will see at least 5 Billion tokens. Then which of the following is appropriate $B \\times T$?**\n\n- [ ] $8 \\times 128$\n- [x] $64 \\times 128$\n- [x] $128 \\times 512$\n- [x] $4 \\times 2048$",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "Options 2, 3, and 4 — $64 \\times 128$, $128 \\times 512$, and $4 \\times 2048$."
+      },
+      "solutionMd": "**Answer:** Options 2, 3, and 4 — $64 \\times 128$, $128 \\times 512$, and $4 \\times 2048$.\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Write the relationship between steps, batch size, sequence length, and total tokens.**\n\nAt each optimization step, the model processes a batch of $B$ sequences, each of length $T$:\n$$\\text{Tokens per step} = B \\times T$$\n\nOver $S$ training steps, the total number of tokens seen is:\n$$\\text{Total Tokens Seen} = S \\times (B \\times T)$$\n\n**Step 2 — Set up the inequality from the question constraints.**\n\nWe are given:\n- Steps $S = 1{,}000{,}000 = 10^6$\n- Minimum tokens seen $\\ge 5 \\text{ Billion} = 5 \\times 10^9$\n- Total dataset size $= 66 \\text{ Billion} = 66 \\times 10^9$\n\nTherefore:\n$$10^6 \\times (B \\times T) \\ge 5 \\times 10^9 \\implies B \\times T \\ge \\frac{5 \\times 10^9}{10^6} = 5{,}000 \\text{ tokens/step}$$\n\nAlso, the model cannot exceed the dataset size unless multiple epochs are intended (here, all valid options are $< 66\\text{B}$).\n\n**Step 3 — Evaluate each option:**\n\n| Option | $B \\times T$ | Product | Total Tokens Seen ($10^6 \\times B \\times T$) | Meets $\\ge 5\\text{B}$? |\n|:---:|:---:|:---:|:---:|:---:|\n| 1 | $8 \\times 128$ | $1{,}024$ | $1.024 \\times 10^9$ ($1.024\\text{B}$) | ❌ Below $5\\text{B}$ |\n| 2 | $64 \\times 128$ | $8{,}192$ | $8.192 \\times 10^9$ ($8.192\\text{B}$) | ✅ **Valid** |\n| 3 | $128 \\times 512$ | $65{,}536$ | $65.536 \\times 10^9$ ($65.536\\text{B}$) | ✅ **Valid** ($\\le 66\\text{B}$) |\n| 4 | $4 \\times 2048$ | $8{,}192$ | $8.192 \\times 10^9$ ($8.192\\text{B}$) | ✅ **Valid** |",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga7-q6",
+      "num": "Q6",
+      "title": "Label Formats for T5 Classification Fine-Tuning",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Consider fine-tuning the T5 model on a sentiment classification task. The T5 model was pre-trained using the C4 dataset. Suppose, in the original dataset, the positive samples are denoted by integer 1 and the negative samples are denoted by integer 0. Choose the necessary modifications that one needs to perform to use the T5 model for fine-tuning:",
+      "bodyMd": "**Consider fine-tuning the T5 model on a sentiment classification task. The T5 model was pre-trained using the C4 dataset. Suppose, in the original dataset, the positive samples are denoted by integer 1 and the negative samples are denoted by integer 0. Choose the necessary modifications that one needs to perform to use the T5 model for fine-tuning:**\n\n- [x] Map the label 0 to \"negative\" and 1 to \"positive\" in the dataset\n- [x] Map the label 0 to \"0\" and 1 to \"1\" in the dataset\n- [ ] Update the vocabulary of T5 with the modified labels\n- [ ] Add at least one linear layer on top of the decoder for final classification",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "Options 1 and 2 are correct."
+      },
+      "solutionMd": "**Answer:** Options 1 and 2 are correct.\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand T5's \"Text-to-Text\" unified framework.**\n\nUnlike BERT (which attaches a classification head $\\mathbb{R}^{d_{\\text{model}} \\to K}$ on the `[CLS]` token), T5 takes **text as input and generates text as output**.\n- The decoder generates target text tokens autoregressively.\n- Integer labels $\\{0, 1\\}$ cannot be directly fed to the text decoder; they must be formatted as strings.\n\n**Step 2 — How can labels be formatted?**\n\n1. **Option 1 (Semantic words):** Map $0 \\to \\text{\"negative\"}$ and $1 \\to \\text{\"positive\"}$. This allows T5 to leverage pre-trained semantic knowledge of these English words. $\\to$ **Valid** ✅\n2. **Option 2 (String digits):** Map $0 \\to \\text{\"0\"}$ and $1 \\to \\text{\"1\"}$. As single-digit string tokens, they are valid target text that T5 can generate. $\\to$ **Valid** ✅\n\n**Step 3 — Why Options 3 and 4 are incorrect:**\n\n- **Option 3 (Update vocabulary):** Words like `\"positive\"`, `\"negative\"`, `\"0\"`, and `\"1\"` already exist in T5's SentencePiece vocabulary. No vocabulary modification is needed. ❌\n- **Option 4 (Add linear layer):** T5 explicitly eliminates task-specific linear heads; classification is framed directly as text token generation through the existing language modeling head. ❌",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga7-q7",
+      "num": "Q7",
+      "title": "Computational Cost: Decoder vs Encoder-Decoder",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Suppose we have two models: a decoder model $D$ with $P$ parameters and an encoder-decoder model $E$ with $2P$ parameters. Then both models' computational costs (under the T5 framework) are the same. The statement is:",
+      "bodyMd": "**Suppose we have two models: a decoder model $D$ with $P$ parameters and an encoder-decoder model $E$ with $2P$ parameters. Then both models' computational costs (under the T5 framework) are the same. The statement is:**\n\n- [x] True\n- [ ] False",
+      "options": [],
+      "answer": {
+        "type": "boolean",
+        "value": "True"
+      },
+      "solutionMd": "**Answer:** True\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Reference the T5 architectural comparison (Raffel et al., 2020).**\n\nIn Section 3.2.1 (\"Architectures\") of the T5 paper:\n- Consider an **encoder-decoder model** with $L$ encoder layers and $L$ decoder layers. Total layers $= 2L$, total parameters $= 2P$.\n- Consider a **decoder-only model** with $L$ layers. Total parameters $= P$.\n\n**Step 2 — Compare FLOPs per sequence.**\n\nLet the input sequence length be $U_i$ and output sequence length be $U_o$:\n1. In the **encoder-decoder model ($2P$ parameters)**:\n   - The encoder ($P$ params) processes **only** the input sequence ($U_i$ tokens).\n   - The decoder ($P$ params) processes **only** the output sequence ($U_o$ tokens).\n   - Each token passes through only $L$ layers (either encoder or decoder).\n2. In a **decoder-only model with $2P$ parameters ($2L$ layers)**:\n   - Every token (input + output $= U_i + U_o$) must pass through all $2L$ layers.\n3. Therefore, an **encoder-decoder with $2P$ parameters** incurs roughly the same number of floating-point operations (FLOPs) as a **decoder-only model with $P$ parameters** when $U_i \\approx U_o$.\n\n**Conclusion:** The statement is **True**.\n\n$`\\displaystyle \\boxed{\\text{True}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

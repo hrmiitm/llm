@@ -1,0 +1,179 @@
+{
+  "id": "ga11",
+  "week": 11,
+  "title": "Week 11 — Graded Assignment 11",
+  "topics": [
+    "Attention Complexity",
+    "FLOP Counting",
+    "KV Caching",
+    "Local Window Attention"
+  ],
+  "notesFile": "week11-learning-notes.md",
+  "score": 88,
+  "maxScore": 100,
+  "submittedDate": "Sun, 30 Aug 2026",
+  "questionCount": 8,
+  "durationMinutes": 30,
+  "questions": [
+    {
+      "id": "ga11-q1",
+      "num": "Q1",
+      "title": "Exact FLOPs for Pre-Attention Scores",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Calculate the exact number of FLOPs (Floating Point Operations) required to compute the pre-attention scores. Enter your answer in MFLOPs. For example, for 373.43 MFLOPs, enter 373.43.",
+      "bodyMd": "**Calculate the exact number of FLOPs (Floating Point Operations) required to compute the pre-attention scores. Enter your answer in MFLOPs. For example, for 373.43 MFLOPs, enter 373.43.**\n\n*(Numeric input — enter MFLOPs)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "1072.69"
+      },
+      "solutionMd": "**Answer:** $\\boxed{1072.69}$ *(Accepted portal grading range: $[1072, 1073]$)*\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Identify the pre-attention score computation.**\n\nThe pre-attention score matrix $S$ is computed as:\n$$S = Q K^T$$\nwhere:\n- Query matrix $Q \\in \\mathbb{R}^{T \\times d_k} = \\mathbb{R}^{1024 \\times 512}$\n- Transposed Key matrix $K^T \\in \\mathbb{R}^{d_k \\times T} = \\mathbb{R}^{512 \\times 1024}$\n- Resulting attention score matrix $S \\in \\mathbb{R}^{T \\times T} = \\mathbb{R}^{1024 \\times 1024}$\n\n**Step 2 — Count operations per matrix entry.**\n\nThe matrix product $S = Q K^T$ has $T \\times T$ scalar entries.\nEach entry $S_{ij} = \\mathbf{q}_i \\cdot \\mathbf{k}_j = \\sum_{m=1}^{d_k} Q_{im} K_{jm}$ is a dot product of two vectors of length $d_k = 512$:\n- **Multiplications:** $d_k = 512$ multiplications\n- **Additions:** $d_k - 1 = 511$ additions\n- **Total FLOPs per entry:** $d_k + (d_k - 1) = 2 d_k - 1 = 2(512) - 1 = 1{,}023 \\text{ FLOPs}$\n\n**Step 3 — Multiply across all entries in the matrix.**\n\nSince the question specifies a **full attention mechanism** (all $T \\times T$ pairs are computed):\n$$\\text{Total FLOPs} = T \\times T \\times (2 d_k - 1) = 1024 \\times 1024 \\times 1023$$\n$$\\text{Total FLOPs} = 1{,}048{,}576 \\times 1023 = 1{,}072{,}693{,}248 \\text{ FLOPs}$$\n\n**Step 4 — Convert to MFLOPs ($10^6$ FLOPs):**\n\n$$\\text{MFLOPs} = \\frac{1{,}072{,}693{,}248}{10^6} = \\mathbf{1072.693} \\approx \\mathbf{1072.69} \\text{ MFLOPs}$$\n\n> [!NOTE]\n> If using the loose convention $2 d_k$ FLOPs per dot product:\n> $1024 \\times 1024 \\times 1024 = 1{,}073{,}741{,}824 \\text{ FLOPs} = 1073.74 \\text{ MFLOPs}$.\n> The portal grader accepts the full range **$[1072, 1073]$**.\n\n$`\\displaystyle \\boxed{1072.69}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga11-q2",
+      "num": "Q2",
+      "title": "Memory Required for Pre-Attention Scores",
+      "type": "numeric",
+      "context": null,
+      "questionText": "What is the amount of memory required to store these pre-attention scores if we assign 16 bits per number? Enter the answer in KB.",
+      "bodyMd": "**What is the amount of memory required to store these pre-attention scores if we assign 16 bits per number? Enter the answer in KB.**\n\n*(Numeric input — enter KB)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2097.15"
+      },
+      "solutionMd": "**Answer:** $\\boxed{2097.15}$ *(Accepted portal grading range: $[2096, 2098]$)*\n\n> [!WARNING]\n> In the official submission, the value `524.288` was entered (which resulted from erroneously dividing by 4). The true mathematically correct answer accepted by the portal grader is **$2097.15$ KB**.\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Count the total number of elements in the score matrix.**\n\nThe pre-attention score matrix $S \\in \\mathbb{R}^{T \\times T}$:\n$$\\text{Number of elements} = T \\times T = 1024 \\times 1024 = 1{,}048{,}576 \\text{ numbers}$$\n\n**Step 2 — Determine memory per number in bytes.**\n\nPrecision is given as **16 bits per number**:\n$$16 \\text{ bits} = \\frac{16}{8} = 2 \\text{ bytes per number}$$\n\n**Step 3 — Compute total storage in bytes.**\n\n$$\\text{Total Memory} = 1{,}048{,}576 \\text{ numbers} \\times 2 \\text{ bytes/number} = 2{,}097{,}152 \\text{ bytes}$$\n\n**Step 4 — Convert to Kilobytes (KB):**\n\nUsing standard decimal SI units ($1 \\text{ KB} = 1{,}000 \\text{ bytes}$ as adopted by the evaluation grader):\n$$\\text{Memory in KB} = \\frac{2{,}097{,}152 \\text{ bytes}}{1{,}000 \\text{ bytes/KB}} = \\mathbf{2097.152} \\text{ KB}$$\n\nNotice that $2097.152$ lies directly in the center of the grader's accepted range: **$[2096, 2098]$**.\n\n*(Note: In binary KiB with $1 \\text{ KiB} = 1024 \\text{ bytes}$, the value would be $2048 \\text{ KiB}$. Always use decimal KB for this assignment).*\n\n$`\\displaystyle \\boxed{2097.15}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga11-q3",
+      "num": "Q3",
+      "title": "Window Size for Local Attention Complexity Reduction",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Suppose we want to reduce the complexity of the attention module in the encoder part of the transformer from $O(T^2)$ to at max $O\\left(\\frac{T^2}{2}\\right)$ using a local attention mechanism. Then which of the following values of $c$ (window size) in the strided local attention helps achieve this objective?",
+      "bodyMd": "**Suppose we want to reduce the complexity of the attention module in the encoder part of the transformer from $O(T^2)$ to at max $O\\left(\\frac{T^2}{2}\\right)$ using a local attention mechanism. Then which of the following values of $c$ (window size) in the strided local attention helps achieve this objective?**\n\n- [x] $c = 512$\n- [ ] $c = 768$\n- [x] $c = 256$\n- [x] $c = 128$",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "Options 1, 3, and 4 — $c = 512$, $c = 256$, and $c = 128$."
+      },
+      "solutionMd": "**Answer:** Options 1, 3, and 4 — $c = 512$, $c = 256$, and $c = 128$.\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Compare full attention vs. local attention complexity.**\n\n- In **full attention**, each of the $T$ tokens attends to all $T$ tokens in the sequence:\n  $$\\text{Complexity}_{\\text{full}} = T \\times T = T^2$$\n- In **local attention** with window size $c$, each token only attends to a local context window of $c$ neighboring tokens:\n  $$\\text{Complexity}_{\\text{local}} = T \\times c$$\n\n**Step 2 — Apply the given inequality constraint.**\n\nWe want the complexity to be at most $\\frac{T^2}{2}$:\n$$\\text{Complexity}_{\\text{local}} \\le \\frac{T^2}{2} \\implies T \\times c \\le \\frac{T^2}{2} \\implies c \\le \\frac{T}{2}$$\n\n**Step 3 — Substitute $T = 1024$:**\n\n$$c \\le \\frac{1024}{2} = 512$$\n\n**Step 4 — Test each candidate option:**\n- $c = 512$: $512 \\le 512$ ✅ **Valid** (achieves exactly $\\frac{T^2}{2}$)\n- $c = 768$: $768 > 512$ ❌ **Exceeds bound**\n- $c = 256$: $256 \\le 512$ ✅ **Valid** (reduces to $\\frac{T^2}{4}$)\n- $c = 128$: $128 \\le 512$ ✅ **Valid** (reduces to $\\frac{T^2}{8}$)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga11-q4",
+      "num": "Q4",
+      "title": "Valid Block Permutations",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Of these 4 blocks, choose the block(s) that is (are) proper permutation of 4 blocks:",
+      "bodyMd": "**Of these 4 blocks, choose the block(s) that is (are) proper permutation of 4 blocks:**\n\n- [x] a\n- [x] b\n- [x] c\n- [x] d\n- [ ] None of these",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "All four — a, b, c, and d."
+      },
+      "solutionMd": "**Answer:** All four — a, b, c, and d.\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand what constitutes a \"proper permutation of 4 blocks\".**\n\nIn block-wise sparse attention (such as BlockBERT or Sparse Transformer), a context of 8 tokens is grouped into 4 blocks of size 2 tokens each:\n$$\\text{Block 1: tokens 0--1}, \\quad \\text{Block 2: tokens 2--3}, \\quad \\text{Block 3: tokens 4--5}, \\quad \\text{Block 4: tokens 6--7}$$\n\nA **proper permutation of 4 blocks** means:\n- Every query block $i \\in \\{1, 2, 3, 4\\}$ (row block) attends to **exactly one** key block $j \\in \\{1, 2, 3, 4\\}$ (column block).\n- Every key block is attended to by **exactly one** query block (bijective 1-to-1 mapping, i.e., a permutation matrix).\n\n**Step 2 — Examine each subplot in Figure 1:**\n\n| Subplot | Row 1 (Tokens 0–1) Attends To | Row 2 (Tokens 2–3) Attends To | Row 3 (Tokens 4–5) Attends To | Row 4 (Tokens 6–7) Attends To | Permutation Sequence | Valid? |\n|:---:|:---:|:---:|:---:|:---:|:---:|:---:|\n| **a** | Block 2 (Cols 2–3) | Block 3 (Cols 4–5) | Block 1 (Cols 0–1) | Block 4 (Cols 6–7) | $(2, 3, 1, 4)$ | ✅ **Valid** |\n| **b** | Block 2 (Cols 2–3) | Block 3 (Cols 4–5) | Block 4 (Cols 6–7) | Block 1 (Cols 0–1) | $(2, 3, 4, 1)$ | ✅ **Valid** |\n| **c** | Block 2 (Cols 2–3) | Block 4 (Cols 6–7) | Block 1 (Cols 0–1) | Block 3 (Cols 4–5) | $(2, 4, 1, 3)$ | ✅ **Valid** |\n| **d** | Block 2 (Cols 2–3) | Block 4 (Cols 6–7) | Block 3 (Cols 4–5) | Block 1 (Cols 0–1) | $(2, 4, 3, 1)$ | ✅ **Valid** |\n\nEach of the four patterns contains exactly one non-zero block per row and per column, forming a valid permutation matrix of order 4.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga11-q5",
+      "num": "Q5",
+      "title": "Query-Key Interaction in Head 4",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Let $q_1, q_2, q_3, q_4$ denote the 4 query blocks and $k_1, k_2, k_3, k_4$ denote the 4 key blocks. Select which of the following denotes the computation of pre-attention score for the $q_4$ in the 4-th attention head:",
+      "bodyMd": "**Let $q_1, q_2, q_3, q_4$ denote the 4 query blocks and $k_1, k_2, k_3, k_4$ denote the 4 key blocks. Select which of the following denotes the computation of pre-attention score for the $q_4$ in the 4-th attention head:**\n\n- [ ] $q_4^T k_4$\n- [x] $q_4^T k_1$\n- [ ] $q_4^T k_2$\n- [ ] $q_4^T k_3$",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "Option 2 — $q_4^T k_1$"
+      },
+      "solutionMd": "**Answer:** Option 2 — $q_4^T k_1$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Identify the 4-th attention head:**\n\nThe four subplots correspond from left to right to heads 1, 2, 3, and 4:\n- Head 1 $\\to$ Subplot a\n- Head 2 $\\to$ Subplot b\n- Head 3 $\\to$ Subplot c\n- **Head 4 $\\to$ Subplot d**\n\n**Step 2 — Locate query block $q_4$ in Subplot d:**\n\n- $q_1$ corresponds to rows 0 and 1\n- $q_2$ corresponds to rows 2 and 3\n- $q_3$ corresponds to rows 4 and 5\n- **$q_4$ corresponds to rows 6 and 7 (the bottom row block)**\n\n**Step 3 — Find which key block is active (white) for rows 6 and 7 in Subplot d:**\n\nLooking at Subplot d in Figure 1:\n- In rows 6 and 7, the white active square is located at **columns 0 and 1**.\n- Columns 0 and 1 correspond to **key block $k_1$**.\n\nTherefore, the attention score computed for query block $q_4$ is $q_4^T k_1$.\n\n$`\\displaystyle \\boxed{q_4^T k_1}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga11-q6",
+      "num": "Q6",
+      "title": "Low-Rank Approximation vs. Local Attention",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "The statement that *\"both a low-rank approximation of attention and local attention has the same computational complexity when $k=1$ and $c=1$ and therefore both approaches always end up computing the same representation for the given tokens in a sequence\"* is:",
+      "bodyMd": "**The statement that *\"both a low-rank approximation of attention and local attention has the same computational complexity when $k=1$ and $c=1$ and therefore both approaches always end up computing the same representation for the given tokens in a sequence\"* is:**\n\n- [ ] True\n- [x] False",
+      "options": [],
+      "answer": {
+        "type": "boolean",
+        "value": "False"
+      },
+      "solutionMd": "**Answer:** False\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Analyze the premise:**\nWhen rank $k = 1$ in low-rank attention (Linformer) and window size $c = 1$ in local attention, both methods have linear computational complexity $O(T)$ with respect to sequence length $T$.\n\n**Step 2 — Do they compute the same representations?**\n**Absolutely NOT.**\n- **Low-Rank Attention ($k=1$):** Projects the $T$ keys and values globally into a 1-dimensional subspace. Every token attends to a global, sequence-wide compressed bottleneck.\n- **Local Attention ($c=1$):** Each token attends strictly to itself (or an immediate neighbor within distance 1). There is zero cross-token information exchange across distances $> 1$.\n\nHaving the same computational complexity $O(T)$ does **not** imply identical mathematical operations or representations. The statement is **False**.\n\n$`\\displaystyle \\boxed{\\text{False}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga11-q7",
+      "num": "Q7",
+      "title": "Minimum KV Cache Memory Size",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Suppose we decided to use $KV$ caching mechanism for faster inference. The details of the text generation model are given below:",
+      "bodyMd": "**Suppose we decided to use $KV$ caching mechanism for faster inference. The details of the text generation model are given below:**\n\n1. Number of layers: $12$\n2. Number of heads per layer: $8$\n3. $d_{\\text{model}} = 512$\n4. $d_q = d_k = d_v = 64$\n5. Precision: $32\\text{ bits}$\n\n**What will be the minimum size of cache memory (in MB) such that it should cache at least 512 tokens? Enter your answer in MB, for example, enter 1.23 for 1.23 MB.**\n\n*(Numeric input — enter MB)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "25.17"
+      },
+      "solutionMd": "**Answer:** $\\boxed{25.17}$ *(Accepted portal grading range: $[24, 26]$)*\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand what the KV Cache stores:**\n\nDuring autoregressive generation, at each layer and attention head, the model caches the **Key ($K$)** and **Value ($V$)** vectors of all past tokens so they do not need to be recomputed:\n- For each token, we store **2 vectors** ($K$ and $V$).\n- Each head has dimension $d_k = 64$.\n- Each layer has $h = 8$ heads.\n- Notice: $h \\times d_k = 8 \\times 64 = 512 = d_{\\text{model}}$.\n\n**Step 2 — Calculate total scalar elements in the KV Cache:**\n\n$$\\text{Elements per token per layer} = 2 \\times (h \\times d_k) = 2 \\times (8 \\times 64) = 1{,}024 \\text{ numbers}$$\n\nAcross all $L = 12$ layers:\n$$\\text{Elements per token} = 12 \\times 1{,}024 = 12{,}288 \\text{ numbers}$$\n\nFor $T_{\\text{cache}} = 512$ tokens:\n$$\\text{Total Elements} = 512 \\times 12{,}288 = 6{,}291{,}456 \\text{ numbers}$$\n\n**Step 3 — Convert to bytes using 32-bit precision:**\n\nPrecision $= 32 \\text{ bits} = 4 \\text{ bytes per number}$:\n$$\\text{Total Memory in Bytes} = 6{,}291{,}456 \\times 4 = 25{,}165{,}824 \\text{ bytes}$$\n\n**Step 4 — Convert to Megabytes (MB):**\n\n- Using standard decimal Megabytes ($1 \\text{ MB} = 10^6 \\text{ bytes}$):\n  $$\\text{Memory in MB} = \\frac{25{,}165{,}824}{10^6} \\approx \\mathbf{25.166} \\text{ MB} \\approx \\mathbf{25.17} \\text{ MB}$$\n- Using binary Megabytes ($1 \\text{ MiB} = 2^{20} = 1{,}048{,}576 \\text{ bytes}$):\n  $$\\text{Memory in MiB} = \\frac{25{,}165{,}824}{1{,}048{,}576} = \\mathbf{24.0} \\text{ MiB}$$\n\nBoth $25.17 \\text{ MB}$ and $24.0 \\text{ MiB}$ lie within the evaluation portal's valid acceptance window: **$[24, 26]$**.\n\n$`\\displaystyle \\boxed{25.17}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga11-q8",
+      "num": "Q8",
+      "title": "KV Caching in Encoder Models (BERT)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "The statement that *\"KV caching is not helpful during inference in encoder models like BERT\"* is:",
+      "bodyMd": "**The statement that *\"KV caching is not helpful during inference in encoder models like BERT\"* is:**\n\n- [x] True\n- [ ] False",
+      "options": [],
+      "answer": {
+        "type": "boolean",
+        "value": "True"
+      },
+      "solutionMd": "**Answer:** True\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Why does KV caching exist?**\nKV caching is designed specifically for **autoregressive generation** (decoder models like GPT). In decoders, text is generated token by token:\n$$\\text{Step 1: generate } x_1 \\implies \\text{Step 2: generate } x_2 \\implies \\dots$$\nAt step $t$, the keys and values for tokens $1, \\dots, t-1$ never change, so caching them saves recomputing attention over past tokens from scratch.\n\n**Step 2 — Why is it useless in encoder models like BERT?**\nEncoder models (e.g. BERT) perform **non-autoregressive, bidirectional inference**:\n- The entire sentence is fed into the encoder simultaneously in a **single forward pass**.\n- The model never produces output tokens sequentially one by one.\n- Since there are no sequential subsequent steps, there are no \"past tokens\" to cache.\n\n**Conclusion:** KV caching provides zero speedup in encoder models. The statement is **True**.\n\n$`\\displaystyle \\boxed{\\text{True}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

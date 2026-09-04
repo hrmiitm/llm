@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+portal/node_modules/
+
+# Production build output
+portal/dist/
+portal/dist-ssr/
+
+# Local env & cache
+*.local
+.cache/
+.vite/
+portal/.vite/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo

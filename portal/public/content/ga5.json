@@ -1,0 +1,373 @@
+{
+  "id": "ga5",
+  "week": 5,
+  "title": "Week 5 — Graded Assignment 5",
+  "topics": [
+    "Vocabulary Construction",
+    "BPE",
+    "WordPiece",
+    "Tokenization"
+  ],
+  "notesFile": "week5-learning-notes.md",
+  "score": 100,
+  "maxScore": 100,
+  "submittedDate": "Sun, 19 Jul 2026",
+  "questionCount": 12,
+  "durationMinutes": 36,
+  "questions": [
+    {
+      "id": "ga5-q1",
+      "num": "Q1",
+      "title": "Challenges in Building a Vocabulary",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "What are all the challenges one would face while building a vocabulary from a large corpus of text (assume the corpus contains only English text)?",
+      "bodyMd": "**What are all the challenges one would face while building a vocabulary from a large corpus of text (assume the corpus contains only English text)?**\n\n- ( ) Deciding the size of the vocabulary\n- ( ) Method to handle unknown tokens\n- ( ) Handling misspelled words\n- ( ) Handling names and numbers\n- ( ) None of these",
+      "options": [
+        {
+          "id": "A",
+          "text": "Deciding the size of the vocabulary"
+        },
+        {
+          "id": "B",
+          "text": "Method to handle unknown tokens"
+        },
+        {
+          "id": "C",
+          "text": "Handling misspelled words"
+        },
+        {
+          "id": "D",
+          "text": "Handling names and numbers"
+        },
+        {
+          "id": "E",
+          "text": "None of these"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "**Answer:** All four — Deciding vocabulary size, Method to handle unknown tokens, Handling misspelled words, Handling names and numbers\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Vocabulary size trade-off.**\n\nThe vocabulary is stored in an embedding matrix $E \\in \\mathbb{R}^{|V| \\times d_{\\text{model}}}$.\n\n| Vocabulary too **large** | Vocabulary too **small** |\n|---|---|\n| Huge memory footprint for $E$ | Too many `<unk>` tokens |\n| Softmax over $|V|$ is slow | Long sequence lengths |\n| Many rare tokens with bad embeddings | Poor semantic coverage |\n\n**Step 2 — Unknown tokens (`<unk>`).**\n\nEvery word-level vocabulary has a fixed set of words. At inference time, an unseen word like `\"transformer\"` (not in BERT's 2018 vocabulary) would be replaced by `<unk>`, losing all meaning.\n\n**Step 3 — Misspelled words.**\n\n`\"teh\"`, `\"recieve\"`, `\"occured\"` — misspelled tokens become new vocabulary entries with very low frequency, leading to poor embeddings or `<unk>` mapping.\n\n**Step 4 — Names and numbers.**\n\nProper nouns (`\"Elon Musk\"`, `\"ChatGPT\"`) and numbers (`\"3.14159\"`, `\"2024\"`) are virtually infinite and cannot be fully listed in a fixed vocabulary.\n\n**Step 5 — Conclusion.**\n\nAll four represent fundamental, well-documented challenges in vocabulary construction for NLP systems.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga5-q2",
+      "num": "Q2",
+      "title": "Character-Level Tokenization Properties",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Select correct statements regarding character-level tokenization.",
+      "bodyMd": "**Select correct statements regarding character-level tokenization.**\n\n- ( ) The size of vocabulary by character level tokenization will be **larger** than word level tokenization, if the corpus consists of all the books published on Harry Potter.\n- ( ) Computing softmax probabilities will be easy.\n- ( ) The vocabulary will not expand if new words/sentences are added to the corpus.\n- ( ) No issue of handling unknown tokens",
+      "options": [
+        {
+          "id": "A",
+          "text": "The size of vocabulary by character level tokenization will be **larger** than word level tokenization, if the corpus consists of all the books published on Harry Potter."
+        },
+        {
+          "id": "B",
+          "text": "Computing softmax probabilities will be easy."
+        },
+        {
+          "id": "C",
+          "text": "The vocabulary will not expand if new words/sentences are added to the corpus."
+        },
+        {
+          "id": "D",
+          "text": "No issue of handling unknown tokens"
+        }
+      ],
+      "answer": {
+        "type": "text",
+        "value": "Statements 2, 3, and 4 are correct."
+      },
+      "solutionMd": "**Answer:** Statements 2, 3, and 4 are correct.\n\n#### ✏️ Step-by-Step Solution\n\n**Key intuition:** Character-level tokenization uses a tiny fixed alphabet (e.g., 26 letters + digits + punctuation ≈ 100–256 tokens). Any new word or sentence in the English language is still made of the same letters!\n\n**Statement 1 — Vocabulary size comparison.**\n\n```\nWord-level (Harry Potter books):  |V| ≈ 20,000+ unique words\nCharacter-level:                  |V| ≈ 100–256 characters\n```\n\nCharacter-level vocabulary is **far smaller** than word-level. → Statement 1 is **False**.\n\n**Statement 2 — Softmax cost.**\n\nThe final prediction layer computes:\n```math\n\\text{softmax over } |V| \\text{ outputs} \\quad \\Rightarrow \\quad O(|V|)\n```\n\nWith $|V| \\approx 100$ characters vs. $|V| \\approx 50{,}000$ words, the character-level softmax is **much cheaper**. → Statement 2 is **True**.\n\n**Statement 3 — Vocabulary stability.**\n\nAdding new words to the corpus (e.g., `\"ChatGPT\"`, `\"blockchain\"`) does NOT introduce new characters — they are all composed of existing letters. → Statement 3 is **True**.\n\n**Statement 4 — No unknown tokens.**\n\nSince any new text (in any language using the same alphabet) decomposes entirely into existing characters, `<unk>` tokens are virtually never needed. → Statement 4 is **True**.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga5-q3",
+      "num": "Q3",
+      "title": "BPE Feasibility Across Languages",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "For which of the following options, applying BPE (based on white-space delimiter as a pre-tokenization step) is NOT feasible?",
+      "bodyMd": "**For which of the following options, applying BPE (based on white-space delimiter as a pre-tokenization step) is NOT feasible?**\n\n- ( ) (Japanese) — see image in assets\n- ( ) (Turkish) benim adım John Smith\n- ( ) (English) My name is John Smith\n- ( ) (German) Mein Name ist John Smith",
+      "options": [
+        {
+          "id": "A",
+          "text": "(Japanese) — see image in assets"
+        },
+        {
+          "id": "B",
+          "text": "(Turkish) benim adım John Smith"
+        },
+        {
+          "id": "C",
+          "text": "(English) My name is John Smith"
+        },
+        {
+          "id": "D",
+          "text": "(German) Mein Name ist John Smith"
+        }
+      ],
+      "answer": {
+        "type": "text",
+        "value": "Japanese"
+      },
+      "solutionMd": "**Answer:** Japanese\n\n#### ✏️ Step-by-Step Solution\n\n**How BPE pre-tokenization works:**\n\nStandard BPE splits text on whitespace first, treating each space-separated chunk as a \"word\" before learning subword merges.\n\n```\nEnglish: \"My name is John\" → [\"My\", \"name\", \"is\", \"John\"] ✅ Whitespace works!\nTurkish: \"benim adım John\" → [\"benim\", \"adım\", \"John\"]    ✅ Whitespace works!\nGerman:  \"Mein Name ist\"   → [\"Mein\", \"Name\", \"ist\"]      ✅ Whitespace works!\n\nJapanese: \"私の名前はジョン\" → [\"私の名前はジョン\"]           ❌ Entire sentence = one token!\n```\n\n**Why Japanese fails:**\n\nJapanese (and Chinese, Thai) writes words **continuously without spaces**. Whitespace pre-tokenization cannot find word boundaries, so the entire sentence becomes a single \"word\" token.\n\nJapanese requires a morphological segmenter (like **MeCab**) or a language-aware tokenizer (like **Byte-Level BPE** in GPT) before BPE can work correctly.\n\n$`\\displaystyle \\boxed{\\text{Japanese}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga5-q4",
+      "num": "Q4",
+      "title": "Initial Vocabulary Size",
+      "type": "numeric",
+      "context": null,
+      "questionText": "You will be learning Byte Pair Encoding. How many tokens are there in the initial vocabulary?",
+      "bodyMd": "**You will be learning Byte Pair Encoding. How many tokens are there in the initial vocabulary?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "12"
+      },
+      "solutionMd": "**Answer:** $\\boxed{12}$\n\n#### ✏️ Step-by-Step Solution\n\n**Collect all unique character tokens across all words:**\n\n| From \"low\" | From \"older\" | From \"finest\" | From \"lowest\" | From \"loneliest\" |\n|---|---|---|---|---|\n| `l, o, w, </w>` | `o, l, d, e, r, </w>` | `f, i, n, e, s, t, </w>` | `l, o, w, e, s, t, </w>` | `l, o, n, e, l, i, e, s, t, </w>` |\n\n**Unique token set $V_0$:**\n\n```\n{ l, o, w, d, e, r, f, i, n, s, t, </w> }\n  1  2  3  4  5  6  7  8  9  10 11  12\n```\n\n$`\\displaystyle |V_0| = \\boxed{12}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga5-q5",
+      "num": "Q5",
+      "title": "Least Frequent Pair Before First Merge",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Which of the following pairs has the least frequency before any merge?",
+      "bodyMd": "**Which of the following pairs has the least frequency before any merge?**\n\n- ( ) (`w`, `</w>`)\n- ( ) (`l`, `d`)\n- ( ) (`i`, `n`)\n- ( ) (`n`, `e`)\n- ( ) (`w`, `e`)\n- ( ) None of these.",
+      "options": [
+        {
+          "id": "A",
+          "text": "(`w`, `</w>`)"
+        },
+        {
+          "id": "B",
+          "text": "(`l`, `d`)"
+        },
+        {
+          "id": "C",
+          "text": "(`i`, `n`)"
+        },
+        {
+          "id": "D",
+          "text": "(`n`, `e`)"
+        },
+        {
+          "id": "E",
+          "text": "(`w`, `e`)"
+        },
+        {
+          "id": "F",
+          "text": "None of these."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "**Answer:** (`w`, `</w>`)\n\n#### ✏️ Step-by-Step Solution\n\n**Calculate frequency of each candidate pair across all words (multiply by word frequency):**\n\n| Pair | Found In | Count |\n|:---:|---|:---:|\n| `(w, </w>)` | `low` (4) only | **4** ← minimum |\n| `(l, d)` | `older` (5) only | **5** |\n| `(i, n)` | `finest` (6) only | **6** |\n| `(n, e)` | `finest` (6) + `loneliest` (8) | **14** |\n| `(w, e)` | `lowest` (7) only | **7** |\n\nThe pair `('w', '</w>')` with frequency **4** is the least frequent among all options.\n\n$`\\displaystyle \\boxed{\\text{(`w', `</w>')}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga5-q6",
+      "num": "Q6",
+      "title": "Most Frequent Pair Before First Merge",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "What is the most frequent byte-pair before the very first merge? (Enter the pair string, e.g., `es`)",
+      "bodyMd": "**What is the most frequent byte-pair before the very first merge? (Enter the pair string, e.g., `es`)**\n\n*(Short answer input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "textes"
+      },
+      "solutionMd": "**Answer:** $\\boxed{\\text{es}}$\n\n#### ✏️ Step-by-Step Solution\n\n**Compute all adjacent pair frequencies:**\n\n| Pair | Words Containing It | Frequency |\n|:---:|---|:---:|\n| `(e, s)` | `finest`(6) + `lowest`(7) + `loneliest`(8) | **21** 🏆 |\n| `(s, t)` | `finest`(6) + `lowest`(7) + `loneliest`(8) | **21** 🏆 |\n| `(t, </w>)` | `finest`(6) + `lowest`(7) + `loneliest`(8) | **21** 🏆 |\n| `(l, o)` | `low`(4) + `lowest`(7) + `loneliest`(8) | 19 |\n| `(n, e)` | `finest`(6) + `loneliest`(8) | 14 |\n| `(o, w)` | `low`(4) + `lowest`(7) | 11 |\n\nThree pairs tie at frequency **21**. By left-to-right tie-breaking, `('e', 's')` is selected first.\n\n$`\\displaystyle \\boxed{\\text{es}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga5-q7",
+      "num": "Q7",
+      "title": "Frequency of Most Frequent Pair",
+      "type": "numeric",
+      "context": null,
+      "questionText": "What is the frequency of the most frequent byte-pair before the very first merge?",
+      "bodyMd": "**What is the frequency of the most frequent byte-pair before the very first merge?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "21"
+      },
+      "solutionMd": "**Answer:** $\\boxed{21}$\n\n#### ✏️ Step-by-Step Solution\n\nFrom Q6's table, the pair `('e', 's')` appears in three words:\n\n```math\n\\text{freq}(e, s) = 6 \\underbrace{(\\text{finest})}_{} + 7 \\underbrace{(\\text{lowest})}_{} + 8 \\underbrace{(\\text{loneliest})}_{} = 21\n```\n\n$`\\displaystyle \\boxed{21}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga5-q8",
+      "num": "Q8",
+      "title": "Token Frequencies Revised After First Merge",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many tokens in the vocabulary will have their frequency revised/reduced after the first merge?",
+      "bodyMd": "**How many tokens in the vocabulary will have their frequency revised/reduced after the first merge?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2"
+      },
+      "solutionMd": "**Answer:** $\\boxed{2}$\n\n#### ✏️ Step-by-Step Solution\n\n**The first merge combines `e` + `s` → `es`.**\n\nWherever `e` immediately precedes `s` in a word, that `e`-`s` pair is replaced by the new token `es`. This **reduces** the standalone counts of both `e` and `s`:\n\n| Token | Count Before Merge | What Happened | Count After Merge |\n|:---:|:---:|---|:---:|\n| `e` | 34 | 21 instances of `e` followed by `s` were merged → those `e`s disappear | **13** |\n| `s` | 21 | Every `s` preceded by `e` was merged → all 21 disappear | **0** |\n| All others | unchanged | `l`, `o`, `w`, `d`, `r`, `f`, `i`, `n`, `t`, `</w>` are unaffected | unchanged |\n\n> **Why does `e` drop from 34 to 13?**  \n> `e` appears in `older` (5×) as `d-e-r` — the `e` here is NOT followed by `s`, so it survives.  \n> But in `finest`, `lowest`, `loneliest`, `e` always precedes `s`, so 6+7+8 = **21** of those `e`s get merged away.  \n> $34 - 21 = \\mathbf{13}$ standalone `e`s remain.\n\nExactly **2** tokens (`e` and `s`) have their frequencies reduced.\n\n$`\\displaystyle \\boxed{2}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga5-q9",
+      "num": "Q9",
+      "title": "Vocabulary Size After First Merge",
+      "type": "numeric",
+      "context": null,
+      "questionText": "After the first merge, how many tokens are there in the updated vocabulary?",
+      "bodyMd": "**After the first merge, how many tokens are there in the updated vocabulary?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "13"
+      },
+      "solutionMd": "**Answer:** $\\boxed{13}$\n\n#### ✏️ Step-by-Step Solution\n\n**BPE rule:** Every merge adds exactly **1** new token to the vocabulary. Existing tokens are NOT removed.\n\n```math\n|V_1| = |V_0| + 1 = 12 + 1 = 13\n```\n\n**Vocabulary after merge 1:**\n```\n{ l, o, w, d, e, r, f, i, n, s, t, </w>, es }\n  ↑ original 12 tokens             ↑ new token\n```\n\n$`\\displaystyle \\boxed{13}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga5-q10",
+      "num": "Q10",
+      "title": "Tokenization After 7 Merges",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Suppose the process stopped after 7 merges (in order):",
+      "bodyMd": "**Suppose the process stopped after 7 merges (in order):**\n\n| # | Token 1 | Token 2 | → Merged |\n|:---:|:---:|:---:|:---:|\n| 1 | `e` | `s` | `es` |\n| 2 | `es` | `t` | `est` |\n| 3 | `est` | `</w>` | `est</w>` |\n| 4 | `l` | `o` | `lo` |\n| 5 | `lo` | `w` | `low` |\n| 6 | `lo` | `n` | `lon` |\n| 7 | `lon` | `e` | `lone` |\n\n**How will the word `finest</w>` be tokenized?**\n\n- ( ) (`f`, `i`, `n`, `est</w>`)\n- ( ) (`f`, `i`, `n`, `est`, `</w>`)\n- ( ) (`f`, `i`, `n`, `e`, `s`, `t</w>`)\n- ( ) (`f`, `i`, `n`, `e`, `st`, `</w>`)\n- ( ) (`fin`, `est</w>`)\n- ( ) None of these",
+      "options": [
+        {
+          "id": "A",
+          "text": "(`f`, `i`, `n`, `est</w>`)"
+        },
+        {
+          "id": "B",
+          "text": "(`f`, `i`, `n`, `est`, `</w>`)"
+        },
+        {
+          "id": "C",
+          "text": "(`f`, `i`, `n`, `e`, `s`, `t</w>`)"
+        },
+        {
+          "id": "D",
+          "text": "(`f`, `i`, `n`, `e`, `st`, `</w>`)"
+        },
+        {
+          "id": "E",
+          "text": "(`fin`, `est</w>`)"
+        },
+        {
+          "id": "F",
+          "text": "None of these"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "solutionMd": "**Answer:** (`f`, `i`, `n`, `est</w>`)\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — List vocabulary $V_7$ after all 7 merges:**\n\n```\nOriginal: l, o, w, d, e, r, f, i, n, s, t, </w>\nMerge 1:  + es\nMerge 2:  + est\nMerge 3:  + est</w>   ← key token!\nMerge 4:  + lo\nMerge 5:  + low\nMerge 6:  + lon\nMerge 7:  + lone\n```\n\n**Step 2 — Apply greedy longest-match tokenization to `finest</w>`:**\n\n```\nf i n e s t </w>\n↓\nf    → matches \"f\"       ✅\ni    → matches \"i\"       ✅\nn    → matches \"n\"       ✅\nest</w> → matches \"est</w>\" ✅ (longest match wins!)\n```\n\n**Result:**\n$`\\displaystyle \\text{finest</w>} \\longrightarrow (\\text{`f'}, \\text{`i'}, \\text{`n'}, \\text{`est</w>'})`$\n\n$`\\displaystyle \\boxed{(\\text{`f'}, \\text{`i'}, \\text{`n'}, \\text{`est</w>'})}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga5-q11",
+      "num": "Q11",
+      "title": "Highest Scoring Pair in WordPiece Before First Merge",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "What is the highest scoring byte-pair before the very first merge? (Enter the pair string, e.g., `fi`)",
+      "bodyMd": "**What is the highest scoring byte-pair before the very first merge? (Enter the pair string, e.g., `fi`)**\n\n*(Short answer input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "textfi"
+      },
+      "solutionMd": "**Answer:** $\\boxed{\\text{fi}}$\n\n#### ✏️ Step-by-Step Solution\n\n**WordPiece score formula:**\n\n```math\n\\text{Score}(A, B) = \\frac{\\text{freq}(AB)}{\\text{freq}(A) \\times \\text{freq}(B)}\n```\n\n> **Intuition:** This score is high when $A$ and $B$ occur together far more often than expected by chance. A rare pair that always sticks together scores higher than a common pair that occasionally appears adjacent.\n\n**Step 1 — Individual symbol total counts across all words:**\n\n| Symbol | Calculation | Count |\n|:---:|---|:---:|\n| `e` | `older`(1×5) + `finest`(1×6) + `lowest`(1×7) + `loneliest`(2×8) | **34** |\n| `l` | `low`(1×4) + `older`(1×5) + `lowest`(1×7) + `loneliest`(2×8) | **32** |\n| `</w>` | appears once in every word: 4+5+6+7+8 | **30** |\n| `o` | `low`(4) + `older`(5) + `lowest`(7) + `loneliest`(8) | **24** |\n| `s` | `finest`(6) + `lowest`(7) + `loneliest`(8) | **21** |\n| `t` | `finest`(6) + `lowest`(7) + `loneliest`(8) | **21** |\n| `i` | `finest`(6) + `loneliest`(8) | **14** |\n| `n` | `finest`(6) + `loneliest`(8) | **14** |\n| `w` | `low`(4) + `lowest`(7) | **11** |\n| `f` | `finest`(6) only | **6** |\n| `d` | `older`(5) only | **5** |\n| `r` | `older`(5) only | **5** |\n\n**Step 2 — Compute scores for top candidate pairs:**\n\n| Pair | freq(AB) | freq(A) | freq(B) | Score = freq(AB)/(A×B) |\n|:---:|:---:|:---:|:---:|:---:|\n| **(f, i)** | 6 | 6 | 14 | $\\frac{6}{6 \\times 14} = \\frac{1}{14} \\approx \\mathbf{0.0714}$ 🏆 |\n| (s, t) | 21 | 21 | 21 | $\\frac{21}{21 \\times 21} = \\frac{1}{21} \\approx 0.0476$ |\n| (o, w) | 11 | 24 | 11 | $\\frac{11}{24 \\times 11} = \\frac{1}{24} \\approx 0.0417$ |\n| (e, s) | 21 | 34 | 21 | $\\frac{21}{34 \\times 21} = \\frac{1}{34} \\approx 0.0294$ |\n\n> **Why does `(f, i)` win?** Although it only appears 6 times, `f` itself is extremely rare (total count = 6). Every single `f` in the corpus is always followed by `i`. This mutual exclusivity gives `(f, i)` the highest score!\n\n**Answer:** `fi`\n\n$`\\displaystyle \\boxed{\\text{fi}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga5-q12",
+      "num": "Q12",
+      "title": "Value of $100 \\cdot s_1$",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Say the score of the very first pair merged is $s_1$. What is the value of $100 \\cdot s_1$? (Correct up to 2 decimal places)",
+      "bodyMd": "**Say the score of the very first pair merged is $s_1$. What is the value of $100 \\cdot s_1$? (Correct up to 2 decimal places)**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "7.14"
+      },
+      "solutionMd": "**Answer:** $\\boxed{7.14}$\n\n#### ✏️ Step-by-Step Solution\n\nFrom Q11, the first merged pair is `(f, i)` with score:\n\n```math\ns_1 = \\frac{\\text{freq}(fi)}{\\text{freq}(f) \\times \\text{freq}(i)} = \\frac{6}{6 \\times 14} = \\frac{6}{84} = \\frac{1}{14}\n```\n\nMultiplying by 100:\n\n```math\n100 \\cdot s_1 = \\frac{100}{14} = \\frac{50}{7} = 7.142857\\ldots\n```\n\nTruncated to 2 decimal places (without rounding):\n\n$`\\displaystyle \\boxed{7.14}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

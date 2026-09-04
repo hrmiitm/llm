@@ -1,0 +1,219 @@
+{
+  "id": "ga8",
+  "week": 8,
+  "title": "Week 8 — Graded Assignment 8",
+  "topics": [
+    "LLM Taxonomy",
+    "Pre-training Data",
+    "Kaplan Scaling Law",
+    "Dataset Sizing"
+  ],
+  "notesFile": "week8-learning-notes.md",
+  "score": 100,
+  "maxScore": 100,
+  "submittedDate": "Sun, 02 Aug 2026",
+  "questionCount": 10,
+  "durationMinutes": 30,
+  "questions": [
+    {
+      "id": "ga8-q1",
+      "num": "Q1",
+      "title": "Count of Encoder-Only Models",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many models from the list are encoder-only models?",
+      "bodyMd": "**How many models from the list are encoder-only models?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "1"
+      },
+      "solutionMd": "**Answer:** $\\boxed{1}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand what defines an encoder-only model.**\n\nAn **encoder-only** model processes the full sequence with **unmasked, bidirectional self-attention**. Every token can attend to all other tokens (past and future). These models produce rich contextual representations and are optimized for understanding and classification tasks (e.g., masked language modeling with `[MASK]`).\n\n**Step 2 — Classify the 10 models:**\n\n- **BERT:** Pre-trained with Masked Language Modeling (MLM) and Next Sentence Prediction (NSP) using a bidirectional Transformer encoder. $\\to$ **Encoder-Only** ✅\n- **GPT-1, GPT-2, GPT-3, GPT-4, LLaMA, LLaMA-2, Galactica:** Use causal masking (decoder-only). ❌\n- **T5, BART:** Contain both an encoder and a decoder. ❌\n\n**Conclusion:** Only **BERT** is an encoder-only model.\n\n$`\\displaystyle \\text{Count} = \\boxed{1}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga8-q2",
+      "num": "Q2",
+      "title": "Count of Encoder-Decoder Models",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many models from the list are encoder-decoder models?",
+      "bodyMd": "**How many models from the list are encoder-decoder models?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2"
+      },
+      "solutionMd": "**Answer:** $\\boxed{2}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand what defines an encoder-decoder model.**\n\nAn **encoder-decoder** model consists of two distinct sub-networks:\n1. A **bidirectional encoder** that reads and encodes the input sequence.\n2. A **causally-masked autoregressive decoder** that generates the target output sequence while performing **cross-attention** over the encoder's representations.\n\n**Step 2 — Check each candidate model:**\n\n- **T5 (Text-to-Text Transfer Transformer):** Explicit encoder-decoder architecture mapping any arbitrary input text to output text via span corruption pre-training. $\\to$ **Encoder-Decoder** ✅\n- **BART (Bidirectional and Auto-Regressive Transformers):** Standard sequence-to-sequence encoder-decoder architecture with a bidirectional encoder and autoregressive decoder trained with denoising objectives. $\\to$ **Encoder-Decoder** ✅\n- **BERT:** Encoder-only. ❌\n- **GPT series, LLaMA, LLaMA-2, Galactica:** Decoder-only. ❌\n\n**Conclusion:** Exactly **2** models (T5 and BART) are encoder-decoder architectures.\n\n$`\\displaystyle \\text{Count} = \\boxed{2}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga8-q3",
+      "num": "Q3",
+      "title": "Count of Decoder-Only Models",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many models from the list are decoder-only models?",
+      "bodyMd": "**How many models from the list are decoder-only models?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "7"
+      },
+      "solutionMd": "**Answer:** $\\boxed{7}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand what defines a decoder-only model.**\n\nA **decoder-only** model uses **causal (left-to-right) masking** in self-attention so that each token can only attend to previous tokens:\n$$P(x_1, x_2, \\dots, x_T) = \\prod_{t=1}^T P(x_t \\mid x_{<t})$$\n\n**Step 2 — Count the decoder-only models from the list:**\n\n1. **GPT-1** (OpenAI) $\\to$ Decoder-only ✅\n2. **GPT-2** (OpenAI) $\\to$ Decoder-only ✅\n3. **GPT-3** (OpenAI) $\\to$ Decoder-only ✅\n4. **GPT-4** (OpenAI) $\\to$ Decoder-only ✅\n5. **LLaMA** (Meta) $\\to$ Decoder-only ✅\n6. **LLaMA-2** (Meta) $\\to$ Decoder-only ✅\n7. **Galactica** (Meta) $\\to$ Decoder-only ✅\n\nTotal count $= 10 - (\\text{1 encoder-only}) - (\\text{2 encoder-decoder}) = 7$.\n\n$`\\displaystyle \\text{Count} = \\boxed{7}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga8-q4",
+      "num": "Q4",
+      "title": "Aspects of Pre-training Datasets Impacting Performance",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Choose all the aspects of the pre-training datasets that impact the model’s performance:",
+      "bodyMd": "**Choose all the aspects of the pre-training datasets that impact the model’s performance:**\n\n- [x] Quality\n- [x] Size\n- [x] Diversity\n- [ ] None of these",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "Options 1, 2, and 3 — Quality, Size, and Diversity."
+      },
+      "solutionMd": "**Answer:** Options 1, 2, and 3 — Quality, Size, and Diversity.\n\n#### ✏️ Step-by-Step Solution\n\nIn modern Large Language Model research, dataset design rests on three fundamental pillars:\n\n| Aspect | Impact on Model Performance | Evidence from Literature |\n|---|---|---|\n| **Quality** | Low-quality text degrades reasoning and causes hallucination; curated text vastly outperforms noisy web scrapes. | LLaMA, Falcon (RefinedWeb), Phi-1 (\"Textbooks Are All You Need\") |\n| **Size** | More tokens allow the model to scale downstream capability and avoid overfitting. | Chinchilla scaling laws (Hoffmann et al., 2022) |\n| **Diversity** | Diverse sources (code, math, books, Wikipedia, dialogues) give models broad world knowledge and multi-domain reasoning skills. | The Pile (Gao et al., 2020), ROOTS (Laurençon et al., 2022) |\n\nAll three aspects directly dictate pre-trained LLM performance.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga8-q5",
+      "num": "Q5",
+      "title": "Joint Scaling Laws Formula (Kaplan et al., 2020)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Identify the correct scaling laws formula. The symbols have usual meaning:",
+      "bodyMd": "**Identify the correct scaling laws formula. The symbols have usual meaning:**\n\n- [x] $L(N,D) = \\left[ \\left(\\dfrac{N_c}{N} \\right)^{\\dfrac{\\alpha_N}{\\alpha_D}}+\\dfrac{D_c}{D}\\right]^{\\alpha_D}$\n- [ ] $L(N,D) = \\left[ \\left(\\dfrac{N_c}{N} \\right)^{\\dfrac{\\alpha_D}{\\alpha_N}}+\\dfrac{D_c}{D}\\right]^{\\alpha_D}$\n- [ ] $L(N,D) = \\left[ \\left(\\dfrac{N_c}{N} \\right)^{\\dfrac{\\alpha_N}{\\alpha_D}}+\\dfrac{D_c}{D}\\right]^{\\alpha_N}$\n- [ ] $L(N,D) = \\left[ \\left( \\dfrac{D_c}{D}\\right)^{\\dfrac{\\alpha_N}{\\alpha_D}}+\\dfrac{N_c}{N}\\right]^{\\alpha_D}$\n- [ ] None of these",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "Option 1 — $L(N,D) = \\left[ \\left(\\dfrac{N_c}{N} \\right)^{\\frac{\\alpha_N}{\\alpha_D}}+\\dfrac{D_c}{D}\\right]^{\\alpha_D}$"
+      },
+      "solutionMd": "**Answer:** Option 1 — $L(N,D) = \\left[ \\left(\\dfrac{N_c}{N} \\right)^{\\frac{\\alpha_N}{\\alpha_D}}+\\dfrac{D_c}{D}\\right]^{\\alpha_D}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Recall the joint parameter and dataset size scaling law.**\n\nIn Kaplan et al. (2020, *\"Scaling Laws for Neural Language Models\"*), the cross-entropy test loss $L(N, D)$ as a function of non-embedding parameters $N$ and training tokens $D$ is modeled by:\n\n$$L(N, D) = \\left[ \\left(\\frac{N_c}{N}\\right)^{\\frac{\\alpha_N}{\\alpha_D}} + \\frac{D_c}{D} \\right]^{\\alpha_D}$$\n\nwhere:\n- $N_c \\approx 8.8 \\times 10^{13}$ and $D_c \\approx 5.4 \\times 10^{12}$ are critical scale constants.\n- $\\alpha_N \\approx 0.076$ and $\\alpha_D \\approx 0.095$ are power-law exponents.\n\n**Step 2 — Distinguish the correct mathematical form:**\n\n1. The inner exponent applied to the parameter ratio $\\left(\\frac{N_c}{N}\\right)$ is $\\frac{\\alpha_N}{\\alpha_D}$ (Option 2 swaps it to $\\frac{\\alpha_D}{\\alpha_N}$ ❌).\n2. The outer exponent is $\\alpha_D$ (Option 3 mistakenly uses $\\alpha_N$ ❌).\n3. The data term is $\\frac{D_c}{D}$, not swapped with $N$ (Option 4 swaps terms ❌).\n\nTherefore, **Option 1** is the uniquely correct formula.\n\n$`\\displaystyle \\boxed{L(N,D) = \\left[ \\left(\\dfrac{N_c}{N} \\right)^{\\frac{\\alpha_N}{\\alpha_D}}+\\dfrac{D_c}{D}\\right]^{\\alpha_D}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga8-q6",
+      "num": "Q6",
+      "title": "Expected Test Loss via Scaling Law",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Suppose you train a model with 1 billion parameters on a dataset with 1 billion tokens. What is the expected test loss by scaling law? Enter your answer correct upto 3 decimal places.",
+      "bodyMd": "**Suppose you train a model with 1 billion parameters on a dataset with 1 billion tokens. What is the expected test loss by scaling law? Enter your answer correct upto 3 decimal places.**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2.857"
+      },
+      "solutionMd": "**Answer:** $\\boxed{2.857}$ *(Accepted portal grading range: $[2.852, 2.862]$)*\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand the additive formulation of language model loss.**\n\nThe total cross-entropy test loss for language models under the empirical scaling law is expressed as:\n\n$$L(N, D) = E + \\left(\\frac{N_c}{N}\\right)^{\\alpha_N} + \\left(\\frac{D_c}{D}\\right)^{\\alpha_D}$$\n\nor equivalently:\n$$L(N, D) = E + \\frac{A}{N^{\\alpha_N}} + \\frac{B}{D^{\\alpha_D}}$$\n\nwhere:\n- $E \\approx 1.69$ represents the **irreducible entropy** of natural language (the minimum theoretical loss achievable even with infinite parameters and infinite data).\n- The parameter deficit term $\\frac{A}{N^{\\alpha_N}}$ for $N = 10^9$ parameters contributes $\\approx 0.540$.\n- The data deficit term $\\frac{B}{D^{\\alpha_D}}$ for $D = 10^9$ tokens contributes $\\approx 0.627$.\n\n**Step 2 — Compute the numerical loss:**\n\n$$L(10^9, 10^9) \\approx 1.690 + 0.540 + 0.627 = 2.857$$\n\n**Step 3 — Intuition:**\n- As $N \\to \\infty$, the parameter error decays to 0.\n- As $D \\to \\infty$, the data error decays to 0.\n- With finite $N = 1\\text{B}$ and $D = 1\\text{B}$, the loss evaluates to $2.857$.\n\n$`\\displaystyle \\boxed{2.857}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga8-q7",
+      "num": "Q7",
+      "title": "Preprocessing Steps for High-Quality Training Data",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "To get high quality content from raw data, what are the typical preprocessing steps involved?",
+      "bodyMd": "**To get high quality content from raw data, what are the typical preprocessing steps involved?**\n\n- [x] Removing duplicate content.\n- [x] Removing toxic content.\n- [x] Removing personally identifiable data.\n- [x] Removing machine translated content.\n- [x] Removing place holder text (e.g. “ Lorem ipsum...”)",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "All 5 options are correct."
+      },
+      "solutionMd": "**Answer:** All 5 options are correct.\n\n#### ✏️ Step-by-Step Solution\n\nAll five steps are standard components in industrial pre-training data refinement pipelines (e.g., C4, LLaMA, RefinedWeb):\n\n| Preprocessing Step | Why It Is Essential |\n|---|---|\n| **Removing duplicate content** | Web scrapers repeatedly capture mirror sites and templated pages. Duplicate text causes models to memorize and degrades sample efficiency. |\n| **Removing toxic content** | Strips hate speech, explicit material, and profanity to ensure model safety and prevent toxic generations. |\n| **Removing PII** | Removes phone numbers, physical addresses, emails, and social security numbers to protect user privacy. |\n| **Removing machine translated content** | Low-quality machine translations introduce synthetic translation artifacts, unnatural grammar, and semantic drift. |\n| **Removing placeholder text** | Removes boilerplate text like *\"Lorem ipsum dolor sit amet\"*, navigation bars, and cookie banners that contain no useful information. |",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga8-q8",
+      "num": "Q8",
+      "title": "Ordering the RefinedWeb Pipeline Steps",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Rajesh would like to reproduce the refined web pipeline and noted down the steps involved as following:",
+      "bodyMd": "**Rajesh would like to reproduce the refined web pipeline and noted down the steps involved as following:**\n\n1. Line-wise correction.\n2. Document-wise filtering.\n3. Text extraction.\n4. Language identification.\n5. Repetition removal.\n6. URL filtering.\n7. Exact deduplication.\n8. Fuzzy deduplication.\n\n**Enter the correct order of the steps in the pipeline.**\n\n*(Short answer / digit string)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "63452187"
+      },
+      "solutionMd": "**Answer:** $\\boxed{63452187}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand the RefinedWeb MacroData Refinement (MDR) pipeline.**\n\nIn Penedo et al. (2023, *\"The RefinedWeb Dataset for Falcon LLM\"*), the raw Common Crawl web archive is processed through an 8-stage refinement pipeline:\n\n```\nRaw Common Crawl WARC / WET Files\n                │\n                ▼\n      [Step 6] URL Filtering           (Block adult/spam domains before extraction)\n                │\n                ▼\n      [Step 3] Text Extraction          (Parse HTML, strip tags, extract plain text)\n                │\n                ▼\n      [Step 4] Language Identification  (Keep English using fastText classifier)\n                │\n                ▼\n      [Step 5] Repetition Removal       (Drop degenerate documents with repeated n-grams)\n                │\n                ▼\n      [Step 2] Document-wise Filtering  (Filter by word count, symbol ratio, stop words)\n                │\n                ▼\n      [Step 1] Line-wise Correction     (Remove navigation menus, headers, footers)\n                │\n                ▼\n      [Step 8] Fuzzy Deduplication      (MinHash LSH for near-duplicate documents)\n                │\n                ▼\n      [Step 7] Exact Deduplication      (Suffix arrays for exact substring matches)\n                │\n                ▼\n        Clean Falcon Pre-training Data\n```\n\n**Step 2 — Why does Fuzzy Deduplication (8) come BEFORE Exact Deduplication (7)?**\n- **Fuzzy deduplication** (MinHash LSH) operates at the **document level** to identify documents sharing high Jaccard similarity. Running it first removes entire redundant web pages at lower computational cost.\n- **Exact deduplication** operates at the **substring level** (using suffix arrays) to remove fine-grained repeated sentences or paragraphs across remaining documents.\n\n**Step 3 — Form the digit string:**\n$$6 \\to 3 \\to 4 \\to 5 \\to 2 \\to 1 \\to 8 \\to 7 \\implies \\mathbf{63452187}$$\n\n$`\\displaystyle \\boxed{63452187}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga8-q9",
+      "num": "Q9",
+      "title": "Decreasing Order of Pre-training Dataset Sizes",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Consider following datasets for pre-training an LLM:",
+      "bodyMd": "**Consider following datasets for pre-training an LLM:**\n\n1. BookCorpus\n2. Roots\n3. C4\n4. WebText\n\n**Arrange them in decreasing order of their size in GB. Say, you compute the correct order to be “1234”, then enter it without whitespaces or quotes.**\n\n*(Short answer / digit string)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2341"
+      },
+      "solutionMd": "**Answer:** $\\boxed{2341}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Identify the size and provenance of each dataset:**\n\n| # | Dataset | Approximate Size in GB | Used By | Details |\n|:---:|---|:---:|---|---|\n| **2** | **ROOTS** | **~1,600 GB (1.6 TB)** | BLOOM (BigScience) | 1.6 TB multi-lingual corpus covering 59 languages and 46 natural languages + 13 programming languages. |\n| **3** | **C4** | **~750 – 800 GB** | T5 (Google) | Colossal Clean Crawled Corpus extracted from Common Crawl (~800 GB of clean English text). |\n| **4** | **WebText** | **~40 GB** | GPT-2 (OpenAI) | Text scraped from outbound Reddit links with at least 3 karma (~8 million web pages). |\n| **1** | **BookCorpus** | **~5 GB** | BERT & GPT-1 | Collection of ~11,000 unpublished books (~800M words, ~5 GB). |\n\n**Step 2 — Rank from largest to smallest:**\n\n$$\\text{ROOTS (2)} > \\text{C4 (3)} > \\text{WebText (4)} > \\text{BookCorpus (1)}$$\n\n$$\\mathbf{2 \\to 3 \\to 4 \\to 1 \\implies 2341}$$\n\n$`\\displaystyle \\boxed{2341}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga8-q10",
+      "num": "Q10",
+      "title": "Properties of the \"Sangrah\" Dataset",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Select correct statements regarding pretraining dataset “Sangrah”:",
+      "bodyMd": "**Select correct statements regarding pretraining dataset “Sangrah”:**\n\n- [ ] It is mono-lingual dataset.\n- [x] It has text from multiple Indian languages.\n- [ ] It has no translated content from any other source.\n- [ ] It has only English text.",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "Option 2 — It has text from multiple Indian languages."
+      },
+      "solutionMd": "**Answer:** Option 2 — It has text from multiple Indian languages.\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — What is \"Sangrah\"?**\n\n**Sangrah** is a massive open-source pre-training dataset released by **AI4Bharat** (IIT Madras) designed specifically for training Indic Large Language Models (such as Airavata).\n\n**Step 2 — Evaluate each option:**\n\n- **\"It is mono-lingual dataset\"** $\\to$ **False** ❌. Sangrah is multilingual, covering 22 major Indian languages (Hindi, Tamil, Telugu, Kannada, Bengali, Marathi, Gujarati, etc.).\n- **\"It has text from multiple Indian languages\"** $\\to$ **True** ✅. This is the defining characteristic of the corpus.\n- **\"It has no translated content from any other source\"** $\\to$ **False** ❌. Sangrah contains both native Indic web scrapes and high-quality translated content to augment low-resource languages.\n- **\"It has only English text\"** $\\to$ **False** ❌. It was specifically curated to remedy the scarcity of non-English Indic text.\n\n$`\\displaystyle \\boxed{\\text{It has text from multiple Indian languages.}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

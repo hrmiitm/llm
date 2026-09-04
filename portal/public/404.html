@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>LLM Exam Portal — Redirecting…</title>
+    <script>
+      // Single Page Application redirect script for GitHub Pages
+      // Converts path /llm/exam/ga1 into /llm/#/exam/ga1
+      var l = window.location;
+      var pathSegments = l.pathname.split('/').filter(Boolean);
+      // If deployed under /llm/, the first segment is 'llm'
+      var repo = pathSegments[0] === 'llm' ? '/llm' : '';
+      var remaining = pathSegments[0] === 'llm' ? pathSegments.slice(1).join('/') : pathSegments.join('/');
+      var target = l.protocol + '//' + l.host + repo + '/#/' + remaining + l.search + l.hash;
+      window.location.replace(target);
+    </script>
+  </head>
+  <body style="font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #08060d; color: white;">
+    <div style="text-align: center;">
+      <h2>Redirecting to LLM Exam Portal…</h2>
+      <p style="color: #94a3b8;">If you are not redirected automatically, <a id="redirect-link" href="/llm/#/" style="color: #38bdf8;">click here</a>.</p>
+    </div>
+    <script>
+      document.getElementById('redirect-link').href = target;
+    </script>
+  </body>
+</html>

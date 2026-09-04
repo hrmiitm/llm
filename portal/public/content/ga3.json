@@ -1,0 +1,287 @@
+{
+  "id": "ga3",
+  "week": 3,
+  "title": "Week 3 — Graded Assignment 3",
+  "topics": [
+    "GPT Architecture",
+    "Causal LM",
+    "Decoding Strategies",
+    "Positional Encoding"
+  ],
+  "notesFile": "week3-week4-learning-notes.md",
+  "score": 100,
+  "maxScore": 100,
+  "submittedDate": "Sun, 05 Jul 2026",
+  "questionCount": 8,
+  "durationMinutes": 30,
+  "questions": [
+    {
+      "id": "ga3-q1",
+      "num": "Q1",
+      "title": "Sinusoidal Positional Embedding Sum",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Consider the word embedding vector $x = [0.1,\\ 0,\\ 0.23,\\ 0.4,\\ -0.75,\\ 1]$. The word is at **position 4** in the sentence. Add the sinusoidal position embedding $p$ and enter the sum of elements in $h = x + p$.",
+      "bodyMd": "**Consider the word embedding vector $x = [0.1,\\ 0,\\ 0.23,\\ 0.4,\\ -0.75,\\ 1]$. The word is at **position 4** in the sentence. Add the sinusoidal position embedding $p$ and enter the sum of elements in $h = x + p$.**\n\nFormulas:\n\n```math\nPE(\\text{pos},\\ 2i) = \\sin\\left(\\frac{\\text{pos}}{10000^{2i/d_{\\text{model}}}}\\right)\n```\n\n```math\nPE(\\text{pos},\\ 2i+1) = \\cos\\left(\\frac{\\text{pos}}{10000^{2i/d_{\\text{model}}}}\\right)\n```\n\n*(Numeric input — accepted range: 1.7 to 1.8)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "1.75"
+      },
+      "solutionMd": "**Answer:** $\\boxed{1.75}$\n\n### ✏️ Step-by-Step Solution\n\n**Step 1 — Identify the parameters.**\n\n- Position: $\\text{pos} = 4$\n- Embedding dimension: $d_{\\text{model}} = 6$ (since $x$ has 6 elements)\n- Index $i$ runs from $0$ to $d_{\\text{model}}/2 - 1 = 2$\n\n**Step 2 — Compute each positional embedding component.**\n\nThe 6-dimensional positional vector $p$ is computed as:\n\n| Index | Formula | Denominator | Argument | Value |\n|:---:|---|---|---|---|\n| 0 (even, $i=0$) | $\\sin\\left(\\frac{4}{10000^{0/6}}\\right)$ | $10000^{0} = 1$ | $\\sin(4)$ | $-0.7568$ |\n| 1 (odd, $i=0$) | $\\cos\\left(\\frac{4}{10000^{0/6}}\\right)$ | $10000^{0} = 1$ | $\\cos(4)$ | $-0.6536$ |\n| 2 (even, $i=1$) | $\\sin\\left(\\frac{4}{10000^{2/6}}\\right)$ | $10000^{1/3} \\approx 21.544$ | $\\sin(0.1857)$ | $+0.1848$ |\n| 3 (odd, $i=1$) | $\\cos\\left(\\frac{4}{10000^{2/6}}\\right)$ | $10000^{1/3} \\approx 21.544$ | $\\cos(0.1857)$ | $+0.9827$ |\n| 4 (even, $i=2$) | $\\sin\\left(\\frac{4}{10000^{4/6}}\\right)$ | $10000^{2/3} \\approx 464.16$ | $\\sin(0.00862)$ | $+0.00862$ |\n| 5 (odd, $i=2$) | $\\cos\\left(\\frac{4}{10000^{4/6}}\\right)$ | $10000^{2/3} \\approx 464.16$ | $\\cos(0.00862)$ | $+0.99996$ |\n\n$`\\displaystyle p = [-0.7568,\\ -0.6536,\\ 0.1848,\\ 0.9827,\\ 0.00862,\\ 0.99996]`$\n\n**Step 3 — Add $p$ to the word embedding $x$.**\n\n$`\\displaystyle h = x + p = [0.1 + (-0.7568),\\ 0 + (-0.6536),\\ 0.23 + 0.1848,\\ 0.4 + 0.9827,\\ -0.75 + 0.00862,\\ 1 + 0.99996]`$\n\n$`\\displaystyle h = [-0.6568,\\ -0.6536,\\ 0.4148,\\ 1.3827,\\ -0.7414,\\ 1.9999]`$\n\n**Step 4 — Sum all elements.**\n\n$`\\displaystyle \\text{Sum}(h) = -0.6568 + (-0.6536) + 0.4148 + 1.3827 + (-0.7414) + 1.9999`$\n\n$`\\displaystyle = (-0.6568 - 0.6536) + (0.4148 + 1.3827) + (-0.7414 + 1.9999)`$\n\n$`\\displaystyle = -1.3104 + 1.7975 + 1.2585 = \\boxed{1.746 \\approx 1.75}`$\n\n> **Intuition:** Positional embeddings use different frequencies for different dimensions. Low-index dimensions ($i=0$) vary rapidly (high frequency: $`\\sin(4)`$), while high-index dimensions ($i=2$) vary slowly (low frequency: $`\\sin(0.009)`$). This lets the model distinguish positions at multiple scales.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga3-q2",
+      "num": "Q2",
+      "title": "GPT Attention Mask for Right-to-Left Language",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Consider a Right-to-Left (RTL) language (e.g., \"transformer movie the enjoyed I\"). If we use GPT for Causal Language Modelling (CLM), then:",
+      "bodyMd": "**Consider a Right-to-Left (RTL) language (e.g., \"transformer movie the enjoyed I\"). If we use GPT for Causal Language Modelling (CLM), then:**\n\n- ( ) It is necessary to flip the attention mask horizontally\n- ( ) It is necessary to flip the attention mask vertically\n- ( ) Neither the horizontal nor the vertical flipping of attention mask is required",
+      "options": [
+        {
+          "id": "A",
+          "text": "It is necessary to flip the attention mask horizontally"
+        },
+        {
+          "id": "B",
+          "text": "It is necessary to flip the attention mask vertically"
+        },
+        {
+          "id": "C",
+          "text": "Neither the horizontal nor the vertical flipping of attention mask is required"
+        }
+      ],
+      "answer": {
+        "type": "text",
+        "value": "Neither horizontal nor vertical flipping is required."
+      },
+      "solutionMd": "**Answer:** Neither horizontal nor vertical flipping is required.\n\n### ✏️ Step-by-Step Solution\n\n**Step 1 — Recall what the causal mask does.**\n\nIn GPT (Causal Language Modelling), the model predicts the **next token** given all **previous tokens**. The causal mask prevents each position from attending to *future* positions:\n\n$`\\displaystyle M_{ij} = \\begin{cases} 0 & \\text{if } j \\leq i \\text{ (can attend)} \\\\ -\\infty & \\text{if } j > i \\text{ (cannot attend)} \\end{cases}`$\n\nThis is a **lower-triangular mask** — each token can only see itself and tokens to its *left* (earlier in the sequence).\n\n**Step 2 — Understand how RTL text is handled.**\n\nFor an RTL language, we simply **feed the tokens in their natural order** as the input sequence. For \"transformer movie the enjoyed I\":\n\n$`\\displaystyle \\text{Position 0: transformer}, \\quad \\text{Position 1: movie}, \\quad \\ldots, \\quad \\text{Position 4: I}`$\n\nThe model reads left to right through the *written* sequence, where \"earlier in the sequence\" corresponds to \"earlier in the RTL sentence\".\n\n**Step 3 — Does the mask need flipping?**\n\n- The mask's job is to enforce the **autoregressive property**: token at position $i$ can only condition on positions $0, 1, \\ldots, i-1$.\n- This is the same requirement whether the underlying language is LTR or RTL.\n- We do NOT need to flip the mask because we are **not changing the direction of token processing** — we simply treat the RTL text as a normal sequence.\n\n$`\\displaystyle \\boxed{\\text{Neither flipping is required.}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga3-q3",
+      "num": "Q3",
+      "title": "Correct Statements About GPT Pre-training vs Fine-tuning",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Choose the correct statements: (Select all that apply)",
+      "bodyMd": "**Choose the correct statements: (Select all that apply)**\n\n- ( ) All parameters of GPT are randomly initialized during **pre-training**\n- ( ) The model minimizes the CLM objective during **fine-tuning**\n- ( ) All parameters of GPT are randomly initialized during **fine-tuning**\n- ( ) In general, fine-tuning requires a dataset **with labels**",
+      "options": [
+        {
+          "id": "A",
+          "text": "All parameters of GPT are randomly initialized during **pre-training**"
+        },
+        {
+          "id": "B",
+          "text": "The model minimizes the CLM objective during **fine-tuning**"
+        },
+        {
+          "id": "C",
+          "text": "All parameters of GPT are randomly initialized during **fine-tuning**"
+        },
+        {
+          "id": "D",
+          "text": "In general, fine-tuning requires a dataset **with labels**"
+        }
+      ],
+      "answer": {
+        "type": "text",
+        "value": "Statements A and D."
+      },
+      "solutionMd": "**Answer:** Statements A and D.\n\n### ✏️ Step-by-Step Solution\n\n**Step 1 — Analyse each statement.**\n\n**Statement A: \"All parameters of GPT are randomly initialized during pre-training.\"**\n\n✅ **CORRECT.**\n\nDuring pre-training, the model starts with **random weights** and learns from a large unlabelled corpus. The training objective is CLM:\n\n$`\\displaystyle \\mathcal{L}_{\\text{CLM}} = -\\sum_{t} \\log P(x_t \\mid x_1, x_2, \\ldots, x_{t-1})`$\n\n**Statement B: \"The model minimizes the CLM objective during fine-tuning.\"**\n\n❌ **INCORRECT.**\n\nDuring fine-tuning, the objective changes to match the **downstream task** (e.g., cross-entropy for classification, NER loss, etc.). CLM is the *pre-training* objective, not the fine-tuning objective.\n\n**Statement C: \"All parameters of GPT are randomly initialized during fine-tuning.\"**\n\n❌ **INCORRECT.**\n\nDuring fine-tuning, we start from the **pre-trained weights** (not random). This is the entire point of transfer learning — we leverage the knowledge already captured during pre-training.\n\n$`\\displaystyle \\theta_{\\text{fine-tune, init}} = \\theta_{\\text{pre-trained}} \\quad (\\text{NOT random})`$\n\n**Statement D: \"In general, fine-tuning requires a dataset with labels.\"**\n\n✅ **CORRECT.**\n\nFine-tuning on a downstream task (sentiment analysis, NER, QA, etc.) typically requires **labelled examples** $(x_i, y_i)$ for supervised learning. This contrasts with pre-training which uses **unlabelled** text.\n\n$`\\displaystyle \\boxed{\\text{Correct: A and D}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga3-q4",
+      "num": "Q4",
+      "title": "Will Rare Word Embeddings Get Updated?",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Vocabulary: 10,000 words; 100 rare words appeared only once. Embedding layer and output layer parameters are shared. A batch of 256 samples contains NONE of the 100 rare words. After one training iteration:",
+      "bodyMd": "**Vocabulary: 10,000 words; 100 rare words appeared only once. Embedding layer and output layer parameters are shared. A batch of 256 samples contains NONE of the 100 rare words. After one training iteration:**\n\n- ( ) It is certain that embeddings of none of the 100 rare words will get updated\n- ( ) There is a chance that embeddings of all or some of these 100 rare words will get updated\n- ( ) The embeddings of all 100 rare words will definitely get updated",
+      "options": [
+        {
+          "id": "A",
+          "text": "It is certain that embeddings of none of the 100 rare words will get updated"
+        },
+        {
+          "id": "B",
+          "text": "There is a chance that embeddings of all or some of these 100 rare words will get updated"
+        },
+        {
+          "id": "C",
+          "text": "The embeddings of all 100 rare words will definitely get updated"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** There is a chance that all or some of the rare-word embeddings will be updated.\n\n### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand weight tying (shared embeddings).**\n\nWhen the **embedding layer** (input) and **output layer** are **weight-tied**, they share the same matrix $E \\in \\mathbb{R}^{|V| \\times d_{\\text{model}}}$:\n\n- The embedding layer uses $E$ to look up input token representations.\n- The output layer uses $E^{\\top}$ (or $E$) to produce logits for each vocabulary token.\n\n**Step 2 — Understand how gradients flow.**\n\nDuring the forward pass, the model computes:\n\n$`\\displaystyle \\text{logits} = h \\cdot E^{\\top} \\in \\mathbb{R}^{|V|}`$\n\nwhere $h$ is the hidden state. After softmax, the loss (CLM cross-entropy) is computed.\n\n**Step 3 — Analyse gradient flow to rare words.**\n\nThe gradient with respect to the embedding row of word $w$ comes from the **output layer** (since weights are shared):\n\n$`\\displaystyle \\frac{\\partial \\mathcal{L}}{\\partial E_w} = \\frac{\\partial \\mathcal{L}}{\\partial \\text{logit}_w} \\cdot h`$\n\nThis gradient is **non-zero for every word** in the vocabulary (including rare words), because:\n\n- The softmax denominator includes all vocabulary words.\n- Gradients flow through the softmax to all logits, including those for rare words.\n\n**Step 4 — Conclusion.**\n\nEven though the 100 rare words do not appear in the *input* sequences, their **embedding rows are referenced in the output projection** (weight tying). Therefore:\n\n- There is a **non-zero probability** that their gradients are non-zero.\n- However, it is **not guaranteed** — the gradient magnitude depends on the specific forward pass values.\n\n$`\\displaystyle \\boxed{\\text{There is a chance that all or some rare word embeddings will get updated.}}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga3-q5",
+      "num": "Q5",
+      "title": "Shape of the Positional Embedding",
+      "type": "single_choice",
+      "context": "**Rajesh's GPT-like model configuration:**\n\n| Parameter | Value |\n|---|:---:|\n| Vocabulary size | 1000 |\n| Sequence length | 64 |\n| Embedding dimension $d_{\\text{model}}$ | 128 |\n| Number of transformer blocks (layers) | 4 |\n| Number of attention heads per block | 4 |\n| FFN hidden layer size | 256 |\n\n---",
+      "questionText": "What is the shape of the positional embedding?",
+      "bodyMd": "**What is the shape of the positional embedding?**\n\n- ( ) $64 \\times 128$\n- ( ) $64 \\times 4$\n- ( ) $12 \\times 128$\n- ( ) $512 \\times 768$",
+      "options": [
+        {
+          "id": "A",
+          "text": "$64 \\times 128$"
+        },
+        {
+          "id": "B",
+          "text": "$64 \\times 4$"
+        },
+        {
+          "id": "C",
+          "text": "$12 \\times 128$"
+        },
+        {
+          "id": "D",
+          "text": "$512 \\times 768$"
+        }
+      ],
+      "answer": {
+        "type": "text",
+        "value": "$64 \\times 128$"
+      },
+      "solutionMd": "**Answer:** $64 \\times 128$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand what positional embedding is.**\n\nThe positional embedding is a matrix that assigns a unique vector to each possible position in the sequence. It has:\n\n- **Rows** = number of possible positions = sequence length $T$\n- **Columns** = embedding dimension = $d_{\\text{model}}$\n\n**Step 2 — Plug in values.**\n\n$`\\displaystyle \\text{Positional Embedding} \\in \\mathbb{R}^{T \\times d_{\\text{model}}} = \\mathbb{R}^{64 \\times 128}`$\n\n**Step 3 — Eliminate wrong options.**\n\n- $64 \\times 4$: uses number of heads instead of $d_{\\text{model}}$ — wrong.\n- $12 \\times 128$: 12 is a GPT-style config value (not this model's) — wrong.\n- $512 \\times 768$: these are GPT-2's dimensions — wrong.\n\n$`\\displaystyle \\boxed{64 \\times 128}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga3-q6",
+      "num": "Q6",
+      "title": "Shape of $W_Q^i$",
+      "type": "single_choice",
+      "context": "**Rajesh's GPT-like model configuration:**\n\n| Parameter | Value |\n|---|:---:|\n| Vocabulary size | 1000 |\n| Sequence length | 64 |\n| Embedding dimension $d_{\\text{model}}$ | 128 |\n| Number of transformer blocks (layers) | 4 |\n| Number of attention heads per block | 4 |\n| FFN hidden layer size | 256 |\n\n---",
+      "questionText": "What is the shape of the per-head query projection matrix $W_Q^i$?",
+      "bodyMd": "**What is the shape of the per-head query projection matrix $W_Q^i$?**\n\n- ( ) $32 \\times 32$\n- ( ) $64 \\times 32$\n- ( ) $128 \\times 16$\n- ( ) $128 \\times 32$\n- ( ) $8 \\times 32$\n- ( ) None of these",
+      "options": [
+        {
+          "id": "A",
+          "text": "$32 \\times 32$"
+        },
+        {
+          "id": "B",
+          "text": "$64 \\times 32$"
+        },
+        {
+          "id": "C",
+          "text": "$128 \\times 16$"
+        },
+        {
+          "id": "D",
+          "text": "$128 \\times 32$"
+        },
+        {
+          "id": "E",
+          "text": "$8 \\times 32$"
+        },
+        {
+          "id": "F",
+          "text": "None of these"
+        }
+      ],
+      "answer": {
+        "type": "text",
+        "value": "$128 \\times 32$"
+      },
+      "solutionMd": "**Answer:** $128 \\times 32$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Determine the head dimension $d_k$.**\n\nWith $n_h = 4$ heads and $d_{\\text{model}} = 128$, the standard practice is:\n\n$`\\displaystyle d_k = \\frac{d_{\\text{model}}}{n_h} = \\frac{128}{4} = 32`$\n\n**Step 2 — Determine the shape of $W_Q^i$.**\n\nThe query projection for head $i$ maps from the full model dimension to the head dimension:\n\n$`\\displaystyle W_Q^i \\in \\mathbb{R}^{d_{\\text{model}} \\times d_k} = \\mathbb{R}^{128 \\times 32}`$\n\n**Step 3 — Verify with usage.**\n\nFor an input $X \\in \\mathbb{R}^{T \\times d_{\\text{model}}} = \\mathbb{R}^{64 \\times 128}$:\n\n$`\\displaystyle Q^i = X W_Q^i \\in \\mathbb{R}^{64 \\times 32} \\quad \\checkmark`$\n\n$`\\displaystyle \\boxed{128 \\times 32}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga3-q7",
+      "num": "Q7",
+      "title": "Shape of the Causal Attention Mask $M$",
+      "type": "single_choice",
+      "context": "**Rajesh's GPT-like model configuration:**\n\n| Parameter | Value |\n|---|:---:|\n| Vocabulary size | 1000 |\n| Sequence length | 64 |\n| Embedding dimension $d_{\\text{model}}$ | 128 |\n| Number of transformer blocks (layers) | 4 |\n| Number of attention heads per block | 4 |\n| FFN hidden layer size | 256 |\n\n---",
+      "questionText": "What is the shape of the mask $M$?",
+      "bodyMd": "**What is the shape of the mask $M$?**\n\n- ( ) $16 \\times 16$\n- ( ) $32 \\times 32$\n- ( ) $64 \\times 64$\n- ( ) $128 \\times 128$\n- ( ) None of these",
+      "options": [
+        {
+          "id": "A",
+          "text": "$16 \\times 16$"
+        },
+        {
+          "id": "B",
+          "text": "$32 \\times 32$"
+        },
+        {
+          "id": "C",
+          "text": "$64 \\times 64$"
+        },
+        {
+          "id": "D",
+          "text": "$128 \\times 128$"
+        },
+        {
+          "id": "E",
+          "text": "None of these"
+        }
+      ],
+      "answer": {
+        "type": "text",
+        "value": "$64 \\times 64$"
+      },
+      "solutionMd": "**Answer:** $64 \\times 64$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand what the attention mask is.**\n\nThe attention mask $M$ is used to implement causal (autoregressive) attention. It is applied to the attention score matrix before softmax:\n\n$`\\displaystyle \\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^{\\top}}{\\sqrt{d_k}} + M\\right) V`$\n\n**Step 2 — Determine the dimensions of $QK^{\\top}$.**\n\nFor one head: $Q \\in \\mathbb{R}^{T \\times d_k}$, $K \\in \\mathbb{R}^{T \\times d_k}$\n\n$`\\displaystyle QK^{\\top} \\in \\mathbb{R}^{T \\times T}`$\n\n**Step 3 — The mask must match this shape.**\n\n$`\\displaystyle M \\in \\mathbb{R}^{T \\times T} = \\mathbb{R}^{64 \\times 64}`$\n\nThe mask is lower triangular: $0$ marks an allowed position and $-\\infty$ marks a future position that is masked before softmax.\n\n| Row $i$ / column $j$ | 0 | 1 | 2 | $\\cdots$ | $T-1$ |\n|:---:|---:|---:|---:|:---:|---:|\n| 0 | 0 | $-\\infty$ | $-\\infty$ | $\\cdots$ | $-\\infty$ |\n| 1 | 0 | 0 | $-\\infty$ | $\\cdots$ | $-\\infty$ |\n| $\\vdots$ | $\\vdots$ | $\\vdots$ | $\\ddots$ | $\\ddots$ | $\\vdots$ |\n| $T-1$ | 0 | 0 | 0 | $\\cdots$ | 0 |\n\n$`\\displaystyle \\boxed{64 \\times 64}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga3-q8",
+      "num": "Q8",
+      "title": "Identifying Degenerative Text Generation Models",
+      "type": "single_choice",
+      "context": "**Rajesh's GPT-like model configuration:**\n\n| Parameter | Value |\n|---|:---:|\n| Vocabulary size | 1000 |\n| Sequence length | 64 |\n| Embedding dimension $d_{\\text{model}}$ | 128 |\n| Number of transformer blocks (layers) | 4 |\n| Number of attention heads per block | 4 |\n| FFN hidden layer size | 256 |\n\n---",
+      "questionText": "The following GPT-based models generated text with the prompt \"I like\":",
+      "bodyMd": "**The following GPT-based models generated text with the prompt \"I like\":**\n\n| Model | Generated Output |\n|---|---|\n| $M_1$ | I like to **to** like. |\n| $M_2$ | I like **like like**. |\n| $M_3$ | I like **the do because**. |\n| $M_4$ | I like to study the origin of the universe. |\n\n**Select the degenerative model(s):**\n\n- [ ] $M_1$\n- [ ] $M_2$\n- [ ] $M_3$\n- [ ] $M_4$",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "$M_1$, $M_2$, and $M_3$"
+      },
+      "solutionMd": "**Answer:** $M_1$, $M_2$, and $M_3$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Define degenerative text generation.**\n\nA language model is called **degenerative** when it produces text that is:\n\n- **Repetitive**: the same token or phrase appears over and over\n- **Incoherent**: grammatically broken or semantically nonsensical\n- **Stuck in loops**: the model keeps generating the same token\n\nDegenerative behaviour is a known failure mode of greedy/beam search decoding in LLMs.\n\n**Step 2 — Evaluate each model.**\n\n**$M_1$: \"I like to **to** like.\"**\n\n- The word \"to\" is repeated immediately → **repetitive loop**\n- ✅ **Degenerative**\n\n**$M_2$: \"I like **like like**.\"**\n\n- \"like\" is repeated 2 more times in a row → **severe repetition**\n- ✅ **Degenerative**\n\n**$M_3$: \"I like **the do because**.\"**\n\n- Grammatically incoherent — \"the do because\" makes no sense\n- ✅ **Degenerative** (incoherent, not a valid sentence continuation)\n\n**$M_4$: \"I like to study the origin of the universe.\"**\n\n- Grammatically correct ✓\n- Semantically meaningful ✓\n- No repetition ✓\n- ❌ **NOT degenerative**\n\n$`\\displaystyle \\boxed{M_1,\\ M_2,\\ M_3 \\text{ are degenerative}}`$\n\n> **Why does degeneration happen?** Under greedy or beam search, the model can assign high probability to repeating seen tokens because the training distribution is biased towards common patterns. Methods like **Top-k sampling**, **nucleus (top-p) sampling**, and **repetition penalties** are used to mitigate this.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

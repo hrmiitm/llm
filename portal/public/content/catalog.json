@@ -1,0 +1,146 @@
+[
+  {
+    "id": "ga1",
+    "week": 1,
+    "title": "Week 1 — Graded Assignment 1",
+    "topics": [
+      "Context Length",
+      "Embedding Tensors",
+      "Self-Attention",
+      "Attention Matrix"
+    ],
+    "score": 100,
+    "maxScore": 100,
+    "submittedDate": "Sun, 21 Jun 2026",
+    "questionCount": 8,
+    "durationMinutes": 30
+  },
+  {
+    "id": "ga2",
+    "week": 2,
+    "title": "Week 2 — Graded Assignment 2",
+    "topics": [
+      "Multi-Head Attention",
+      "Parameter Counting",
+      "Projection Matrices",
+      "Cross-Attention"
+    ],
+    "score": 100,
+    "maxScore": 100,
+    "submittedDate": "Sun, 28 Jun 2026",
+    "questionCount": 7,
+    "durationMinutes": 30
+  },
+  {
+    "id": "ga3",
+    "week": 3,
+    "title": "Week 3 — Graded Assignment 3",
+    "topics": [
+      "GPT Architecture",
+      "Causal LM",
+      "Decoding Strategies",
+      "Positional Encoding"
+    ],
+    "score": 100,
+    "maxScore": 100,
+    "submittedDate": "Sun, 05 Jul 2026",
+    "questionCount": 8,
+    "durationMinutes": 30
+  },
+  {
+    "id": "ga4",
+    "week": 4,
+    "title": "Week 4 — Graded Assignment 4",
+    "topics": [
+      "BERT Architecture",
+      "MLM",
+      "NSP",
+      "Bidirectional Encoder"
+    ],
+    "score": 100,
+    "maxScore": 100,
+    "submittedDate": "Sun, 12 Jul 2026",
+    "questionCount": 6,
+    "durationMinutes": 30
+  },
+  {
+    "id": "ga5",
+    "week": 5,
+    "title": "Week 5 — Graded Assignment 5",
+    "topics": [
+      "Vocabulary Construction",
+      "BPE",
+      "WordPiece",
+      "Tokenization"
+    ],
+    "score": 100,
+    "maxScore": 100,
+    "submittedDate": "Sun, 19 Jul 2026",
+    "questionCount": 12,
+    "durationMinutes": 36
+  },
+  {
+    "id": "ga7",
+    "week": 7,
+    "title": "Week 7 — Graded Assignment 7",
+    "topics": [
+      "BART",
+      "T5",
+      "Span Corruption",
+      "Sentinel Tokens"
+    ],
+    "score": 100,
+    "maxScore": 100,
+    "submittedDate": "Sun, 02 Aug 2026",
+    "questionCount": 7,
+    "durationMinutes": 30
+  },
+  {
+    "id": "ga8",
+    "week": 8,
+    "title": "Week 8 — Graded Assignment 8",
+    "topics": [
+      "LLM Taxonomy",
+      "Pre-training Data",
+      "Kaplan Scaling Law",
+      "Dataset Sizing"
+    ],
+    "score": 100,
+    "maxScore": 100,
+    "submittedDate": "Sun, 02 Aug 2026",
+    "questionCount": 10,
+    "durationMinutes": 30
+  },
+  {
+    "id": "ga11",
+    "week": 11,
+    "title": "Week 11 — Graded Assignment 11",
+    "topics": [
+      "Attention Complexity",
+      "FLOP Counting",
+      "KV Caching",
+      "Local Window Attention"
+    ],
+    "score": 88,
+    "maxScore": 100,
+    "submittedDate": "Sun, 30 Aug 2026",
+    "questionCount": 8,
+    "durationMinutes": 30
+  },
+  {
+    "id": "ga12",
+    "week": 12,
+    "title": "Week 12 — Graded Assignment 12",
+    "topics": [
+      "Positional Encodings",
+      "RoPE",
+      "ALiBi",
+      "Length Extrapolation"
+    ],
+    "score": 100,
+    "maxScore": 100,
+    "submittedDate": "Sun, 30 Aug 2026",
+    "questionCount": 6,
+    "durationMinutes": 30
+  }
+]

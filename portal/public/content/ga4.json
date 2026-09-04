@@ -1,0 +1,152 @@
+{
+  "id": "ga4",
+  "week": 4,
+  "title": "Week 4 — Graded Assignment 4",
+  "topics": [
+    "BERT Architecture",
+    "MLM",
+    "NSP",
+    "Bidirectional Encoder"
+  ],
+  "notesFile": "week3-week4-learning-notes.md",
+  "score": 100,
+  "maxScore": 100,
+  "submittedDate": "Sun, 12 Jul 2026",
+  "questionCount": 6,
+  "durationMinutes": 30,
+  "questions": [
+    {
+      "id": "ga4-q1",
+      "num": "Q1",
+      "title": "$P(y_1 = \\text{Astronomy} \\mid y_0 = \\text{[Start]})$",
+      "type": "numeric",
+      "context": "Use this vocabulary index throughout Questions 1–6:\n\n| Index | Token |\n|:---:|---|\n| 0 | [start] |\n| 1 | building |\n| 2 | character |\n| 3 | a |\n| 4 | is |\n| 5 | astronomy |\n| 6 | science |\n| 7 | experience |\n| 8 | natural |\n| 9 | [end] |\n\nA pre-trained GPT model for text generation always takes **[start]** as the first input token.\n\nThe prediction table $\\hat{Y}$ is below. Each row $r$ gives the distribution over the vocabulary **given the greedy-decoded tokens up to row $r-1$** as context. Use the vocabulary index as the column key.\n\n| Row / index | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n| 0 | 0.05 | 0.02 | 0.14 | 0.07 | 0.09 | 0.41 | 0.08 | 0.05 | 0.08 | 0.01 |\n| 1 | 0.10 | 0.04 | 0.06 | 0.16 | 0.43 | 0.01 | 0.06 | 0.09 | 0.01 | 0.04 |\n| 2 | 0.05 | 0.07 | 0.28 | 0.29 | 0.03 | 0.08 | 0.04 | 0.08 | 0.04 | 0.04 |\n| 3 | 0.10 | 0.02 | 0.48 | 0.02 | 0.01 | 0.07 | 0.06 | 0.14 | 0.07 | 0.01 |\n| 4 | 0.08 | 0.29 | 0.04 | 0.01 | 0.04 | 0.03 | 0.25 | 0.05 | 0.15 | 0.06 |\n| 5 | 0.14 | 0.22 | 0.13 | 0.08 | 0.01 | 0.03 | 0.06 | 0.23 | 0.08 | 0.03 |\n\n**Greedy Search** is used as the decoding strategy (unless stated otherwise). If information is insufficient for any sub-question, enter **−1**.\n\n---",
+      "questionText": "What is the probability of predicting \"Astronomy\" given \"[Start]\" as the initial input?",
+      "bodyMd": "**What is the probability of predicting \"Astronomy\" given \"[Start]\" as the initial input?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.41"
+      },
+      "solutionMd": "**Answer:** $\\boxed{0.41}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand the matrix structure.**\n\nRow 0 of $\\hat{Y}$ gives $P(y_1 \\mid y_0 = \\text{[Start]})$ — the probability of each vocabulary token as the **first predicted word**.\n\n**Step 2 — Locate \"astronomy\" in the vocabulary.**\n\nFrom the vocabulary index: **astronomy = index 5**.\n\n**Step 3 — Read the probability from Row 0.**\n\n$`\\displaystyle P(y_1 = \\text{astronomy} \\mid y_0 = \\text{[Start]}) = \\hat{Y}[0][5] = \\boxed{0.41}`$\n\n**Step 4 — Verify with Greedy Search.**\n\nUnder greedy search, the token with the highest probability is selected:\n\n$`\\displaystyle \\arg\\max_w \\hat{Y}[0][w] = \\arg\\max(0.05, 0.02, 0.14, 0.07, 0.09, \\mathbf{0.41}, 0.08, 0.05, 0.08, 0.01) = \\text{astronomy}`$\n\n\"Astronomy\" is indeed the greedily chosen first token.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga4-q2",
+      "num": "Q2",
+      "title": "Probability of the Sequence \"Astronomy is a character building experience\"",
+      "type": "numeric",
+      "context": "Use this vocabulary index throughout Questions 1–6:\n\n| Index | Token |\n|:---:|---|\n| 0 | [start] |\n| 1 | building |\n| 2 | character |\n| 3 | a |\n| 4 | is |\n| 5 | astronomy |\n| 6 | science |\n| 7 | experience |\n| 8 | natural |\n| 9 | [end] |\n\nA pre-trained GPT model for text generation always takes **[start]** as the first input token.\n\nThe prediction table $\\hat{Y}$ is below. Each row $r$ gives the distribution over the vocabulary **given the greedy-decoded tokens up to row $r-1$** as context. Use the vocabulary index as the column key.\n\n| Row / index | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n| 0 | 0.05 | 0.02 | 0.14 | 0.07 | 0.09 | 0.41 | 0.08 | 0.05 | 0.08 | 0.01 |\n| 1 | 0.10 | 0.04 | 0.06 | 0.16 | 0.43 | 0.01 | 0.06 | 0.09 | 0.01 | 0.04 |\n| 2 | 0.05 | 0.07 | 0.28 | 0.29 | 0.03 | 0.08 | 0.04 | 0.08 | 0.04 | 0.04 |\n| 3 | 0.10 | 0.02 | 0.48 | 0.02 | 0.01 | 0.07 | 0.06 | 0.14 | 0.07 | 0.01 |\n| 4 | 0.08 | 0.29 | 0.04 | 0.01 | 0.04 | 0.03 | 0.25 | 0.05 | 0.15 | 0.06 |\n| 5 | 0.14 | 0.22 | 0.13 | 0.08 | 0.01 | 0.03 | 0.06 | 0.23 | 0.08 | 0.03 |\n\n**Greedy Search** is used as the decoding strategy (unless stated otherwise). If information is insufficient for any sub-question, enter **−1**.\n\n---",
+      "questionText": "What is the probability of the sequence \"Astronomy is a character building experience\"?",
+      "bodyMd": "**What is the probability of the sequence \"Astronomy is a character building experience\"?**\n\n*(Numeric input — enter correct up to 4 decimal places; accepted range: 0.001 to 0.002)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.0016"
+      },
+      "solutionMd": "**Answer:** $\\boxed{0.0016}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Understand conditional probability of a sequence.**\n\nThe probability of a sequence under the greedy-decoded conditional distribution is:\n\n$`\\displaystyle P(\\text{sequence}) = \\prod_{t=1}^{T} P(y_t \\mid y_0, y_1, \\ldots, y_{t-1})`$\n\nEach factor is read from the corresponding row of $\\hat{Y}$.\n\n**Step 2 — Trace the Greedy Search path.**\n\nUnder greedy search, each row gives the distribution conditioned on the *greedily chosen* previous tokens:\n\n| Row | Context (greedy so far) | Greedy choice | Next word to predict |\n|:---:|---|---|---|\n| Row 0 | [Start] | astronomy (0.41) | → Row 1 |\n| Row 1 | [Start], astronomy | is (0.43) | → Row 2 |\n| Row 2 | [Start], astronomy, is | a (0.29) | → Row 3 |\n| Row 3 | [Start], astronomy, is, a | character (0.48) | → Row 4 |\n| Row 4 | [Start], astronomy, is, a, character | building (0.29) | → Row 5 |\n| Row 5 | [Start], astronomy, is, a, character, building | experience (0.23) | END |\n\n**Step 3 — Read each probability.**\n\n| Step | Token | Vocabulary Index | Probability |\n|:---:|---|:---:|---|\n| $y_1$ | astronomy | 5 | $\\hat{Y}[0][5] = 0.41$ |\n| $y_2$ | is | 4 | $\\hat{Y}[1][4] = 0.43$ |\n| $y_3$ | a | 3 | $\\hat{Y}[2][3] = 0.29$ |\n| $y_4$ | character | 2 | $\\hat{Y}[3][2] = 0.48$ |\n| $y_5$ | building | 1 | $\\hat{Y}[4][1] = 0.29$ |\n| $y_6$ | experience | 7 | $\\hat{Y}[5][7] = 0.23$ |\n\n**Step 4 — Compute the product.**\n\n$`\\displaystyle P = 0.41 \\times 0.43 \\times 0.29 \\times 0.48 \\times 0.29 \\times 0.23`$\n\n$`\\displaystyle = 0.1763 \\times 0.29 \\times 0.48 \\times 0.29 \\times 0.23`$\n\n$`\\displaystyle = 0.051127 \\times 0.48 \\times 0.29 \\times 0.23`$\n\n$`\\displaystyle = 0.024541 \\times 0.29 \\times 0.23`$\n\n$`\\displaystyle = 0.0071169 \\times 0.23 = \\boxed{0.0016}`$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga4-q3",
+      "num": "Q3",
+      "title": "Probability of \"Astronomy is a natural science\"",
+      "type": "numeric",
+      "context": "Use this vocabulary index throughout Questions 1–6:\n\n| Index | Token |\n|:---:|---|\n| 0 | [start] |\n| 1 | building |\n| 2 | character |\n| 3 | a |\n| 4 | is |\n| 5 | astronomy |\n| 6 | science |\n| 7 | experience |\n| 8 | natural |\n| 9 | [end] |\n\nA pre-trained GPT model for text generation always takes **[start]** as the first input token.\n\nThe prediction table $\\hat{Y}$ is below. Each row $r$ gives the distribution over the vocabulary **given the greedy-decoded tokens up to row $r-1$** as context. Use the vocabulary index as the column key.\n\n| Row / index | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n| 0 | 0.05 | 0.02 | 0.14 | 0.07 | 0.09 | 0.41 | 0.08 | 0.05 | 0.08 | 0.01 |\n| 1 | 0.10 | 0.04 | 0.06 | 0.16 | 0.43 | 0.01 | 0.06 | 0.09 | 0.01 | 0.04 |\n| 2 | 0.05 | 0.07 | 0.28 | 0.29 | 0.03 | 0.08 | 0.04 | 0.08 | 0.04 | 0.04 |\n| 3 | 0.10 | 0.02 | 0.48 | 0.02 | 0.01 | 0.07 | 0.06 | 0.14 | 0.07 | 0.01 |\n| 4 | 0.08 | 0.29 | 0.04 | 0.01 | 0.04 | 0.03 | 0.25 | 0.05 | 0.15 | 0.06 |\n| 5 | 0.14 | 0.22 | 0.13 | 0.08 | 0.01 | 0.03 | 0.06 | 0.23 | 0.08 | 0.03 |\n\n**Greedy Search** is used as the decoding strategy (unless stated otherwise). If information is insufficient for any sub-question, enter **−1**.\n\n---",
+      "questionText": "What is the probability of the sequence \"Astronomy is a natural science\"?",
+      "bodyMd": "**What is the probability of the sequence \"Astronomy is a natural science\"?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0"
+      },
+      "solutionMd": "**Answer:** $\\boxed{0}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Recall how rows of $\\hat{Y}$ are conditioned.**\n\nEach row is conditioned on the **greedily decoded** sequence of previous tokens. This means:\n\n- Row 2 is conditioned on [Start] → **astronomy** → **is** (because greedy picks astronomy first, then is).\n- Row 3 is conditioned on [Start] → astronomy → is → **a** (greedy picks a from Row 2).\n\n**Step 2 — Check if the sequence is consistent with greedy decoding.**\n\nThe sequence \"Astronomy is a **natural** science\" requires:\n\n- $y_1 = \\text{astronomy}$: $\\hat{Y}[0][5] = 0.41$ ✓ (greedy picks this)\n- $y_2 = \\text{is}$: $\\hat{Y}[1][4] = 0.43$ ✓ (greedy picks this)\n- $y_3 = \\text{a}$: $\\hat{Y}[2][3] = 0.29$ ✓ (greedy picks this)\n- $y_4 = \\text{natural}$: requires $\\hat{Y}[3][8]$ — but **greedy picks \"character\" (0.48)**, not \"natural\" (0.07)\n\n**Step 3 — Since the path diverges from greedy, the probability is 0.**\n\nRow 4 of $\\hat{Y}$ is **only valid if Row 3's greedy choice was made** (i.e., \"character\" was generated). Since the sequence asks for \"natural\" at position 4, it falls **outside the greedy decoding path**. $\\hat{Y}$ does not provide a distribution conditioned on a non-greedy path.\n\n$`\\displaystyle P(\\text{\"Astronomy is a natural science\"}) = \\boxed{0}`$\n\n> **Key insight:** The rows of $\\hat{Y}$ represent *conditional* distributions only along the greedy path. Any deviation makes the sequence impossible (probability 0) within this matrix's conditioning.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga4-q4",
+      "num": "Q4",
+      "title": "$P(y_1 = \\text{Astronomy} \\mid y_0 = \\text{[Start]})$ with Top-k Sampling ($k = 3$)",
+      "type": "numeric",
+      "context": "Use this vocabulary index throughout Questions 1–6:\n\n| Index | Token |\n|:---:|---|\n| 0 | [start] |\n| 1 | building |\n| 2 | character |\n| 3 | a |\n| 4 | is |\n| 5 | astronomy |\n| 6 | science |\n| 7 | experience |\n| 8 | natural |\n| 9 | [end] |\n\nA pre-trained GPT model for text generation always takes **[start]** as the first input token.\n\nThe prediction table $\\hat{Y}$ is below. Each row $r$ gives the distribution over the vocabulary **given the greedy-decoded tokens up to row $r-1$** as context. Use the vocabulary index as the column key.\n\n| Row / index | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n| 0 | 0.05 | 0.02 | 0.14 | 0.07 | 0.09 | 0.41 | 0.08 | 0.05 | 0.08 | 0.01 |\n| 1 | 0.10 | 0.04 | 0.06 | 0.16 | 0.43 | 0.01 | 0.06 | 0.09 | 0.01 | 0.04 |\n| 2 | 0.05 | 0.07 | 0.28 | 0.29 | 0.03 | 0.08 | 0.04 | 0.08 | 0.04 | 0.04 |\n| 3 | 0.10 | 0.02 | 0.48 | 0.02 | 0.01 | 0.07 | 0.06 | 0.14 | 0.07 | 0.01 |\n| 4 | 0.08 | 0.29 | 0.04 | 0.01 | 0.04 | 0.03 | 0.25 | 0.05 | 0.15 | 0.06 |\n| 5 | 0.14 | 0.22 | 0.13 | 0.08 | 0.01 | 0.03 | 0.06 | 0.23 | 0.08 | 0.03 |\n\n**Greedy Search** is used as the decoding strategy (unless stated otherwise). If information is insufficient for any sub-question, enter **−1**.\n\n---",
+      "questionText": "Using Top-k sampling with $k = 3$, what is the probability of predicting \"Astronomy\" as the first token?",
+      "bodyMd": "**Using Top-k sampling with $k = 3$, what is the probability of predicting \"Astronomy\" as the first token?**\n\n*(Numeric input — accepted range: 0.63 to 0.65)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.64"
+      },
+      "solutionMd": "**Answer:** $\\boxed{0.64}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Recall how Top-k sampling works.**\n\nIn **Top-k sampling**, the model:\n\n1. Takes the top-k tokens by probability.\n2. **Re-normalizes** the probabilities so they sum to 1.\n3. Samples from this truncated distribution.\n\nThis avoids the \"always greedy\" problem and prevents extremely unlikely tokens from being selected.\n\n**Step 2 — Find the top-3 tokens from Row 0.**\n\nRow 0 probabilities:\n\n| Token | Index | Probability |\n|---|:---:|---|\n| astronomy | 5 | **0.41** ← 1st |\n| character | 2 | **0.14** ← 2nd |\n| is | 4 | **0.09** ← 3rd |\n| a | 3 | 0.07 |\n| science | 6 | 0.08 |\n| natural | 8 | 0.08 |\n| [start] | 0 | 0.05 |\n| experience | 7 | 0.05 |\n| building | 1 | 0.02 |\n| [end] | 9 | 0.01 |\n\nTop-3: **astronomy (0.41), character (0.14), is (0.09)**.\n\n**Step 3 — Compute the re-normalization constant.**\n\n$`\\displaystyle Z = 0.41 + 0.14 + 0.09 = 0.64`$\n\n**Step 4 — Compute the re-normalized probability for \"astronomy\".**\n\n$`\\displaystyle P_{\\text{top-3}}(y_1 = \\text{astronomy}) = \\frac{0.41}{Z} = \\frac{0.41}{0.64} = 0.640625 \\approx \\boxed{0.64}`$\n\n> **Interpretation:** Top-k sampling *boosts* the probability of \"astronomy\" from 0.41 to 0.64 (relative to the shortlisted candidates), because we have removed the probability mass from the 7 lower-ranked tokens.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga4-q5",
+      "num": "Q5",
+      "title": "BERT Masked Language Modelling Loss",
+      "type": "numeric",
+      "context": "Use this vocabulary index throughout Questions 1–6:\n\n| Index | Token |\n|:---:|---|\n| 0 | [start] |\n| 1 | building |\n| 2 | character |\n| 3 | a |\n| 4 | is |\n| 5 | astronomy |\n| 6 | science |\n| 7 | experience |\n| 8 | natural |\n| 9 | [end] |\n\nA pre-trained GPT model for text generation always takes **[start]** as the first input token.\n\nThe prediction table $\\hat{Y}$ is below. Each row $r$ gives the distribution over the vocabulary **given the greedy-decoded tokens up to row $r-1$** as context. Use the vocabulary index as the column key.\n\n| Row / index | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n| 0 | 0.05 | 0.02 | 0.14 | 0.07 | 0.09 | 0.41 | 0.08 | 0.05 | 0.08 | 0.01 |\n| 1 | 0.10 | 0.04 | 0.06 | 0.16 | 0.43 | 0.01 | 0.06 | 0.09 | 0.01 | 0.04 |\n| 2 | 0.05 | 0.07 | 0.28 | 0.29 | 0.03 | 0.08 | 0.04 | 0.08 | 0.04 | 0.04 |\n| 3 | 0.10 | 0.02 | 0.48 | 0.02 | 0.01 | 0.07 | 0.06 | 0.14 | 0.07 | 0.01 |\n| 4 | 0.08 | 0.29 | 0.04 | 0.01 | 0.04 | 0.03 | 0.25 | 0.05 | 0.15 | 0.06 |\n| 5 | 0.14 | 0.22 | 0.13 | 0.08 | 0.01 | 0.03 | 0.06 | 0.23 | 0.08 | 0.03 |\n\n**Greedy Search** is used as the decoding strategy (unless stated otherwise). If information is insufficient for any sub-question, enter **−1**.\n\n---",
+      "questionText": "Now consider BERT with the same vocabulary.** Here, index 0 is **[CLS]** and index 9 is **[SEP]**; indexes 1–8 keep the meanings in the vocabulary table above.",
+      "bodyMd": "**Now consider BERT with the same vocabulary.** Here, index 0 is **[CLS]** and index 9 is **[SEP]**; indexes 1–8 keep the meanings in the vocabulary table above.\n\nInput: **\"Astronomy is a [Mask] building [Mask]\"** (replaced \"character\" and \"experience\" with [Mask])\n\nThe BERT prediction table $\\hat{Y}_{\\text{BERT}}$ for this input is:\n\n| Row / index | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n| 0 | 0.05 | 0.02 | 0.41 | 0.07 | 0.09 | 0.14 | 0.08 | 0.05 | 0.08 | 0.01 |\n| 1 | 0.10 | 0.04 | 0.06 | 0.16 | 0.04 | 0.01 | 0.06 | 0.09 | 0.01 | 0.43 |\n| 2 | 0.05 | 0.07 | 0.28 | 0.03 | 0.29 | 0.08 | 0.04 | 0.08 | 0.04 | 0.04 |\n| 3 | 0.10 | 0.02 | 0.14 | 0.02 | 0.01 | 0.07 | 0.06 | 0.48 | 0.07 | 0.01 |\n| 4 | 0.08 | 0.29 | 0.04 | 0.01 | 0.04 | 0.03 | 0.25 | 0.05 | 0.15 | 0.06 |\n| 5 | 0.14 | 0.13 | 0.22 | 0.08 | 0.01 | 0.03 | 0.06 | 0.23 | 0.08 | 0.03 |\n\n**What is the total MLM loss for this input? Use natural logarithm.**\n\n*(Numeric input — accepted range: 3.3 to 3.5)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "3.44"
+      },
+      "solutionMd": "**Answer:** $\\boxed{3.44}$\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Recall how BERT's MLM loss works.**\n\nIn Masked Language Modelling (MLM), **only the masked positions** contribute to the loss:\n\n$`\\displaystyle \\mathcal{L}_{\\text{MLM}} = -\\sum_{m \\in \\text{masked positions}} \\log P(\\text{true token}_m \\mid \\text{masked input})`$\n\n**Step 2 — Map the input sequence to positions.**\n\nInput: \"Astronomy is a [Mask] building [Mask]\"\n\n| Position | Token | Masked? | True Label (if masked) | Vocab Index |\n|:---:|---|:---:|---|:---:|\n| 0 | Astronomy | No | — | 5 |\n| 1 | is | No | — | 4 |\n| 2 | a | No | — | 3 |\n| 3 | **[Mask]** | **Yes** | **character** | **2** |\n| 4 | building | No | — | 1 |\n| 5 | **[Mask]** | **Yes** | **experience** | **7** |\n\n**Step 3 — Read the predicted probabilities at masked positions.**\n\n**For position 3 (true label = character, index 2):**\n\n$`\\displaystyle \\hat{p}_3 = \\hat{Y}_{\\text{BERT}}[3][2] = 0.14`$\n\n**For position 5 (true label = experience, index 7):**\n\n$`\\displaystyle \\hat{p}_5 = \\hat{Y}_{\\text{BERT}}[5][7] = 0.23`$\n\n**Step 4 — Compute the cross-entropy loss for each masked token.**\n\n$`\\displaystyle \\mathcal{L}_3 = -\\ln(0.14) = -(-1.9661) = 1.9661`$\n\n$`\\displaystyle \\mathcal{L}_5 = -\\ln(0.23) = -(-1.4697) = 1.4697`$\n\n**Step 5 — Sum to get total loss.**\n\n$`\\displaystyle \\mathcal{L}_{\\text{MLM}} = \\mathcal{L}_3 + \\mathcal{L}_5 = 1.9661 + 1.4697 = \\boxed{3.4358 \\approx 3.44}`$\n\n> **Why only masked positions?** BERT's design principle is that loss is only computed at masked positions. This is intentional — if loss were computed everywhere, the model could simply copy the unmasked input tokens (which are visible), defeating the purpose of learning contextual representations.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "ga4-q6",
+      "num": "Q6",
+      "title": "Using Pre-trained BERT for Sentiment Classification",
+      "type": "single_choice",
+      "context": "Use this vocabulary index throughout Questions 1–6:\n\n| Index | Token |\n|:---:|---|\n| 0 | [start] |\n| 1 | building |\n| 2 | character |\n| 3 | a |\n| 4 | is |\n| 5 | astronomy |\n| 6 | science |\n| 7 | experience |\n| 8 | natural |\n| 9 | [end] |\n\nA pre-trained GPT model for text generation always takes **[start]** as the first input token.\n\nThe prediction table $\\hat{Y}$ is below. Each row $r$ gives the distribution over the vocabulary **given the greedy-decoded tokens up to row $r-1$** as context. Use the vocabulary index as the column key.\n\n| Row / index | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n| 0 | 0.05 | 0.02 | 0.14 | 0.07 | 0.09 | 0.41 | 0.08 | 0.05 | 0.08 | 0.01 |\n| 1 | 0.10 | 0.04 | 0.06 | 0.16 | 0.43 | 0.01 | 0.06 | 0.09 | 0.01 | 0.04 |\n| 2 | 0.05 | 0.07 | 0.28 | 0.29 | 0.03 | 0.08 | 0.04 | 0.08 | 0.04 | 0.04 |\n| 3 | 0.10 | 0.02 | 0.48 | 0.02 | 0.01 | 0.07 | 0.06 | 0.14 | 0.07 | 0.01 |\n| 4 | 0.08 | 0.29 | 0.04 | 0.01 | 0.04 | 0.03 | 0.25 | 0.05 | 0.15 | 0.06 |\n| 5 | 0.14 | 0.22 | 0.13 | 0.08 | 0.01 | 0.03 | 0.06 | 0.23 | 0.08 | 0.03 |\n\n**Greedy Search** is used as the decoding strategy (unless stated otherwise). If information is insufficient for any sub-question, enter **−1**.\n\n---",
+      "questionText": "We use pre-trained BERT for sentiment classification via feature extraction. Which statement is True?",
+      "bodyMd": "**We use pre-trained BERT for sentiment classification via feature extraction. Which statement is True?**\n\n- ( ) We can only take the representation of the [CLS] token as input to the classifier\n- ( ) We can also use the representation of the [SEP] token as input to the classifier\n- ( ) We can take the representation of any word in the input sequence as input to the classifier",
+      "options": [
+        {
+          "id": "A",
+          "text": "We can only take the representation of the [CLS] token as input to the classifier"
+        },
+        {
+          "id": "B",
+          "text": "We can also use the representation of the [SEP] token as input to the classifier"
+        },
+        {
+          "id": "C",
+          "text": "We can take the representation of any word in the input sequence as input to the classifier"
+        }
+      ],
+      "answer": {
+        "type": "text",
+        "value": "Use the final hidden representation of the [CLS] token as the classifier input."
+      },
+      "solutionMd": "**Answer:** Use the final hidden representation of the [CLS] token as the classifier input.\n\n#### ✏️ Step-by-Step Solution\n\n**Step 1 — Recall the special role of [CLS] in BERT.**\n\nBERT was specifically designed with the **[CLS] token** (Classification token) prepended to every input sequence:\n\n$`\\displaystyle \\text{Input: } [\\text{CLS}],\\ w_1,\\ w_2,\\ \\ldots,\\ w_n,\\ [\\text{SEP}]`$\n\nDuring **pre-training with NSP (Next Sentence Prediction)**, the final hidden state of [CLS] was used to classify whether two sentences are consecutive or not. This means BERT's [CLS] representation is trained to encode a **sentence-level summary**.\n\n**Step 2 — Evaluate each option.**\n\n**Option A: \"We can only take the representation of [CLS] as input to the classifier.\"**\n\n✅ **CORRECT** (within the context of the question).\n\nBy design and convention, [CLS] aggregates the bidirectional context of the entire sequence and its representation is used as input to downstream classifiers in the original BERT paper.\n\n**Option B: \"We can also use the representation of [SEP] token.\"**\n\n❌ **INCORRECT.**\n\n[SEP] is a separator token — it does not have a meaningful semantic representation. It is not used for classification in standard BERT usage.\n\n**Option C: \"We can take the representation of any word.\"**\n\n❌ **INCORRECT** (in the standard BERT feature-extraction setting for sentence classification).\n\nWhile technically you *could* take any token's representation, the correct answer in the context of this question — and the standard practice in feature extraction — is to use [CLS]. Individual word representations encode **local, word-level** context, not the whole sentence.\n\n$`\\displaystyle \\boxed{\\text{We can only take the representation of [CLS] as input to the classifier.}}`$\n\n> **Summary of BERT's [CLS] token:**\n>\n> - Prepended to every input sequence.\n> - Attends to all other tokens via bidirectional self-attention.\n> - Its final-layer representation encodes a holistic sentence summary.\n> - Used for sentence-level tasks: classification, entailment, similarity.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}
