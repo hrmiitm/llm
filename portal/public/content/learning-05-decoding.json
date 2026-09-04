@@ -1,0 +1,496 @@
+{
+  "id": "learning-05-decoding",
+  "week": 5,
+  "title": "Learning 05 — Sequence Probability and Decoding",
+  "category": "LEARNING",
+  "label": "Learning 05 — Decoding",
+  "topics": [
+    "Chain Rule",
+    "Greedy Search",
+    "Top-k / Top-p",
+    "Beam Search"
+  ],
+  "notesFile": "GA/week3-week4-learning-notes.md",
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 15,
+  "durationMinutes": 45,
+  "questions": [
+    {
+      "id": "learning-05-decoding-q1",
+      "num": "Q1",
+      "title": "A sequence probability (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "What is \\(P(A,C\\mid<s>)\\)?",
+      "bodyMd": "What is \\(P(A,C\\mid<s>)\\)?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.3"
+      },
+      "solutionMd": "Autoregressive sequence probability multiplies conditional probabilities:\n\n\\[\nP(A,C\\mid<s>)=P(A\\mid<s>)P(C\\mid A)=0.6\\times0.5=0.30.\n\\]\n\n**Mnemonic:** a sequence is a probability **chain**, so multiply its links.\n\n**Answer:** \\(\\boxed{0.3}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q2",
+      "num": "Q2",
+      "title": "Compare a second path (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "What is \\(P(B,C\\mid<s>)\\)?",
+      "bodyMd": "What is \\(P(B,C\\mid<s>)\\)?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.36"
+      },
+      "solutionMd": "\\[\nP(B,C\\mid<s>)=P(B\\mid<s>)P(C\\mid B)=0.4\\times0.9=0.36.\n\\]\n\nAlthough \\(B\\) is not the most likely first token, its continuation is much stronger.\n\n**Answer:** \\(\\boxed{0.36}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q3",
+      "num": "Q3",
+      "title": "Greedy's first move (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Which token does greedy decoding choose at the first step?",
+      "bodyMd": "Which token does greedy decoding choose at the first step?\n\n- ( ) A\n- ( ) B\n- ( ) C\n- ( ) It must enumerate both complete paths first",
+      "options": [
+        {
+          "id": "A",
+          "text": "A"
+        },
+        {
+          "id": "B",
+          "text": "B"
+        },
+        {
+          "id": "C",
+          "text": "C"
+        },
+        {
+          "id": "D",
+          "text": "It must enumerate both complete paths first"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "Greedy decoding chooses the locally largest probability at each step. Since \\(0.6>0.4\\), it chooses \\(A\\) first.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q4",
+      "num": "Q4",
+      "title": "Greedy sequence (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "What full two-token sequence does greedy decoding produce under the stated tie rule?",
+      "bodyMd": "What full two-token sequence does greedy decoding produce under the stated tie rule?\n\n- ( ) \\(A,C\\)\n- ( ) \\(A,D\\)\n- ( ) \\(B,C\\)\n- ( ) \\(B,D\\)",
+      "options": [
+        {
+          "id": "A",
+          "text": "\\(A,C\\)"
+        },
+        {
+          "id": "B",
+          "text": "\\(A,D\\)"
+        },
+        {
+          "id": "C",
+          "text": "\\(B,C\\)"
+        },
+        {
+          "id": "D",
+          "text": "\\(B,D\\)"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "Greedy first chooses \\(A\\). After \\(A\\), \\(C\\) and \\(D\\) tie at \\(0.5\\); the rule chooses alphabetically earlier \\(C\\). Hence the output is \\((A,C)\\).\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q5",
+      "num": "Q5",
+      "title": "Best complete sequence (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Which two-token sequence has the highest joint probability?",
+      "bodyMd": "Which two-token sequence has the highest joint probability?\n\n- ( ) \\(A,C\\)\n- ( ) \\(A,D\\)\n- ( ) \\(B,C\\)\n- ( ) \\(B,D\\)",
+      "options": [
+        {
+          "id": "A",
+          "text": "\\(A,C\\)"
+        },
+        {
+          "id": "B",
+          "text": "\\(A,D\\)"
+        },
+        {
+          "id": "C",
+          "text": "\\(B,C\\)"
+        },
+        {
+          "id": "D",
+          "text": "\\(B,D\\)"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "\\[\nP(A,C)=P(A,D)=0.30,\\quad P(B,C)=0.36,\\quad P(B,D)=0.04.\n\\]\n\nSo \\((B,C)\\) is globally best. Greedy missed it because it committed to the locally best first step.\n\n**Intuition:** local best does not always mean route best.\n\n**Answer:** C",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q6",
+      "num": "Q6",
+      "title": "Decoding distinctions (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Which statements are correct?",
+      "bodyMd": "Which statements are correct?\n\n- ( ) Greedy decoding makes a local choice at each step.\n- ( ) Exhaustive search can compare all complete candidate sequences in a finite toy problem.\n- ( ) Greedy decoding is guaranteed to find the maximum-probability full sequence.\n- ( ) A decoding algorithm operates on probabilities produced by the model.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Greedy decoding makes a local choice at each step."
+        },
+        {
+          "id": "B",
+          "text": "Exhaustive search can compare all complete candidate sequences in a finite toy problem."
+        },
+        {
+          "id": "C",
+          "text": "Greedy decoding is guaranteed to find the maximum-probability full sequence."
+        },
+        {
+          "id": "D",
+          "text": "A decoding algorithm operates on probabilities produced by the model."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "D"
+        ]
+      },
+      "solutionMd": "Greedy is fast because it makes no backtracking. Exhaustive search can find the global best by evaluating all paths, but the number of paths grows quickly. The model supplies conditional probabilities; the decoder decides how to use them.\n\n**Answer:** A, B and D",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q7",
+      "num": "Q7",
+      "title": "Top-\\(k\\) renormalization (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "A next-token distribution is \\([0.5,0.3,0.2]\\). With top-\\(k\\) sampling and \\(k=2\\), what is the renormalized probability of the originally most likely token?",
+      "bodyMd": "A next-token distribution is \\([0.5,0.3,0.2]\\). With top-\\(k\\) sampling and \\(k=2\\), what is the renormalized probability of the originally most likely token?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.625"
+      },
+      "solutionMd": "Keep the top two tokens, whose retained mass is \\(0.5+0.3=0.8\\). Then renormalize:\n\n\\[\n\\frac{0.5}{0.8}=0.625.\n\\]\n\nThe discarded token receives probability 0 for this sampling step.\n\n**Answer:** \\(\\boxed{0.625}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q8",
+      "num": "Q8",
+      "title": "Nucleus sampling (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "What does top-\\(p\\) (nucleus) sampling retain before drawing a token?",
+      "bodyMd": "What does top-\\(p\\) (nucleus) sampling retain before drawing a token?\n\n- ( ) Exactly \\(p\\) vocabulary items\n- ( ) The smallest set of highest-probability tokens whose cumulative mass reaches at least \\(p\\)\n- ( ) Only the single most probable token\n- ( ) Every token with probability below \\(p\\)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Exactly \\(p\\) vocabulary items"
+        },
+        {
+          "id": "B",
+          "text": "The smallest set of highest-probability tokens whose cumulative mass reaches at least \\(p\\)"
+        },
+        {
+          "id": "C",
+          "text": "Only the single most probable token"
+        },
+        {
+          "id": "D",
+          "text": "Every token with probability below \\(p\\)"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "Unlike top-\\(k\\), top-\\(p\\) adapts its candidate-set size to the shape of the distribution. A peaked distribution needs few tokens to reach \\(p\\); a flat distribution needs more.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q9",
+      "num": "Q9",
+      "title": "Negative log-likelihood (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "If the model assigns probability \\(0.1\\) to the correct next token, what is the natural-log negative log-likelihood \\(-\\ln(0.1)\\), rounded to three decimals?",
+      "bodyMd": "If the model assigns probability \\(0.1\\) to the correct next token, what is the natural-log negative log-likelihood \\(-\\ln(0.1)\\), rounded to three decimals?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2.303"
+      },
+      "solutionMd": "\\[\n-\\ln(0.1)=2.302585\\ldots\\approx2.303.\n\\]\n\nHigher probability gives lower loss; probability 1 would give loss 0.\n\n**Answer:** \\(\\boxed{2.303}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q10",
+      "num": "Q10",
+      "title": "Why use log probabilities? (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Why are log probabilities commonly added during search instead of multiplying raw probabilities?",
+      "bodyMd": "Why are log probabilities commonly added during search instead of multiplying raw probabilities?\n\n- ( ) Logarithms reverse the ranking of sequences\n- ( ) Products become sums and very small products are numerically easier to handle\n- ( ) They make every sequence probability equal to 1\n- ( ) They eliminate the vocabulary softmax",
+      "options": [
+        {
+          "id": "A",
+          "text": "Logarithms reverse the ranking of sequences"
+        },
+        {
+          "id": "B",
+          "text": "Products become sums and very small products are numerically easier to handle"
+        },
+        {
+          "id": "C",
+          "text": "They make every sequence probability equal to 1"
+        },
+        {
+          "id": "D",
+          "text": "They eliminate the vocabulary softmax"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "\\[\n\\log\\prod_t p_t=\\sum_t\\log p_t.\n\\]\n\nBecause log is increasing, maximizing a product is equivalent to maximizing the sum of its log probabilities. The sum is more stable than multiplying many tiny numbers.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q11",
+      "num": "Q11",
+      "title": "Exhaustive-search growth (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "With vocabulary size \\(V=3\\), how many distinct nonempty prefixes exist through generation length 3: all length-1, length-2, and length-3 candidates combined?",
+      "bodyMd": "With vocabulary size \\(V=3\\), how many distinct nonempty prefixes exist through generation length 3: all length-1, length-2, and length-3 candidates combined?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "39"
+      },
+      "solutionMd": "There are \\(3\\) length-1 prefixes, \\(3^2=9\\) length-2 prefixes, and \\(3^3=27\\) length-3 prefixes:\n\n\\[\n3+9+27=39.\n\\]\n\nThis exponential growth is why exact search becomes impractical for realistic vocabularies and lengths.\n\n**Answer:** \\(\\boxed{39}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q12",
+      "num": "Q12",
+      "title": "Sampling trade-offs (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Which statements are true?",
+      "bodyMd": "Which statements are true?\n\n- ( ) Greedy decoding is deterministic when ties are resolved consistently.\n- ( ) Sampling can produce different outputs from the same prompt.\n- ( ) Top-\\(k\\) always keeps a fixed number of candidates before sampling.\n- ( ) Sampling guarantees factually correct text.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Greedy decoding is deterministic when ties are resolved consistently."
+        },
+        {
+          "id": "B",
+          "text": "Sampling can produce different outputs from the same prompt."
+        },
+        {
+          "id": "C",
+          "text": "Top-\\(k\\) always keeps a fixed number of candidates before sampling."
+        },
+        {
+          "id": "D",
+          "text": "Sampling guarantees factually correct text."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "solutionMd": "Sampling introduces randomness, which can improve variety but cannot guarantee truth. Top-\\(k\\) fixes the number of retained candidates; greedy is repeatable under a fixed tie rule.\n\n**Answer:** A, B and C",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q13",
+      "num": "Q13",
+      "title": "Repetition degeneration (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "A model repeatedly emits a high-probability phrase. Which interpretation is best?",
+      "bodyMd": "A model repeatedly emits a high-probability phrase. Which interpretation is best?\n\n- ( ) The model has proven the phrase is true\n- ( ) A locally attractive loop can dominate generation, causing repetitive degeneration\n- ( ) The causal mask has become bidirectional\n- ( ) The vocabulary contains only one token",
+      "options": [
+        {
+          "id": "A",
+          "text": "The model has proven the phrase is true"
+        },
+        {
+          "id": "B",
+          "text": "A locally attractive loop can dominate generation, causing repetitive degeneration"
+        },
+        {
+          "id": "C",
+          "text": "The causal mask has become bidirectional"
+        },
+        {
+          "id": "D",
+          "text": "The vocabulary contains only one token"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "Autoregressive generation feeds earlier output back as input. A repetition can reinforce its own probability and become a loop. Decoding choices and repetition penalties are often used to manage this behavior, not to establish factuality.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q14",
+      "num": "Q14",
+      "title": "Chain rule (Short Answer)",
+      "type": "text",
+      "context": null,
+      "questionText": "Write the chain-rule factorization of a three-token sequence \\((x_1,x_2,x_3)\\).",
+      "bodyMd": "Write the chain-rule factorization of a three-token sequence \\((x_1,x_2,x_3)\\).",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "P(x1) P(x2 | x1) P(x3 | x1, x2)"
+      },
+      "solutionMd": "\\[\nP(x_1,x_2,x_3)=P(x_1)P(x_2\\mid x_1)P(x_3\\mid x_1,x_2).\n\\]\n\nEach new token conditions on the prefix already generated.\n\n**Answer:** `P(x1) P(x2 | x1) P(x3 | x1, x2)`",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-05-decoding-q15",
+      "num": "Q15",
+      "title": "Final decision guide (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "You need a fast, repeatable baseline output rather than variety. Which decoding strategy is the most direct fit?",
+      "bodyMd": "You need a fast, repeatable baseline output rather than variety. Which decoding strategy is the most direct fit?\n\n- ( ) Greedy decoding\n- ( ) Nucleus sampling with random draws\n- ( ) Exhaustive search over all unbounded sequences\n- ( ) Masked-language modeling",
+      "options": [
+        {
+          "id": "A",
+          "text": "Greedy decoding"
+        },
+        {
+          "id": "B",
+          "text": "Nucleus sampling with random draws"
+        },
+        {
+          "id": "C",
+          "text": "Exhaustive search over all unbounded sequences"
+        },
+        {
+          "id": "D",
+          "text": "Masked-language modeling"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "Greedy chooses the highest-probability next token at every step, so it is simple, fast, and deterministic under a fixed tie rule. It is a baseline—not a guarantee of globally optimal or best-quality text.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

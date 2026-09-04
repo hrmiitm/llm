@@ -1,0 +1,534 @@
+{
+  "id": "learning-06-bert",
+  "week": 6,
+  "title": "Learning 06 — BERT and Masked Language Modelling",
+  "category": "LEARNING",
+  "label": "Learning 06 — BERT",
+  "topics": [
+    "Bidirectional Attention",
+    "MLM Loss",
+    "[CLS]",
+    "[SEP]"
+  ],
+  "notesFile": "GA/week3-week4-learning-notes.md",
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 15,
+  "durationMinutes": 45,
+  "questions": [
+    {
+      "id": "learning-06-bert-q1",
+      "num": "Q1",
+      "title": "BERT's core stack (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "What is BERT fundamentally built from?",
+      "bodyMd": "What is BERT fundamentally built from?\n\n- ( ) A decoder-only causal stack\n- ( ) An encoder-only stack with bidirectional self-attention\n- ( ) A no-attention recurrent stack\n- ( ) An encoder-decoder translation stack only",
+      "options": [
+        {
+          "id": "A",
+          "text": "A decoder-only causal stack"
+        },
+        {
+          "id": "B",
+          "text": "An encoder-only stack with bidirectional self-attention"
+        },
+        {
+          "id": "C",
+          "text": "A no-attention recurrent stack"
+        },
+        {
+          "id": "D",
+          "text": "An encoder-decoder translation stack only"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "BERT uses transformer encoder blocks. In ordinary self-attention, a token can attend to contextual tokens on both its left and right.\n\n**Mnemonic:** **B**ERT looks **B**oth ways; **G**PT **G**oes forward.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q2",
+      "num": "Q2",
+      "title": "MLM target (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "In masked language modeling (MLM), what is the model trained to predict?",
+      "bodyMd": "In masked language modeling (MLM), what is the model trained to predict?\n\n- ( ) The next token at every position only\n- ( ) The original identities of selected hidden/corrupted tokens\n- ( ) The number of transformer layers\n- ( ) A fixed answer regardless of input",
+      "options": [
+        {
+          "id": "A",
+          "text": "The next token at every position only"
+        },
+        {
+          "id": "B",
+          "text": "The original identities of selected hidden/corrupted tokens"
+        },
+        {
+          "id": "C",
+          "text": "The number of transformer layers"
+        },
+        {
+          "id": "D",
+          "text": "A fixed answer regardless of input"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "Some input tokens are selected and replaced/corrupted during training. BERT uses surrounding context to recover their original token identities.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q3",
+      "num": "Q3",
+      "title": "One masked-token loss (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "The correct original token has predicted probability \\(0.7\\). What is its MLM cross-entropy contribution \\(-\\ln(0.7)\\), rounded to three decimals?",
+      "bodyMd": "The correct original token has predicted probability \\(0.7\\). What is its MLM cross-entropy contribution \\(-\\ln(0.7)\\), rounded to three decimals?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.357"
+      },
+      "solutionMd": "\\[\n-\\ln(0.7)=0.356675\\ldots\\approx0.357.\n\\]\n\nThe loss rewards placing high probability on the true hidden token.\n\n**Answer:** \\(\\boxed{0.357}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q4",
+      "num": "Q4",
+      "title": "Two masked tokens (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Two selected tokens have correct-token probabilities \\(0.5\\) and \\(0.25\\). If the MLM loss is the **sum** over selected positions, what is the total loss, rounded to three decimals?",
+      "bodyMd": "Two selected tokens have correct-token probabilities \\(0.5\\) and \\(0.25\\). If the MLM loss is the **sum** over selected positions, what is the total loss, rounded to three decimals?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2.079"
+      },
+      "solutionMd": "\\[\n-\\ln(0.5)-\\ln(0.25)=0.693147+1.386294=2.079441.\n\\]\n\nSo the summed loss is about \\(2.079\\). If an objective asks for a mean, divide by the number of selected positions afterward.\n\n**Answer:** \\(\\boxed{2.079}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q5",
+      "num": "Q5",
+      "title": "Which positions contribute? (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Under the standard simplified MLM loss, which positions contribute directly to the prediction loss?",
+      "bodyMd": "Under the standard simplified MLM loss, which positions contribute directly to the prediction loss?\n\n- ( ) Only the positions selected for masking/corruption\n- ( ) Every position equally, whether selected or not\n- ( ) Only the `[CLS]` position\n- ( ) No positions; MLM has no loss",
+      "options": [
+        {
+          "id": "A",
+          "text": "Only the positions selected for masking/corruption"
+        },
+        {
+          "id": "B",
+          "text": "Every position equally, whether selected or not"
+        },
+        {
+          "id": "C",
+          "text": "Only the `[CLS]` position"
+        },
+        {
+          "id": "D",
+          "text": "No positions; MLM has no loss"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "The model processes the whole corrupted sequence, but the usual MLM objective computes token-prediction loss at the selected target positions. Their surrounding unmasked tokens still help provide context through attention.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q6",
+      "num": "Q6",
+      "title": "`[CLS]` representation (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "For single-sentence sequence classification, how is BERT's `[CLS]` representation commonly used?",
+      "bodyMd": "For single-sentence sequence classification, how is BERT's `[CLS]` representation commonly used?\n\n- ( ) It is discarded before training\n- ( ) It is fed to a task-specific classifier head\n- ( ) It is used only as a padding symbol\n- ( ) It blocks all attention scores",
+      "options": [
+        {
+          "id": "A",
+          "text": "It is discarded before training"
+        },
+        {
+          "id": "B",
+          "text": "It is fed to a task-specific classifier head"
+        },
+        {
+          "id": "C",
+          "text": "It is used only as a padding symbol"
+        },
+        {
+          "id": "D",
+          "text": "It blocks all attention scores"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "`[CLS]` is placed at the beginning of the input. Its final contextual vector can be passed to a learned classifier for tasks such as sentiment or topic classification.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q7",
+      "num": "Q7",
+      "title": "`[SEP]` role (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "What does `[SEP]` commonly mark in BERT-style inputs?",
+      "bodyMd": "What does `[SEP]` commonly mark in BERT-style inputs?\n\n- ( ) The end of one segment and/or separation between segments\n- ( ) The only token that may be masked\n- ( ) The vocabulary softmax denominator\n- ( ) A causal future boundary for generation",
+      "options": [
+        {
+          "id": "A",
+          "text": "The end of one segment and/or separation between segments"
+        },
+        {
+          "id": "B",
+          "text": "The only token that may be masked"
+        },
+        {
+          "id": "C",
+          "text": "The vocabulary softmax denominator"
+        },
+        {
+          "id": "D",
+          "text": "A causal future boundary for generation"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "`[SEP]` separates segments such as sentence A and sentence B, and can mark the end of the input sequence. Segment/type embeddings can additionally tell the model which segment each token belongs to.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q8",
+      "num": "Q8",
+      "title": "Sentence-pair layout (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Which is a typical BERT input layout for two text segments A and B?",
+      "bodyMd": "Which is a typical BERT input layout for two text segments A and B?\n\n- ( ) `[CLS] A [SEP] B [SEP]`\n- ( ) `A B [MASK]` only\n- ( ) `[CLS] A B` with no boundary signal ever\n- ( ) `B [CLS] A [PAD]` only",
+      "options": [
+        {
+          "id": "A",
+          "text": "`[CLS] A [SEP] B [SEP]`"
+        },
+        {
+          "id": "B",
+          "text": "`A B [MASK]` only"
+        },
+        {
+          "id": "C",
+          "text": "`[CLS] A B` with no boundary signal ever"
+        },
+        {
+          "id": "D",
+          "text": "`B [CLS] A [PAD]` only"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "The `[CLS]` token supplies a pooled classification location, and `[SEP]` provides segment boundaries:\n\n\\[\n[\\text{CLS}]\\;A\\;[\\text{SEP}]\\;B\\;[\\text{SEP}].\n\\]\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q9",
+      "num": "Q9",
+      "title": "BERT versus GPT (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Which comparisons are correct?",
+      "bodyMd": "Which comparisons are correct?\n\n- ( ) BERT MLM can use left and right context around a selected token.\n- ( ) GPT causal language modeling blocks future tokens at a position.\n- ( ) BERT is naturally used as a left-to-right free-running generator without changing the objective.\n- ( ) Both BERT and GPT use token embeddings and transformer attention.",
+      "options": [
+        {
+          "id": "A",
+          "text": "BERT MLM can use left and right context around a selected token."
+        },
+        {
+          "id": "B",
+          "text": "GPT causal language modeling blocks future tokens at a position."
+        },
+        {
+          "id": "C",
+          "text": "BERT is naturally used as a left-to-right free-running generator without changing the objective."
+        },
+        {
+          "id": "D",
+          "text": "Both BERT and GPT use token embeddings and transformer attention."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "D"
+        ]
+      },
+      "solutionMd": "BERT's encoder attention is bidirectional in its MLM setup, while GPT's causal mask supports next-token generation. Both are transformer architectures with learned representations, but their pretraining objectives create different strengths.\n\n**Answer:** A, B and D",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q10",
+      "num": "Q10",
+      "title": "Bidirectional intuition (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Why can BERT be useful for understanding a token in a sentence?",
+      "bodyMd": "Why can BERT be useful for understanding a token in a sentence?\n\n- ( ) Its ordinary encoder attention can incorporate context on both sides\n- ( ) It predicts only from tokens that come after it\n- ( ) It forbids all token-to-token interaction\n- ( ) It removes words before making embeddings",
+      "options": [
+        {
+          "id": "A",
+          "text": "Its ordinary encoder attention can incorporate context on both sides"
+        },
+        {
+          "id": "B",
+          "text": "It predicts only from tokens that come after it"
+        },
+        {
+          "id": "C",
+          "text": "It forbids all token-to-token interaction"
+        },
+        {
+          "id": "D",
+          "text": "It removes words before making embeddings"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "For a masked word in “The bank of the river,” context on both sides helps resolve meaning. BERT learns to exploit such two-sided context during MLM pretraining.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q11",
+      "num": "Q11",
+      "title": "Classification logits (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Suppose the final `[CLS]` vector has width \\(d_{\\text{model}}=16\\) and a classifier predicts 3 classes. How many logits does the classifier output for one example?",
+      "bodyMd": "Suppose the final `[CLS]` vector has width \\(d_{\\text{model}}=16\\) and a classifier predicts 3 classes. How many logits does the classifier output for one example?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "3"
+      },
+      "solutionMd": "One logit is produced per class, independent of hidden width after the linear map:\n\n\\[\nW_{\\text{cls}}\\in\\mathbb{R}^{16\\times3}\\quad\\Rightarrow\\quad 3\\text{ logits}.\n\\]\n\n**Answer:** \\(\\boxed{3}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q12",
+      "num": "Q12",
+      "title": "Special-input information (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Which information can a BERT-style input representation include before entering encoder layers?",
+      "bodyMd": "Which information can a BERT-style input representation include before entering encoder layers?\n\n- ( ) Token embeddings\n- ( ) Positional embeddings\n- ( ) Segment/type embeddings for sentence pairs\n- ( ) The future ground-truth label as an input feature",
+      "options": [
+        {
+          "id": "A",
+          "text": "Token embeddings"
+        },
+        {
+          "id": "B",
+          "text": "Positional embeddings"
+        },
+        {
+          "id": "C",
+          "text": "Segment/type embeddings for sentence pairs"
+        },
+        {
+          "id": "D",
+          "text": "The future ground-truth label as an input feature"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "solutionMd": "BERT commonly combines token, position, and token-type/segment information. The supervised label is a target used for loss, not an input that the model should receive.\n\n**Answer:** A, B and C",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q13",
+      "num": "Q13",
+      "title": "Choose the objective (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "You want a model to fill in a deliberately hidden word using both neighboring words. Which pretraining objective most directly matches this goal?",
+      "bodyMd": "You want a model to fill in a deliberately hidden word using both neighboring words. Which pretraining objective most directly matches this goal?\n\n- ( ) Masked language modeling\n- ( ) Greedy decoding\n- ( ) Causal next-token prediction only\n- ( ) Top-\\(k\\) sampling",
+      "options": [
+        {
+          "id": "A",
+          "text": "Masked language modeling"
+        },
+        {
+          "id": "B",
+          "text": "Greedy decoding"
+        },
+        {
+          "id": "C",
+          "text": "Causal next-token prediction only"
+        },
+        {
+          "id": "D",
+          "text": "Top-\\(k\\) sampling"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "MLM explicitly trains the model to recover selected hidden tokens from their surrounding context. Greedy/top-\\(k\\) are decoding methods, not pretraining objectives.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q14",
+      "num": "Q14",
+      "title": "MLM loss form (Short Answer)",
+      "type": "text",
+      "context": null,
+      "questionText": "Write a simplified MLM loss for selected mask positions \\(M\\), where \\(x_i\\) is the original token and \\(\\tilde{x}\\) is the corrupted input.",
+      "bodyMd": "Write a simplified MLM loss for selected mask positions \\(M\\), where \\(x_i\\) is the original token and \\(\\tilde{x}\\) is the corrupted input.",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "-sum_{i in M} log P(x_i | x_tilde)"
+      },
+      "solutionMd": "\\[\n\\mathcal{L}_{\\text{MLM}}=-\\sum_{i\\in M}\\log P(x_i\\mid\\tilde{x}).\n\\]\n\nThe conditioning sequence \\(\\tilde{x}\\) includes the corrupted input; the target remains the original token \\(x_i\\).\n\n**Answer:** `-sum_{i in M} log P(x_i | x_tilde)`",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-06-bert-q15",
+      "num": "Q15",
+      "title": "Model-selection checkpoint (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Which model family is the more direct starting point for classifying whether a review is positive or negative using a pooled sentence representation?",
+      "bodyMd": "Which model family is the more direct starting point for classifying whether a review is positive or negative using a pooled sentence representation?\n\n- ( ) BERT-style encoder model with a classifier head\n- ( ) GPT decoding with random sampling only\n- ( ) Exhaustive sequence search only\n- ( ) A causal mask with no learned model",
+      "options": [
+        {
+          "id": "A",
+          "text": "BERT-style encoder model with a classifier head"
+        },
+        {
+          "id": "B",
+          "text": "GPT decoding with random sampling only"
+        },
+        {
+          "id": "C",
+          "text": "Exhaustive sequence search only"
+        },
+        {
+          "id": "D",
+          "text": "A causal mask with no learned model"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "A BERT-style encoder produces contextual token representations and a `[CLS]` representation that can feed a classification head. A generative model can be adapted to classification too, but BERT's setup is the direct conceptual match here.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

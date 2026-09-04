@@ -5,7 +5,7 @@ This directory contains the Vite + React + TypeScript single-page application fo
 ## Commands
 
 ```bash
-# Compile content from ../GA/*.md into public/content/*.json
+# Compile content from ../GA/*.md, ../pyq/*.md, and ../learning/*.md into public/content/*.json
 npm run compile
 
 # Run local development server

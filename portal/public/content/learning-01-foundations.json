@@ -1,0 +1,476 @@
+{
+  "id": "learning-01-foundations",
+  "week": 1,
+  "title": "Learning 01 — From Text to Transformer Inputs",
+  "category": "LEARNING",
+  "label": "Learning 01 — Foundations",
+  "topics": [
+    "Tokens",
+    "Context Length",
+    "Embeddings",
+    "Positions"
+  ],
+  "notesFile": "vid/transformer-notes.md",
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 15,
+  "durationMinutes": 45,
+  "questions": [
+    {
+      "id": "learning-01-foundations-q1",
+      "num": "Q1",
+      "title": "Token or word? (MCQ)",
+      "type": "single_choice",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "Which statement is most accurate?",
+      "bodyMd": "**Which statement is most accurate?**\n\n- ( ) A token is always a complete dictionary word.\n- ( ) A token ID is a learned meaning score.\n- ( ) A token can be a word, a subword, or punctuation.\n- ( ) Tokens only exist after attention is computed.",
+      "options": [
+        {
+          "id": "A",
+          "text": "A token is always a complete dictionary word."
+        },
+        {
+          "id": "B",
+          "text": "A token ID is a learned meaning score."
+        },
+        {
+          "id": "C",
+          "text": "A token can be a word, a subword, or punctuation."
+        },
+        {
+          "id": "D",
+          "text": "Tokens only exist after attention is computed."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** C\n\n#### Step-by-step solution\n\n1. A tokenizer splits text into units from its vocabulary.\n2. Those units can be whole words, pieces such as `learn` + `ing`, or punctuation.\n3. A token ID is only an index used to look up a vector; it is not a numeric meaning.\n\n**Memory hook:** **T**oken = a **T**ext piece, not necessarily a whole word. $\\boxed{\\text{C}}$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q2",
+      "num": "Q2",
+      "title": "Minimum context length (Short Answer)",
+      "type": "numeric",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "A batch contains sequences of 3, 5, and 4 tokens. What is the smallest context length $T$ that avoids truncating any sequence?",
+      "bodyMd": "**A batch contains sequences of 3, 5, and 4 tokens. What is the smallest context length $T$ that avoids truncating any sequence?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "5"
+      },
+      "solutionMd": "**Answer:** $\\boxed{5}$\n\n#### Step-by-step solution\n\n1. Context length is the number of token slots available per sequence.\n2. It must cover the longest sequence, not the average sequence.\n\n$$T=\\max(3,5,4)=\\boxed{5}.$$\n\nShorter sequences receive padding until they also have five slots.\n\n**Memory hook:** **T = Tallest token row**.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q3",
+      "num": "Q3",
+      "title": "Batch-output volume (Short Answer)",
+      "type": "numeric",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "A batch has $B=3$ sequences, context length $T=5$, and hidden width $d_{model}=8$. How many elements are in the encoder output tensor?",
+      "bodyMd": "**A batch has $B=3$ sequences, context length $T=5$, and hidden width $d_{model}=8$. How many elements are in the encoder output tensor?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "120"
+      },
+      "solutionMd": "**Answer:** $\\boxed{120}$\n\n#### Step-by-step solution\n\nThe standard batch-first hidden-state shape is\n\n$$B\\times T\\times d_{model}.$$\n\nSubstitute the values:\n\n$$3\\times5\\times8=\\boxed{120}.$$\n\n**Memory hook:** **B-T-D** = batches, tokens, dimensions.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q4",
+      "num": "Q4",
+      "title": "Embedding-table parameters (Short Answer)",
+      "type": "numeric",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "A vocabulary has 500 tokens and embedding dimension 16. How many parameters are in the embedding table?",
+      "bodyMd": "**A vocabulary has 500 tokens and embedding dimension 16. How many parameters are in the embedding table?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "8000"
+      },
+      "solutionMd": "**Answer:** $\\boxed{8000}$\n\n#### Step-by-step solution\n\nOne embedding vector is stored for every vocabulary entry:\n\n$$E\\in\\mathbb{R}^{|V|\\times d_{model}}.$$\n\nTherefore\n\n$$500\\times16=\\boxed{8000}.$$\n\n**Memory hook:** embedding table = **vocabulary rows × vector columns**.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q5",
+      "num": "Q5",
+      "title": "Correct input shape (MCQ)",
+      "type": "single_choice",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "For $B=2$, $T=7$, and $d_{model}=32$, which is the usual batch-first encoder-input shape?",
+      "bodyMd": "**For $B=2$, $T=7$, and $d_{model}=32$, which is the usual batch-first encoder-input shape?**\n\n- ( ) $2\\times32\\times7$\n- ( ) $2\\times7\\times32$\n- ( ) $7\\times2\\times32$\n- ( ) $32\\times7\\times2$",
+      "options": [
+        {
+          "id": "A",
+          "text": "$2\\times32\\times7$"
+        },
+        {
+          "id": "B",
+          "text": "$2\\times7\\times32$"
+        },
+        {
+          "id": "C",
+          "text": "$7\\times2\\times32$"
+        },
+        {
+          "id": "D",
+          "text": "$32\\times7\\times2$"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** B\n\n#### Step-by-step solution\n\nRead the axes in order:\n\n$$\\underbrace{2}_{B}\\times\\underbrace{7}_{T}\\times\\underbrace{32}_{d_{model}}.$$\n\nThe question asks for the common **batch-first** convention, so the correct shape is $2\\times7\\times32$.\n\n**Memory hook:** say **“batch, time, depth”** before substituting numbers. $\\boxed{\\text{B}}$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q6",
+      "num": "Q6",
+      "title": "Meaning of a token ID (MCQ)",
+      "type": "single_choice",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "What does token ID 4812 mean before embedding lookup?",
+      "bodyMd": "**What does token ID 4812 mean before embedding lookup?**\n\n- ( ) The token is 4,812 times more important than ID 1.\n- ( ) It is an address selecting one row of the embedding table.\n- ( ) It is the token's probability.\n- ( ) It is one coordinate of the token vector.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The token is 4,812 times more important than ID 1."
+        },
+        {
+          "id": "B",
+          "text": "It is an address selecting one row of the embedding table."
+        },
+        {
+          "id": "C",
+          "text": "It is the token's probability."
+        },
+        {
+          "id": "D",
+          "text": "It is one coordinate of the token vector."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** B\n\n#### Step-by-step solution\n\nAn ID is a categorical label. Embedding lookup selects row $E_{4812}$ from $E\\in\\mathbb{R}^{|V|\\times d_{model}}$.\n\nThe number itself has no ordered geometric meaning; ID 4812 is not “larger in meaning” than ID 1.\n\n**Memory hook:** ID = **I**ndex, not **I**ntelligence. $\\boxed{\\text{B}}$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q7",
+      "num": "Q7",
+      "title": "Why add positional information? (MCQ)",
+      "type": "single_choice",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "Why is position information added to token embeddings?",
+      "bodyMd": "**Why is position information added to token embeddings?**\n\n- ( ) It tells attention where each token occurs in the sequence.\n- ( ) It converts probabilities into logits.\n- ( ) It replaces the tokenizer.\n- ( ) It removes the need for an embedding table.",
+      "options": [
+        {
+          "id": "A",
+          "text": "It tells attention where each token occurs in the sequence."
+        },
+        {
+          "id": "B",
+          "text": "It converts probabilities into logits."
+        },
+        {
+          "id": "C",
+          "text": "It replaces the tokenizer."
+        },
+        {
+          "id": "D",
+          "text": "It removes the need for an embedding table."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "**Answer:** A\n\n#### Step-by-step solution\n\nSelf-attention compares token content, but token order matters: `dog bites man` differs from `man bites dog`.\n\nThe input is formed by compatible vectors:\n\n$$H^{(0)}=X+P,$$\n\nwhere $X$ is the token embedding and $P$ gives each position a signature.\n\n**Memory hook:** **P**osition tells the model **P**lace. $\\boxed{\\text{A}}$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q8",
+      "num": "Q8",
+      "title": "Positional-encoding norm at position zero (Short Answer)",
+      "type": "numeric",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "For sinusoidal positional encoding with $d_{model}=4$ and $pos=0$, what is the squared Euclidean norm of the positional vector?",
+      "bodyMd": "**For sinusoidal positional encoding with $d_{model}=4$ and $pos=0$, what is the squared Euclidean norm of the positional vector?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2"
+      },
+      "solutionMd": "**Answer:** $\\boxed{2}$\n\n#### Step-by-step solution\n\nThere are two sine/cosine pairs. At position zero, each pair is\n\n$$[\\sin(0),\\cos(0)]=[0,1].$$\n\nSo $PE(0)=[0,1,0,1]$, and\n\n$$0^2+1^2+0^2+1^2=\\boxed{2}.$$\n\n**Memory hook:** each sine/cosine pair contributes $\\sin^2\\theta+\\cos^2\\theta=1$.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q9",
+      "num": "Q9",
+      "title": "Padding and masks (MSQ)",
+      "type": "multiple_select",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "Which statements about padding are true? (Select all that apply.)",
+      "bodyMd": "**Which statements about padding are true? (Select all that apply.)**\n\n- ( ) Padding gives batch sequences a common tensor shape.\n- ( ) An attention mask should stop useful tokens from attending to padding.\n- ( ) Padding makes the longest sequence shorter.\n- ( ) Padding removes the need to choose a context length.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Padding gives batch sequences a common tensor shape."
+        },
+        {
+          "id": "B",
+          "text": "An attention mask should stop useful tokens from attending to padding."
+        },
+        {
+          "id": "C",
+          "text": "Padding makes the longest sequence shorter."
+        },
+        {
+          "id": "D",
+          "text": "Padding removes the need to choose a context length."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** A and B\n\n#### Step-by-step solution\n\nPadding adds placeholder slots to short sequences so every row has length $T$. A padding mask ensures those artificial slots do not contribute information during attention.\n\n- A is true: shapes can be batched.\n- B is true: pad tokens are ignored.\n- C and D are false: the longest real sequence determines the needed $T$.\n\n**Memory hook:** **Pad for shape; mask for meaning.** $\\boxed{\\text{A, B}}$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q10",
+      "num": "Q10",
+      "title": "Static versus contextual vectors (MCQ)",
+      "type": "single_choice",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "Which representation can make `bank` differ in “river bank” and “money bank”?",
+      "bodyMd": "**Which representation can make `bank` differ in “river bank” and “money bank”?**\n\n- ( ) Its token ID\n- ( ) A static lookup vector alone\n- ( ) A contextual hidden state after Transformer layers\n- ( ) The position index alone",
+      "options": [
+        {
+          "id": "A",
+          "text": "Its token ID"
+        },
+        {
+          "id": "B",
+          "text": "A static lookup vector alone"
+        },
+        {
+          "id": "C",
+          "text": "A contextual hidden state after Transformer layers"
+        },
+        {
+          "id": "D",
+          "text": "The position index alone"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** C\n\n#### Step-by-step solution\n\nThe starting lookup vector for the token can be the same, but attention mixes surrounding words into its hidden state. The final representation can therefore encode river-related context in one sentence and finance-related context in another.\n\n**Memory hook:** lookup is **same word**; hidden state is **same word in a story**. $\\boxed{\\text{C}}$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q11",
+      "num": "Q11",
+      "title": "Same dimensions for addition (MSQ)",
+      "type": "multiple_select",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "Which conditions must hold to add token embeddings $X$ and positional vectors $P$? (Select all that apply.)",
+      "bodyMd": "**Which conditions must hold to add token embeddings $X$ and positional vectors $P$? (Select all that apply.)**\n\n- ( ) They need matching sequence positions.\n- ( ) They need the same final vector width.\n- ( ) Their vocabulary sizes must be identical.\n- ( ) Their number of attention heads must be identical.",
+      "options": [
+        {
+          "id": "A",
+          "text": "They need matching sequence positions."
+        },
+        {
+          "id": "B",
+          "text": "They need the same final vector width."
+        },
+        {
+          "id": "C",
+          "text": "Their vocabulary sizes must be identical."
+        },
+        {
+          "id": "D",
+          "text": "Their number of attention heads must be identical."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** A and B\n\n#### Step-by-step solution\n\nElement-wise addition requires the same shape. For one sequence,\n\n$$X,P\\in\\mathbb{R}^{T\\times d_{model}}.$$\n\nVocabulary size and head count do not appear in this addition.\n\n**Memory hook:** to add, align **where** ($T$) and **how wide** ($d_{model}$). $\\boxed{\\text{A, B}}$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q12",
+      "num": "Q12",
+      "title": "Output volume after padding (Short Answer)",
+      "type": "numeric",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "Four sequences are padded to $T=6$. If $d_{model}=10$, how many values are in the final encoder output for the batch?",
+      "bodyMd": "**Four sequences are padded to $T=6$. If $d_{model}=10$, how many values are in the final encoder output for the batch?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "240"
+      },
+      "solutionMd": "**Answer:** $\\boxed{240}$\n\n#### Step-by-step solution\n\nThe final encoder preserves the batch, token, and hidden axes:\n\n$$4\\times6\\times10=\\boxed{240}.$$\n\nThe number of layers changes the computation, not this final shape.\n\n**Memory hook:** layers change **content**, not the usual B-T-D layout.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q13",
+      "num": "Q13",
+      "title": "Name the three axes (Short Answer)",
+      "type": "text",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "Write the standard batch-first hidden-state axes in order, separated by commas.",
+      "bodyMd": "**Write the standard batch-first hidden-state axes in order, separated by commas.**",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "B, T, d_model"
+      },
+      "solutionMd": "**Answer:** `B, T, d_model`\n\n#### Step-by-step solution\n\n$$\\text{hidden states}\\in\\mathbb{R}^{B\\times T\\times d_{model}}.$$\n\n$B$ counts sequences, $T$ counts positions per padded sequence, and $d_{model}$ counts features per token.\n\n**Memory hook:** **B-T-D = Batch, Tokens, Dimensions.**",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q14",
+      "num": "Q14",
+      "title": "What becomes contextual? (MSQ)",
+      "type": "multiple_select",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "After Transformer blocks process a sentence, which statements are true? (Select all that apply.)",
+      "bodyMd": "**After Transformer blocks process a sentence, which statements are true? (Select all that apply.)**\n\n- ( ) Each token's hidden state may contain information from other tokens.\n- ( ) The same token string can have different hidden states in different sentences.\n- ( ) Token IDs are changed into larger IDs.\n- ( ) Word order is irrelevant once positions are added.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Each token's hidden state may contain information from other tokens."
+        },
+        {
+          "id": "B",
+          "text": "The same token string can have different hidden states in different sentences."
+        },
+        {
+          "id": "C",
+          "text": "Token IDs are changed into larger IDs."
+        },
+        {
+          "id": "D",
+          "text": "Word order is irrelevant once positions are added."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** A and B\n\n#### Step-by-step solution\n\nAttention lets a position read weighted information from other positions, so its hidden state becomes contextual. This is why `bank` can represent different senses in different contexts.\n\nIDs remain vocabulary indexes, and order remains important even after position vectors are added.\n\n**Memory hook:** context changes the **vector**, not the dictionary ID. $\\boxed{\\text{A, B}}$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-01-foundations-q15",
+      "num": "Q15",
+      "title": "Foundations checkpoint (Short Answer)",
+      "type": "numeric",
+      "context": "Keep this input pipeline in mind throughout the assignment:\n\n```text\ntext → tokenizer → token IDs → embedding lookup → add position information → hidden-state tensor\n```\n\n![Attention pipeline, beginning with token embeddings](assets/attention-pipeline.svg)",
+      "questionText": "A batch has $B=4$, padded length $T=6$, and $d_{model}=12$. How many elements are in its hidden-state tensor?",
+      "bodyMd": "**A batch has $B=4$, padded length $T=6$, and $d_{model}=12$. How many elements are in its hidden-state tensor?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "288"
+      },
+      "solutionMd": "**Answer:** $\\boxed{288}$\n\n#### Step-by-step solution\n\nUse the complete input-to-hidden-state shape:\n\n$$\\mathbb{R}^{B\\times T\\times d_{model}}=\\mathbb{R}^{4\\times6\\times12}.$$\n\nTherefore,\n\n$$4\\times6\\times12=\\boxed{288}.$$\n\n**Memory hook:** when stuck, write **B-T-D** before doing any multiplication.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

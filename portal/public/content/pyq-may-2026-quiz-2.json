@@ -1,0 +1,728 @@
+{
+  "id": "pyq-may-2026-quiz-2",
+  "week": 0,
+  "title": "May-2026-Quiz-2",
+  "category": "PYQ",
+  "label": "May-2026-Quiz-2",
+  "topics": [
+    "Encoder-Decoder Transformers",
+    "T5",
+    "BART",
+    "Scaling Laws"
+  ],
+  "notesFile": null,
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 18,
+  "durationMinutes": 54,
+  "questions": [
+    {
+      "id": "pyq-may-2026-quiz-2-q1",
+      "num": "Q2",
+      "title": "Identify every Add & Norm layer (Short Answer)",
+      "type": "text",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "Identify every Add & Norm layer in the labeled architecture. Submit the component letters in alphabetical order as one uppercase string without spaces or punctuation.",
+      "bodyMd": "**Identify every Add & Norm layer in the labeled architecture. Submit the component letters in alphabetical order as one uppercase string without spaces or punctuation.**\n\n*(Example: if the components are Q, G, and S, answer `GQS`.)*",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "FHMPR"
+      },
+      "solutionMd": "**Answer:** `FHMPR`\n\n#### Step-by-step solution\n\n**Step 1 — Recall the encoder pattern.**\n\nAn encoder block has two sublayers:\n\n1. self-attention;\n2. feed-forward network.\n\nEach sublayer is followed by a residual addition and layer normalization. In the diagram, those two Add & Norm components are **F** and **H**.\n\n**Step 2 — Recall the decoder pattern.**\n\nA decoder block has three sublayers:\n\n1. masked self-attention;\n2. encoder-decoder cross-attention;\n3. feed-forward network.\n\nTheir Add & Norm components are **M**, **P**, and **R**, respectively.\n\n**Step 3 — Sort the letters.**\n\n$$\\{F,H,M,P,R\\}\\longrightarrow\\boxed{\\texttt{FHMPR}}.$$\n\nThe residual “$+$” nodes themselves are operations, but the question asks for the labeled Add & Norm components, which are the blocks after each sublayer.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q2",
+      "num": "Q3",
+      "title": "Function of component L (MCQ)",
+      "type": "single_choice",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "Identify the function of component `L`.",
+      "bodyMd": "**Identify the function of component `L`.**\n\n- ( ) Positional encoding\n- ( ) Feed-forward network\n- ( ) Masked multi-head self-attention\n- ( ) Multi-head cross-attention\n- ( ) Linear output projection",
+      "options": [
+        {
+          "id": "A",
+          "text": "Positional encoding"
+        },
+        {
+          "id": "B",
+          "text": "Feed-forward network"
+        },
+        {
+          "id": "C",
+          "text": "Masked multi-head self-attention"
+        },
+        {
+          "id": "D",
+          "text": "Multi-head cross-attention"
+        },
+        {
+          "id": "E",
+          "text": "Linear output projection"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** C — Masked multi-head self-attention\n\n#### Step-by-step solution\n\n**Step 1 — Locate L in the decoder.**\n\nComponent L is the first learned sublayer after the decoder's shifted-right input plus positional encoding.\n\n**Step 2 — Match the standard decoder order.**\n\nThe first decoder sublayer is masked self-attention. It lets position $t$ use positions $\\leq t$ while blocking future target tokens. Cross-attention comes later, after this masked self-attention, and uses encoder outputs as keys and values.\n\nTherefore,\n\n$$\\boxed{\\text{L = masked multi-head self-attention}}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q3",
+      "num": "Q4",
+      "title": "Components appearing more than once (MSQ)",
+      "type": "multiple_select",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "Assume exactly one encoder block and one decoder block. Identify all listed components that appear more than once. (Select all that apply.)",
+      "bodyMd": "**Assume exactly one encoder block and one decoder block. Identify all listed components that appear more than once. (Select all that apply.)**\n\n- ( ) Positional encoding\n- ( ) Feed-forward network\n- ( ) Masked multi-head self-attention\n- ( ) Multi-head cross-attention\n- ( ) Tokenizer\n- ( ) Add & Norm",
+      "options": [
+        {
+          "id": "A",
+          "text": "Positional encoding"
+        },
+        {
+          "id": "B",
+          "text": "Feed-forward network"
+        },
+        {
+          "id": "C",
+          "text": "Masked multi-head self-attention"
+        },
+        {
+          "id": "D",
+          "text": "Multi-head cross-attention"
+        },
+        {
+          "id": "E",
+          "text": "Tokenizer"
+        },
+        {
+          "id": "F",
+          "text": "Add & Norm"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "F"
+        ]
+      },
+      "solutionMd": "**Answer:** A, B, and F\n\n#### Step-by-step solution\n\n**Step 1 — Count the encoder and decoder sublayers.**\n\n| Component | Encoder | Decoder | Total |\n|---|---:|---:|---:|\n| Positional encoding | 1 | 1 | 2 |\n| Feed-forward network | 1 | 1 | 2 |\n| Masked self-attention | 0 | 1 | 1 |\n| Cross-attention | 0 | 1 | 1 |\n| Add & Norm | 2 | 3 | 5 |\n\n**Step 2 — Select totals greater than one.**\n\nPositional encoding, feed-forward network, and Add & Norm appear more than once. The tokenizer is not a repeated labeled block in the shown Transformer stack.\n\n$$\\boxed{\\text{A, B, F}}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q4",
+      "num": "Q5",
+      "title": "Applying a causal mask after softmax (MSQ)",
+      "type": "multiple_select",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "A binary lower-triangular mask $M$ has $M_{ij}=1$ for $j\\leq i$ and $0$ otherwise. It is applied **after** softmax as",
+      "bodyMd": "A binary lower-triangular mask $M$ has $M_{ij}=1$ for $j\\leq i$ and $0$ otherwise. It is applied **after** softmax as\n\n$$\\operatorname{softmax}(A)\\odot M.$$\n\n**Identify the correct statements. (Select all that apply.)**\n\n- ( ) The approach violates the autoregressive property.\n- ( ) The approach preserves the autoregressive property by making final attention weights for future tokens zero.\n- ( ) The final attention weights in the new approach will be greater than or equal to those of the original approach.\n- ( ) The attention weights for the final token will always be the same for both approaches.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The approach violates the autoregressive property."
+        },
+        {
+          "id": "B",
+          "text": "The approach preserves the autoregressive property by making final attention weights for future tokens zero."
+        },
+        {
+          "id": "C",
+          "text": "The final attention weights in the new approach will be greater than or equal to those of the original approach."
+        },
+        {
+          "id": "D",
+          "text": "The attention weights for the final token will always be the same for both approaches."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B",
+          "D"
+        ]
+      },
+      "solutionMd": "**Answer:** B and D\n\n#### Step-by-step solution\n\n![Kroki-style causal masking flow](assets/causal-mask.svg)\n\n**Step 1 — Compare the two masking locations.**\n\nIn the standard method, future logits receive $-\\infty$ **before** softmax:\n\n$$a_j^{\\text{before}}=\\frac{\\exp(A_j)\\,\\mathbf{1}[j\\leq i]}{\\sum_{k\\leq i}\\exp(A_k)}.$$\n\nIn the proposed method, softmax is computed over every position first and then future entries are zeroed:\n\n$$a_j^{\\text{after}}=\\frac{\\exp(A_j)}{\\sum_k\\exp(A_k)}\\mathbf{1}[j\\leq i].$$\n\n**Step 2 — Check autoregressive visibility.**\n\nFor $j>i$, the final value is exactly zero. Thus the query cannot use future tokens, so the autoregressive property is not violated. Statement B is true.\n\n**Step 3 — Compare allowed weights.**\n\nThe after-softmax method leaves probability mass on masked positions before deleting it, so its surviving weights are generally **smaller** than the renormalized before-softmax weights. Also, the new row may sum to less than 1. Statement C is false.\n\n**Step 4 — Check the final row.**\n\nFor the final token, there are no future positions. Its mask row contains only ones, so both methods apply the same softmax to that row. Statement D is true.\n\n$$\\boxed{\\text{B, D}}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q5",
+      "num": "Q6",
+      "title": "BPE training-iteration updates (MSQ)",
+      "type": "multiple_select",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "Which statements correctly describe internal state updates during a Byte Pair Encoding (BPE) training iteration? (Select all that apply.)",
+      "bodyMd": "**Which statements correctly describe internal state updates during a Byte Pair Encoding (BPE) training iteration? (Select all that apply.)**\n\n- ( ) After a pair is chosen for merging, it is permanently added to the active vocabulary list.\n- ( ) The algorithm recalculates the log probability of the entire corpus before the next iteration.\n- ( ) The independent frequencies of the two constituent tokens are reduced by the frequency of the merged token.\n- ( ) The original constituent tokens are removed from the vocabulary to optimize dictionary size.",
+      "options": [
+        {
+          "id": "A",
+          "text": "After a pair is chosen for merging, it is permanently added to the active vocabulary list."
+        },
+        {
+          "id": "B",
+          "text": "The algorithm recalculates the log probability of the entire corpus before the next iteration."
+        },
+        {
+          "id": "C",
+          "text": "The independent frequencies of the two constituent tokens are reduced by the frequency of the merged token."
+        },
+        {
+          "id": "D",
+          "text": "The original constituent tokens are removed from the vocabulary to optimize dictionary size."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** A and C\n\n#### Step-by-step solution\n\n**Step 1 — Identify what BPE stores.**\n\nBPE repeatedly stores a merge rule and updates token counts. If the pair $(a,b)$ is replaced by a new token $ab$ with frequency $f_{ab}$, then the count of the merged token is added to the active vocabulary.\n\n**Step 2 — Update constituent counts.**\n\nThe occurrences used in the merge are no longer independent occurrences at those positions:\n\n$$f_a\\leftarrow f_a-f_{ab},\\qquad f_b\\leftarrow f_b-f_{ab}.$$\n\nSo C is true.\n\n**Step 3 — Reject the incorrect updates.**\n\n- B is false: ordinary BPE does not recompute a full-corpus log-probability objective after every merge; it updates pair frequencies efficiently.\n- D is false: the constituent tokens remain valid vocabulary symbols because they can occur elsewhere and are needed by the merge rules.\n\n$$\\boxed{\\text{A, C}}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q6",
+      "num": "Q7",
+      "title": "T5 span-corruption training (MSQ)",
+      "type": "multiple_select",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "The phrase is **“life is like a box of chocolates”**. The word `life` and the span `box of chocolates` are corrupted.",
+      "bodyMd": "The phrase is **“life is like a box of chocolates”**. The word `life` and the span `box of chocolates` are corrupted.\n\n**Which statements correctly describe training? (Select all that apply.)**\n\n- ( ) The input becomes `<X> is like a <Y>` using unique sentinel tokens.\n- ( ) The target is `<X> life <Y> box of chocolates <Z>`, where the final sentinel marks completion.\n- ( ) Loss is calculated over the generated sentinel tokens and missing text.\n- ( ) The decoder reconstructs the entire original sequence autoregressively and calculates loss over every original position.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The input becomes `<X> is like a <Y>` using unique sentinel tokens."
+        },
+        {
+          "id": "B",
+          "text": "The target is `<X> life <Y> box of chocolates <Z>`, where the final sentinel marks completion."
+        },
+        {
+          "id": "C",
+          "text": "Loss is calculated over the generated sentinel tokens and missing text."
+        },
+        {
+          "id": "D",
+          "text": "The decoder reconstructs the entire original sequence autoregressively and calculates loss over every original position."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** A, B, and C\n\n#### Step-by-step solution\n\n**Step 1 — Replace each corrupted span once.**\n\nThe first removed span is replaced by `<X>` and the second by `<Y>`:\n\n$$\\text{Input: }\\boxed{\\texttt{<X> is like a <Y>}}.$$\n\nThe uncorrupted words stay in the encoder input.\n\n**Step 2 — Build the compact target.**\n\nThe decoder target lists each sentinel followed by the text removed at that sentinel:\n\n$$\\text{Target: }\\boxed{\\texttt{<X> life <Y> box of chocolates <Z>}}.$$\n\n`<Z>` is an end sentinel in the question's notation.\n\n**Step 3 — Locate the loss.**\n\nThe denoising target contains the sentinels and the missing spans, so the sequence-to-sequence cross-entropy is evaluated over those target positions. The decoder does not reproduce visible input words such as `is`, `like`, or `a` in the target.\n\nTherefore D is false and\n\n$$\\boxed{\\text{A, B, C}}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q7",
+      "num": "Q8",
+      "title": "GPT-1 textual-entailment delimiter (MCQ)",
+      "type": "single_choice",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "During GPT-1 fine-tuning for textual entailment, what is the purpose of the delimiter token `$`?",
+      "bodyMd": "**During GPT-1 fine-tuning for textual entailment, what is the purpose of the delimiter token `$`?**\n\n- ( ) Trigger the softmax function\n- ( ) Separate the premise and hypothesis\n- ( ) Mark the end of the sentence\n- ( ) Initialize the linear head",
+      "options": [
+        {
+          "id": "A",
+          "text": "Trigger the softmax function"
+        },
+        {
+          "id": "B",
+          "text": "Separate the premise and hypothesis"
+        },
+        {
+          "id": "C",
+          "text": "Mark the end of the sentence"
+        },
+        {
+          "id": "D",
+          "text": "Initialize the linear head"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** B — Separate the premise and hypothesis\n\n#### Step-by-step solution\n\nTextual entailment supplies two pieces of text: a premise and a hypothesis. GPT-1 concatenates them with a learned delimiter so the model can tell where one segment ends and the other begins. The delimiter is an input marker; it does not itself trigger softmax or initialize a classifier.\n\n$$\\boxed{\\text{B}}$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q8",
+      "num": "Q9",
+      "title": "Why use the final decoder token for classification? (MCQ)",
+      "type": "single_choice",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "Why is the hidden representation of the final input token used as input to the classification layer in a decoder-only Transformer?",
+      "bodyMd": "**Why is the hidden representation of the final input token used as input to the classification layer in a decoder-only Transformer?**\n\n- ( ) The first token only has positional information and lacks semantic context.\n- ( ) The final token is computed independently of self-attention, giving more stable gradients.\n- ( ) It aligns with autoregressive training and eliminates teacher forcing.\n- ( ) Causal self-attention lets the final token aggregate information from all preceding tokens.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The first token only has positional information and lacks semantic context."
+        },
+        {
+          "id": "B",
+          "text": "The final token is computed independently of self-attention, giving more stable gradients."
+        },
+        {
+          "id": "C",
+          "text": "It aligns with autoregressive training and eliminates teacher forcing."
+        },
+        {
+          "id": "D",
+          "text": "Causal self-attention lets the final token aggregate information from all preceding tokens."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "D"
+        ]
+      },
+      "solutionMd": "**Answer:** D\n\n#### Step-by-step solution\n\n**Step 1 — Apply the causal-attention rule.**\n\nAt position $t$, causal self-attention can use positions $1,2,\\ldots,t$. The final position is therefore allowed to attend to the entire input prefix.\n\n**Step 2 — Use the final hidden state as a summary.**\n\nThe final representation can contain information from all earlier tokens, so it is a natural fixed-size summary for a classification head.\n\nThe other statements incorrectly claim that the final token is independent of attention, or confuse representation pooling with teacher forcing.\n\n$$\\boxed{\\text{D}}$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q9",
+      "num": "Q10",
+      "title": "Temperature before top-$p$ sampling (MCQ)",
+      "type": "single_choice",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "With temperature $\\tau=5$ applied to logits before top-$p$ sampling, what is the impact on the subsequent sampling step?",
+      "bodyMd": "**With temperature $\\tau=5$ applied to logits before top-$p$ sampling, what is the impact on the subsequent sampling step?**\n\n- ( ) It increases the required number of candidate tokens and expands the nucleus.\n- ( ) It decreases the required number of candidate tokens and shrinks the nucleus.\n- ( ) It truncates the tail, making sampling similar to top-$k$.\n- ( ) Nucleus size is unaffected because temperature changes only token order.",
+      "options": [
+        {
+          "id": "A",
+          "text": "It increases the required number of candidate tokens and expands the nucleus."
+        },
+        {
+          "id": "B",
+          "text": "It decreases the required number of candidate tokens and shrinks the nucleus."
+        },
+        {
+          "id": "C",
+          "text": "It truncates the tail, making sampling similar to top-$k$."
+        },
+        {
+          "id": "D",
+          "text": "Nucleus size is unaffected because temperature changes only token order."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "**Answer:** A\n\n#### Step-by-step solution\n\n**Step 1 — Recall temperature scaling.**\n\nIf logits are $z_i$, temperature produces\n\n$$p_i=\\operatorname{softmax}(z_i/\\tau).$$\n\nFor $\\tau>1$, logit differences are compressed and the probability distribution becomes flatter.\n\n**Step 2 — Apply the top-$p$ rule.**\n\nTop-$p$ chooses the smallest set of highest-probability tokens whose cumulative probability reaches $p$. A flatter distribution needs more tokens to collect the same cumulative mass.\n\nThus the nucleus expands, so\n\n$$\\boxed{\\text{A}}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q10",
+      "num": "Q11",
+      "title": "WordPiece merge scoring (MCQ)",
+      "type": "single_choice",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "How does the WordPiece scoring formula prioritize token merges?",
+      "bodyMd": "**How does the WordPiece scoring formula prioritize token merges?**\n\n- ( ) It evaluates the log-probability of the pair and chooses the highest transition.\n- ( ) It merges the pair with the highest absolute frequency.\n- ( ) It prioritizes pairs that occur together frequently but rarely appear independently.\n- ( ) None of these.",
+      "options": [
+        {
+          "id": "A",
+          "text": "It evaluates the log-probability of the pair and chooses the highest transition."
+        },
+        {
+          "id": "B",
+          "text": "It merges the pair with the highest absolute frequency."
+        },
+        {
+          "id": "C",
+          "text": "It prioritizes pairs that occur together frequently but rarely appear independently."
+        },
+        {
+          "id": "D",
+          "text": "None of these."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** C\n\n#### Step-by-step solution\n\nA common WordPiece score for a pair $(x,y)$ is proportional to\n\n$$\\operatorname{score}(x,y)=\\frac{\\operatorname{count}(xy)}{\\operatorname{count}(x)\\operatorname{count}(y)}.$$\n\nThe numerator rewards frequent co-occurrence. The denominator reduces the score for tokens that are individually common, so the algorithm favors pairs whose joint occurrence is especially informative relative to their independent frequencies.\n\nThat is exactly option C:\n\n$$\\boxed{\\text{C}}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q11",
+      "num": "Q12",
+      "title": "T5 for regression and classification (MCQ)",
+      "type": "single_choice",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "How does T5 process tasks such as semantic similarity regression and sentiment classification during fine-tuning?",
+      "bodyMd": "**How does T5 process tasks such as semantic similarity regression and sentiment classification during fine-tuning?**\n\n- ( ) Encoder outputs regression and decoder outputs classification tokens, selected by prompt.\n- ( ) Separate regression and classification heads are appended to the decoder.\n- ( ) Both tasks are treated as sequence generation with task-specific prefixes and string outputs.\n- ( ) None of these.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Encoder outputs regression and decoder outputs classification tokens, selected by prompt."
+        },
+        {
+          "id": "B",
+          "text": "Separate regression and classification heads are appended to the decoder."
+        },
+        {
+          "id": "C",
+          "text": "Both tasks are treated as sequence generation with task-specific prefixes and string outputs."
+        },
+        {
+          "id": "D",
+          "text": "None of these."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** C\n\n#### Step-by-step solution\n\n**Step 1 — Use the text-to-text formulation.**\n\nT5 expresses each task as text generation. A task prefix tells the model what to do, for example:\n\n$$\\texttt{\"stsb sentence1: ... sentence2: ...\"}\\longrightarrow\\texttt{\"4.2\"},$$\n$$\\texttt{\"sentiment: ...\"}\\longrightarrow\\texttt{\"positive\"}.$$\n\n**Step 2 — Keep one output interface.**\n\nContinuous values can be generated as decimal strings and class labels as words or other text strings. The standard T5 setup therefore does not require separate task-specific classifier heads.\n\n$$\\boxed{\\text{C}}$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q12",
+      "num": "Q13",
+      "title": "BART denoising architecture (MCQ)",
+      "type": "single_choice",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "How does BART handle corrupted inputs compared with its output?",
+      "bodyMd": "**How does BART handle corrupted inputs compared with its output?**\n\n- ( ) The decoder ignores the encoder and performs standard causal language modeling.\n- ( ) The encoder processes the original sequence and the decoder predicts corrupted tokens.\n- ( ) The encoder processes the corrupted sequence and the decoder predicts the entire original sequence.\n- ( ) Both encoder and decoder process the corrupted sequence to calculate masked loss.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The decoder ignores the encoder and performs standard causal language modeling."
+        },
+        {
+          "id": "B",
+          "text": "The encoder processes the original sequence and the decoder predicts corrupted tokens."
+        },
+        {
+          "id": "C",
+          "text": "The encoder processes the corrupted sequence and the decoder predicts the entire original sequence."
+        },
+        {
+          "id": "D",
+          "text": "Both encoder and decoder process the corrupted sequence to calculate masked loss."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** C\n\n#### Step-by-step solution\n\nBART is an encoder-decoder denoising autoencoder:\n\n1. corrupt the original text;\n2. give the corrupted text to the bidirectional encoder;\n3. ask the autoregressive decoder to reconstruct the complete original text.\n\n$$\\text{corrupted input}\\xrightarrow{\\text{encoder}}h\n\\xrightarrow{\\text{decoder}}\\text{original sequence}.$$\n\nThe target is not only the missing spans; it is the full original sequence. Hence\n\n$$\\boxed{\\text{C}}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q13",
+      "num": "Q14",
+      "title": "C4 versus Unfiltered-C4 (MCQ)",
+      "type": "single_choice",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "When comparing C4 with an “Unfiltered-C4” dataset about eight times larger, what was the observed effect on downstream performance?",
+      "bodyMd": "**When comparing C4 with an “Unfiltered-C4” dataset about eight times larger, what was the observed effect on downstream performance?**\n\n- ( ) Performance remained identical, showing saturation.\n- ( ) Performance improved only for high-resource translation tasks.\n- ( ) Performance improved significantly because of increased data diversity.\n- ( ) Performance degraded across tasks despite the larger scale.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Performance remained identical, showing saturation."
+        },
+        {
+          "id": "B",
+          "text": "Performance improved only for high-resource translation tasks."
+        },
+        {
+          "id": "C",
+          "text": "Performance improved significantly because of increased data diversity."
+        },
+        {
+          "id": "D",
+          "text": "Performance degraded across tasks despite the larger scale."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "D"
+        ]
+      },
+      "solutionMd": "**Answer:** D\n\n#### Step-by-step solution\n\n**Step 1 — Distinguish quantity from quality.**\n\nUnfiltered-C4 has more raw text, but it retains noise that C4's heuristic filtering removes: duplicated pages, boilerplate, malformed text, and undesirable content.\n\n**Step 2 — Interpret the experiment.**\n\nThe larger raw corpus did not compensate for its poorer data quality. The filtered C4 model obtained better downstream results; the unfiltered version underperformed despite being much larger.\n\nThe intended lesson is that useful, diverse, clean tokens are more valuable than raw token count alone:\n\n$$\\boxed{\\text{D}}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q14",
+      "num": "Q15",
+      "title": "Adapter Layers (MCQ)",
+      "type": "single_choice",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "Which description matches the Adapter Layers fine-tuning strategy?",
+      "bodyMd": "**Which description matches the Adapter Layers fine-tuning strategy?**\n\n- ( ) Randomly freeze half of the attention heads.\n- ( ) Add small dense-ReLU-dense blocks after FFN layers and update only them and Layer Norm parameters.\n- ( ) Update all parameters with a much smaller learning rate.\n- ( ) Increase $d_{model}$ of existing feed-forward networks.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Randomly freeze half of the attention heads."
+        },
+        {
+          "id": "B",
+          "text": "Add small dense-ReLU-dense blocks after FFN layers and update only them and Layer Norm parameters."
+        },
+        {
+          "id": "C",
+          "text": "Update all parameters with a much smaller learning rate."
+        },
+        {
+          "id": "D",
+          "text": "Increase $d_{model}$ of existing feed-forward networks."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** B\n\n#### Step-by-step solution\n\nAdapters are small trainable modules inserted into a frozen pre-trained network. A typical adapter is a bottleneck projection, nonlinearity, and expansion:\n\n$$h\\longrightarrow W_{up}\\,\\sigma(W_{down}h).$$\n\nOnly the adapter parameters—and commonly layer-normalization parameters—are updated. The large pre-trained Transformer remains frozen, reducing memory and trainable-parameter cost.\n\n$$\\boxed{\\text{B}}$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q15",
+      "num": "Q16",
+      "title": "Effect of duplicated training data (MCQ)",
+      "type": "single_choice",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "Which is a reported negative effect of significantly duplicated content in LLM training data?",
+      "bodyMd": "**Which is a reported negative effect of significantly duplicated content in LLM training data?**\n\n- ( ) It decreases inference speed during deployment.\n- ( ) It causes repeated sequences to be generated much more frequently.\n- ( ) It permanently reduces the maximum context window.\n- ( ) It removes the ability to process multilingual input.",
+      "options": [
+        {
+          "id": "A",
+          "text": "It decreases inference speed during deployment."
+        },
+        {
+          "id": "B",
+          "text": "It causes repeated sequences to be generated much more frequently."
+        },
+        {
+          "id": "C",
+          "text": "It permanently reduces the maximum context window."
+        },
+        {
+          "id": "D",
+          "text": "It removes the ability to process multilingual input."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** B\n\n#### Step-by-step solution\n\nDuplicate examples overrepresent the same strings and patterns. The model can overfit or memorize those patterns, reducing data efficiency and increasing the chance that decoding falls into repetitive continuations.\n\nThis is a training-data quality problem; it does not directly change the deployed model's context-window limit or hardware inference speed.\n\n$$\\boxed{\\text{B}}$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q16",
+      "num": "Q17",
+      "title": "Scaling laws with a large model and small dataset (MCQ)",
+      "type": "single_choice",
+      "context": "The diagram represents one ($N=1$) Transformer encoder-decoder block. The letters label components in the architecture.\n\n![Kroki-style Transformer encoder-decoder block](assets/transformer-encoder-decoder.svg)\n\nThe encoder path is: input embeddings and positional encoding, self-attention, Add & Norm, feed-forward network, Add & Norm. The decoder path is: shifted-right target embeddings and positional encoding, masked self-attention, Add & Norm, encoder-decoder cross-attention, Add & Norm, feed-forward network, Add & Norm, followed by a linear projection and softmax.",
+      "questionText": "With fixed compute $C$, what is likely if an extraordinarily large model (large $N$) is trained on a relatively small dataset (small $D$)?",
+      "bodyMd": "**With fixed compute $C$, what is likely if an extraordinarily large model (large $N$) is trained on a relatively small dataset (small $D$)?**\n\n- ( ) The model is over-trained and memorizes the dataset.\n- ( ) The model is under-trained and less capable than a smaller model trained on more data with the same compute.\n- ( ) The model perfectly memorizes and generalizes flawlessly.\n- ( ) Inference speed increases dramatically.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The model is over-trained and memorizes the dataset."
+        },
+        {
+          "id": "B",
+          "text": "The model is under-trained and less capable than a smaller model trained on more data with the same compute."
+        },
+        {
+          "id": "C",
+          "text": "The model perfectly memorizes and generalizes flawlessly."
+        },
+        {
+          "id": "D",
+          "text": "Inference speed increases dramatically."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** B\n\n#### Step-by-step solution\n\n**Step 1 — Relate compute to model size and training tokens.**\n\nIncreasing $N$ consumes more compute per training token. Under a fixed budget, an extremely large model therefore receives fewer effective training tokens or fewer updates.\n\n**Step 2 — Identify the imbalance.**\n\nThe model is parameter-rich but data-poor. It is under-trained relative to its capacity, so it can be less capable than a smaller, more compute-efficient model trained on a better-sized dataset.\n\nThis is why scaling-law analyses seek a balanced allocation between model parameters and data:\n\n$$\\boxed{\\text{B}}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q17",
+      "num": "Q18",
+      "title": "Valid segmentations (MSQ)",
+      "type": "multiple_select",
+      "context": "Consider the corpus **“there is no spoon”**, ignoring spaces and punctuation. Build a vocabulary from the four whole-word tokens and all distinct individual characters. The resulting vocabulary has 13 tokens.\n\nWhole words: `there`, `is`, `no`, `spoon`\nCharacter tokens: `t`, `h`, `e`, `r`, `i`, `s`, `n`, `o`, `p`",
+      "questionText": "Using this vocabulary, which proposed segmentations of `prison` and `rhino` are valid? (Select all that apply.)",
+      "bodyMd": "**Using this vocabulary, which proposed segmentations of `prison` and `rhino` are valid? (Select all that apply.)**\n\n- ( ) `prison`\n- ( ) `p, r, is, o, n`\n- ( ) `p, r, is, on`\n- ( ) `r, h, i, n, o`\n- ( ) `r, h, i, no`",
+      "options": [
+        {
+          "id": "A",
+          "text": "`prison`"
+        },
+        {
+          "id": "B",
+          "text": "`p, r, is, o, n`"
+        },
+        {
+          "id": "C",
+          "text": "`p, r, is, on`"
+        },
+        {
+          "id": "D",
+          "text": "`r, h, i, n, o`"
+        },
+        {
+          "id": "E",
+          "text": "`r, h, i, no`"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B",
+          "D",
+          "E"
+        ]
+      },
+      "solutionMd": "**Answer:** B, D, and E\n\n#### Step-by-step solution\n\n**Step 1 — List the usable symbols.**\n\nThe vocabulary contains whole words `there`, `is`, `no`, `spoon` and individual characters `t,h,e,r,i,s,n,o,p`. It does **not** contain arbitrary multi-character strings such as `prison`, `on`, or `nois`.\n\n**Step 2 — Check `prison`.**\n\n$$\\texttt{p | r | is | o | n}$$\n\nuses only vocabulary tokens, so B is valid. `prison` is not itself a token, and `on` is not a token, so A and C are invalid.\n\n**Step 3 — Check `rhino`.**\n\nBoth\n\n$$\\texttt{r | h | i | n | o}$$\n\nand\n\n$$\\texttt{r | h | i | no}$$\n\nuse valid character/whole-word tokens. Therefore D and E are valid.\n\n$$\\boxed{\\text{B, D, E}}$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-2-q18",
+      "num": "Q19",
+      "title": "Highest-probability unigram segmentation (MCQ)",
+      "type": "single_choice",
+      "context": "Consider the corpus **“there is no spoon”**, ignoring spaces and punctuation. Build a vocabulary from the four whole-word tokens and all distinct individual characters. The resulting vocabulary has 13 tokens.\n\nWhole words: `there`, `is`, `no`, `spoon`\nCharacter tokens: `t`, `h`, `e`, `r`, `i`, `s`, `n`, `o`, `p`",
+      "questionText": "Using a unigram language model, identify the segment with the highest probability.",
+      "bodyMd": "**Using a unigram language model, identify the segment with the highest probability.**\n\n- ( ) `n, o, i, s, e, s`\n- ( ) `no, is, e, s`\n- ( ) `nois, e, s`\n- ( ) `no, i, s, e, s`",
+      "options": [
+        {
+          "id": "A",
+          "text": "`n, o, i, s, e, s`"
+        },
+        {
+          "id": "B",
+          "text": "`no, is, e, s`"
+        },
+        {
+          "id": "C",
+          "text": "`nois, e, s`"
+        },
+        {
+          "id": "D",
+          "text": "`no, i, s, e, s`"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** B — `no, is, e, s`\n\n#### Step-by-step solution\n\n**Step 1 — Count token occurrences in the corpus.**\n\nThere are 4 whole-word occurrences and 14 character occurrences, so the combined token count is $18$. Relevant counts are:\n\n| Token | Count |\n|---|---:|\n| `no` | 1 |\n| `is` | 1 |\n| `n` | 2 |\n| `o` | 3 |\n| `i` | 1 |\n| `s` | 2 |\n| `e` | 2 |\n\nThus $P(w)=\\operatorname{count}(w)/18$ and the probability of a segmentation is the product of its token probabilities.\n\n**Step 2 — Compare the valid candidates.**\n\nIgnoring the common denominator powers for a moment:\n\n$$P(\\texttt{n,o,i,s,e,s})=\\frac{2\\cdot3\\cdot1\\cdot2\\cdot2\\cdot2}{18^6},$$\n$$P(\\texttt{no,is,e,s})=\\frac{1\\cdot1\\cdot2\\cdot2}{18^4},$$\n$$P(\\texttt{no,i,s,e,s})=\\frac{1\\cdot1\\cdot2\\cdot2\\cdot2}{18^5}.$$\n\n`nois` is not in the constructed vocabulary, so option C is invalid.\n\n**Step 3 — Compare B and D directly.**\n\n$$\\frac{P(\\texttt{no,is,e,s})}{P(\\texttt{no,i,s,e,s})}\n=\\frac{4/18^4}{8/18^5}=\\frac{4\\times18}{8}=9>1.$$\n\nThe two-token-shorter segmentation in B has the greater probability, and it also beats A. Therefore\n\n$$\\boxed{\\text{B — no, is, e, s}}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+flowchart TB
+    SRC[Source tokens] --> SE[Source embeddings + positional encoding]
+    SE --> ENC[Encoder self-attention + Add & Norm\nFeed-forward + Add & Norm]
+    ENC --> H[Encoder hidden states]
+    TGT[Shifted target tokens] --> DE[Target embeddings + positional encoding]
+    DE --> M[Masked self-attention + Add & Norm]
+    M --> CA[Cross-attention\nqueries from decoder, keys/values from encoder]
+    H --> CA
+    CA --> FF[Feed-forward + Add & Norm]
+    FF --> OUT[Linear projection + softmax]
+
+    classDef input fill:#e8f1ff,stroke:#1355a6,color:#102a43;
+    classDef block fill:#fff4e5,stroke:#d97706,color:#5b3500;
+    classDef output fill:#ecfdf5,stroke:#15803d,color:#14532d;
+    class SRC,TGT input;
+    class SE,ENC,DE,M,CA,FF block;
+    class H,OUT output;

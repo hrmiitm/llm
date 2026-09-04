@@ -1,6 +1,6 @@
 // Core domain types for the LLM Exam Portal
 
-export type QuestionType = 'single_choice' | 'multiple_select' | 'numeric';
+export type QuestionType = 'single_choice' | 'multiple_select' | 'numeric' | 'text';
 
 export interface QuestionOption {
   id: string;
@@ -30,6 +30,8 @@ export interface GACatalogItem {
   id: string;
   week: number;
   title: string;
+  category?: 'GA' | 'PYQ' | 'LEARNING';
+  label?: string;
   topics: string[];
   score: number | null;
   maxScore: number | null;

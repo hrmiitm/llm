@@ -1,0 +1,342 @@
+{
+  "id": "learning-07-capstone",
+  "week": 7,
+  "title": "Learning 07 — Weeks 1–4 Capstone",
+  "category": "LEARNING",
+  "label": "Learning 07 — Capstone",
+  "topics": [
+    "Integrated Shapes",
+    "Attention",
+    "Decoding",
+    "BERT vs GPT"
+  ],
+  "notesFile": "vid/transformer-notes.md",
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 15,
+  "durationMinutes": 45,
+  "questions": [
+    {
+      "id": "learning-07-capstone-q1",
+      "num": "Q1",
+      "title": "Source representation shape (Short Answer)",
+      "type": "text",
+      "context": null,
+      "questionText": "What is the shape of the source hidden-state tensor after its token embeddings and positional information are combined?",
+      "bodyMd": "What is the shape of the source hidden-state tensor after its token embeddings and positional information are combined?",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "2 × 6 × 24"
+      },
+      "solutionMd": "The three axes are batch, source positions, and feature width:\n\n\\[\nH_s\\in\\mathbb{R}^{B\\times T_s\\times d_{\\text{model}}}\n=\\mathbb{R}^{2\\times6\\times24}.\n\\]\n\n**Mnemonic:** **B-T-D** = batches, tokens, dimensions.\n\n**Answer:** `2 × 6 × 24`",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q2",
+      "num": "Q2",
+      "title": "Head dimension (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "What is the width \\(d_h\\) of one attention head?",
+      "bodyMd": "What is the width \\(d_h\\) of one attention head?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "8"
+      },
+      "solutionMd": "\\[\nd_h=\\frac{d_{\\text{model}}}{h}=\\frac{24}{3}=8.\n\\]\n\n**Answer:** \\(\\boxed{8}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q3",
+      "num": "Q3",
+      "title": "Encoder self-attention scores (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many raw score cells does one encoder self-attention head form for one example?",
+      "bodyMd": "How many raw score cells does one encoder self-attention head form for one example?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "36"
+      },
+      "solutionMd": "Each of the 6 source queries compares with 6 source keys:\n\n\\[\nT_s^2=6^2=36.\n\\]\n\n**Answer:** \\(\\boxed{36}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q4",
+      "num": "Q4",
+      "title": "Decoder's blocked future (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many cells are strictly above the diagonal in the decoder's \\(T_t=4\\) causal self-attention mask?",
+      "bodyMd": "How many cells are strictly above the diagonal in the decoder's \\(T_t=4\\) causal self-attention mask?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "6"
+      },
+      "solutionMd": "The number of forbidden future pairs is triangular:\n\n\\[\n\\frac{T_t(T_t-1)}2=\\frac{4\\cdot3}{2}=6.\n\\]\n\nThe allowed region includes the diagonal and the past.\n\n**Answer:** \\(\\boxed{6}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q5",
+      "num": "Q5",
+      "title": "Cross-attention scores (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many raw score cells does one decoder cross-attention head form for one example?",
+      "bodyMd": "How many raw score cells does one decoder cross-attention head form for one example?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "24"
+      },
+      "solutionMd": "Decoder positions provide 4 queries; encoder positions provide 6 keys:\n\n\\[\nT_tT_s=4\\cdot6=24.\n\\]\n\n**Intuition:** cross-attention is “target asks, source answers.”\n\n**Answer:** \\(\\boxed{24}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q6",
+      "num": "Q6",
+      "title": "One MHA module (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many parameters are in one multi-head-attention module, including all four projection biases?",
+      "bodyMd": "How many parameters are in one multi-head-attention module, including all four projection biases?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2400"
+      },
+      "solutionMd": "Packed MHA has four \\(d_{\\text{model}}\\to d_{\\text{model}}\\) projections:\n\n\\[\n4(d_{\\text{model}}^2+d_{\\text{model}})\n=4(24^2+24)=4(600)=2400.\n\\]\n\n**Answer:** \\(\\boxed{2400}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q7",
+      "num": "Q7",
+      "title": "One FFN (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many parameters are in one FFN \\(24\\to48\\to24\\), including both biases?",
+      "bodyMd": "How many parameters are in one FFN \\(24\\to48\\to24\\), including both biases?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2376"
+      },
+      "solutionMd": "\\[\n(24\\cdot48+48)+(48\\cdot24+24)\n=1200+1176=2376.\n\\]\n\nThe FFN expands each token's feature vector, applies a nonlinearity, then projects back.\n\n**Answer:** \\(\\boxed{2376}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q8",
+      "num": "Q8",
+      "title": "Encoder-layer total (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many parameters are in the one encoder layer?",
+      "bodyMd": "How many parameters are in the one encoder layer?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "4872"
+      },
+      "solutionMd": "An encoder layer has MHA, FFN, and two layer norms. Each layer norm has \\(2d_{\\text{model}}=48\\) parameters:\n\n\\[\n2400+2376+2(48)=4872.\n\\]\n\n**Answer:** \\(\\boxed{4872}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q9",
+      "num": "Q9",
+      "title": "Decoder-layer total (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many parameters are in the one decoder layer?",
+      "bodyMd": "How many parameters are in the one decoder layer?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "7320"
+      },
+      "solutionMd": "The decoder has masked self-attention, cross-attention, FFN, and three layer norms:\n\n\\[\n2(2400)+2376+3(48)=7320.\n\\]\n\n**Memory hook:** decoder = **two** attention modules + FFN + **three** norms.\n\n**Answer:** \\(\\boxed{7320}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q10",
+      "num": "Q10",
+      "title": "Target output projection (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many parameters are in the final target-vocabulary linear layer, including bias?",
+      "bodyMd": "How many parameters are in the final target-vocabulary linear layer, including bias?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "3000"
+      },
+      "solutionMd": "The layer maps 24 features to 120 vocabulary logits:\n\n\\[\n24\\cdot120+120=3000.\n\\]\n\n**Answer:** \\(\\boxed{3000}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q11",
+      "num": "Q11",
+      "title": "Generated-sequence probability (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "A decoder assigns probabilities \\(0.5\\), then \\(0.6\\), then \\(0.8\\) to the three tokens it generates. What is the joint probability of that three-token sequence, conditioned on its prompt?",
+      "bodyMd": "A decoder assigns probabilities \\(0.5\\), then \\(0.6\\), then \\(0.8\\) to the three tokens it generates. What is the joint probability of that three-token sequence, conditioned on its prompt?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.24"
+      },
+      "solutionMd": "Apply the chain rule by multiplying the conditional choices:\n\n\\[\n0.5\\times0.6\\times0.8=0.24.\n\\]\n\n**Answer:** \\(\\boxed{0.24}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q12",
+      "num": "Q12",
+      "title": "Top-\\(k\\) in the capstone (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "The next-token probabilities are \\([0.60,0.25,0.15]\\). Under top-\\(k\\) sampling with \\(k=2\\), what is the renormalized probability of the first token, rounded to three decimals?",
+      "bodyMd": "The next-token probabilities are \\([0.60,0.25,0.15]\\). Under top-\\(k\\) sampling with \\(k=2\\), what is the renormalized probability of the first token, rounded to three decimals?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.706"
+      },
+      "solutionMd": "Keep mass \\(0.60+0.25=0.85\\), then normalize the first token:\n\n\\[\n\\frac{0.60}{0.85}=0.705882\\ldots\\approx0.706.\n\\]\n\n**Answer:** \\(\\boxed{0.706}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q13",
+      "num": "Q13",
+      "title": "BERT contrast (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "In a separate BERT MLM example, two selected original tokens receive probabilities \\(0.2\\) and \\(0.5\\). What is the summed MLM loss \\(-\\ln(0.2)-\\ln(0.5)\\), rounded to three decimals?",
+      "bodyMd": "In a separate BERT MLM example, two selected original tokens receive probabilities \\(0.2\\) and \\(0.5\\). What is the summed MLM loss \\(-\\ln(0.2)-\\ln(0.5)\\), rounded to three decimals?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2.303"
+      },
+      "solutionMd": "\\[\n-\\ln(0.2)-\\ln(0.5)\n=1.609438+0.693147=2.302585\\ldots\\approx2.303.\n\\]\n\nUnlike causal generation, MLM predicts selected hidden items using context on both sides.\n\n**Answer:** \\(\\boxed{2.303}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q14",
+      "num": "Q14",
+      "title": "Choose the right tool (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Which pairings are appropriate?",
+      "bodyMd": "Which pairings are appropriate?\n\n- ( ) Translate a source sequence while generating target tokens: encoder-decoder transformer with decoder cross-attention.\n- ( ) Predict a deliberately hidden word from both neighbors: BERT-style MLM.\n- ( ) Generate a continuation one token at a time: GPT-style causal language model.\n- ( ) Give every future target token to a causal decoder at inference so it can choose the answer.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Translate a source sequence while generating target tokens: encoder-decoder transformer with decoder cross-attention."
+        },
+        {
+          "id": "B",
+          "text": "Predict a deliberately hidden word from both neighbors: BERT-style MLM."
+        },
+        {
+          "id": "C",
+          "text": "Generate a continuation one token at a time: GPT-style causal language model."
+        },
+        {
+          "id": "D",
+          "text": "Give every future target token to a causal decoder at inference so it can choose the answer."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "solutionMd": "The first three pair each task with a matching architectural/objective idea. At inference, future target tokens are unknown, so giving them to a causal decoder would leak the answer.\n\n**Answer:** A, B and C",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-07-capstone-q15",
+      "num": "Q15",
+      "title": "Full model total (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Including source embeddings, target embeddings, one encoder layer, one decoder layer, and the target output projection, how many parameters does this model have?",
+      "bodyMd": "Including source embeddings, target embeddings, one encoder layer, one decoder layer, and the target output projection, how many parameters does this model have?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "20472"
+      },
+      "solutionMd": "First count the token tables:\n\n\\[\nV_sd=100(24)=2400,\\qquad V_td=120(24)=2880.\n\\]\n\nThen combine every requested component:\n\n\\[\n2400+2880+4872+7320+3000=20472.\n\\]\n\n**Final checklist:** make a component list first, count each once, and include biases only when the question says they exist.\n\n**Answer:** \\(\\boxed{20472}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

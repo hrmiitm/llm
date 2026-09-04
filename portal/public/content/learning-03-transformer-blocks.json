@@ -1,0 +1,380 @@
+{
+  "id": "learning-03-transformer-blocks",
+  "week": 3,
+  "title": "Learning 03 — Multi-Head Attention and Transformer Blocks",
+  "category": "LEARNING",
+  "label": "Learning 03 — Blocks & Parameters",
+  "topics": [
+    "Multi-Head Attention",
+    "Encoder-Decoder",
+    "FFN",
+    "Parameter Counting"
+  ],
+  "notesFile": "GA/week1-week2-learning-notes.md",
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 15,
+  "durationMinutes": 45,
+  "questions": [
+    {
+      "id": "learning-03-transformer-blocks-q1",
+      "num": "Q1",
+      "title": "Head width (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "What is \\(d_h\\), the width processed by one attention head?",
+      "bodyMd": "What is \\(d_h\\), the width processed by one attention head?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "8"
+      },
+      "solutionMd": "Heads split the model width evenly:\n\n\\[\nd_h=\\frac{d_{\\text{model}}}{h}=\\frac{32}{4}=8.\n\\]\n\n**Mnemonic:** model width divided by **h**eads gives **h**ead width.\n\n**Answer:** \\(\\boxed{8}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q2",
+      "num": "Q2",
+      "title": "One head's query shape (Short Answer)",
+      "type": "text",
+      "context": null,
+      "questionText": "For a sequence of 5 tokens, what is the shape of the projected query matrix for one head?",
+      "bodyMd": "For a sequence of 5 tokens, what is the shape of the projected query matrix for one head?",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "5 × 8"
+      },
+      "solutionMd": "There is one query row per token and \\(d_h=8\\) features per head:\n\n\\[\nQ_{\\text{one head}}\\in\\mathbb{R}^{5\\times8}.\n\\]\n\n**Answer:** `5 × 8`",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q3",
+      "num": "Q3",
+      "title": "Self-attention score cells (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "For a five-token self-attention sequence, how many score cells does one head have before masking?",
+      "bodyMd": "For a five-token self-attention sequence, how many score cells does one head have before masking?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "25"
+      },
+      "solutionMd": "Self-attention compares every query token with every key token:\n\n\\[\nT\\times T=5\\times5=25.\n\\]\n\n**Answer:** \\(\\boxed{25}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q4",
+      "num": "Q4",
+      "title": "Cross-attention score cells (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "If the decoder has 4 target tokens and the encoder has 5 source tokens, how many scores does one cross-attention head form?",
+      "bodyMd": "If the decoder has 4 target tokens and the encoder has 5 source tokens, how many scores does one cross-attention head form?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "20"
+      },
+      "solutionMd": "Cross-attention has a query for each target token and a key for each source token:\n\n\\[\nT_t\\times T_s=4\\times5=20.\n\\]\n\nThe score table is rectangular when source and target lengths differ.\n\n**Answer:** \\(\\boxed{20}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q5",
+      "num": "Q5",
+      "title": "Multi-head attention parameters (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many parameters are in one multi-head-attention module, including the \\(W_Q,W_K,W_V,W_O\\) matrices and their biases?",
+      "bodyMd": "How many parameters are in one multi-head-attention module, including the \\(W_Q,W_K,W_V,W_O\\) matrices and their biases?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "4224"
+      },
+      "solutionMd": "In an implementation, the heads are commonly packed into four \\(32\\times32\\) projections:\n\n\\[\n4(d_{\\text{model}}^2+d_{\\text{model}})\n=4(32^2+32)=4(1056)=4224.\n\\]\n\n**Memory hook:** MHA has **four** learned maps: Q, K, V, and Out.\n\n**Answer:** \\(\\boxed{4224}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q6",
+      "num": "Q6",
+      "title": "Feed-forward parameters (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many parameters are in one two-layer FFN, including both biases?",
+      "bodyMd": "How many parameters are in one two-layer FFN, including both biases?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "4192"
+      },
+      "solutionMd": "The FFN expands then contracts:\n\n\\[\n32\\to64\\to32.\n\\]\n\n\\[\n(32\\cdot64+64)+(64\\cdot32+32)\n=2112+2080=4192.\n\\]\n\n**Intuition:** attention moves information *between* tokens; the FFN transforms information *within* each token position.\n\n**Answer:** \\(\\boxed{4192}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q7",
+      "num": "Q7",
+      "title": "Layer norm parameters (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many trainable parameters are in one layer-normalization module over \\(d_{\\text{model}}=32\\)?",
+      "bodyMd": "How many trainable parameters are in one layer-normalization module over \\(d_{\\text{model}}=32\\)?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "64"
+      },
+      "solutionMd": "Layer norm learns a scale \\(\\gamma\\) and offset \\(\\beta\\) for each feature:\n\n\\[\n2d_{\\text{model}}=2\\cdot32=64.\n\\]\n\nDo not confuse these with batch-normalization statistics; layer norm operates across features of each example/token.\n\n**Answer:** \\(\\boxed{64}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q8",
+      "num": "Q8",
+      "title": "Encoder-layer total (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "An encoder layer has one MHA module, one FFN, and two layer norms. How many parameters does this encoder layer have?",
+      "bodyMd": "An encoder layer has one MHA module, one FFN, and two layer norms. How many parameters does this encoder layer have?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "8544"
+      },
+      "solutionMd": "\\[\n\\text{encoder}=4224+4192+2(64)=8544.\n\\]\n\nResidual connections add activations but no trainable parameters.\n\n**Answer:** \\(\\boxed{8544}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q9",
+      "num": "Q9",
+      "title": "Decoder-layer total (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "A decoder layer has masked self-attention, cross-attention, one FFN, and three layer norms. How many parameters does it have?",
+      "bodyMd": "A decoder layer has masked self-attention, cross-attention, one FFN, and three layer norms. How many parameters does it have?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "12832"
+      },
+      "solutionMd": "It contains two MHA modules:\n\n\\[\n\\text{decoder}=2(4224)+4192+3(64)\n=8448+4192+192=12832.\n\\]\n\n**Mnemonic:** encoder: one attention; decoder: **self + source** attention.\n\n**Answer:** \\(\\boxed{12832}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q10",
+      "num": "Q10",
+      "title": "Embedding tables (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many parameters are in the separate source and target token embedding tables together?",
+      "bodyMd": "How many parameters are in the separate source and target token embedding tables together?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "7040"
+      },
+      "solutionMd": "Each vocabulary item has a \\(32\\)-dimensional embedding:\n\n\\[\nV_s d_{\\text{model}} + V_t d_{\\text{model}}\n=100(32)+120(32)=7040.\n\\]\n\n**Answer:** \\(\\boxed{7040}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q11",
+      "num": "Q11",
+      "title": "Output projection (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many parameters are in the target vocabulary output layer, including its bias, if it maps \\(32\\) features to \\(V_t=120\\) logits?",
+      "bodyMd": "How many parameters are in the target vocabulary output layer, including its bias, if it maps \\(32\\) features to \\(V_t=120\\) logits?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "3960"
+      },
+      "solutionMd": "\\[\nd_{\\text{model}}V_t+V_t=32(120)+120=3960.\n\\]\n\nIts output is one logit for every possible next target token.\n\n**Answer:** \\(\\boxed{3960}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q12",
+      "num": "Q12",
+      "title": "What has parameters? (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Which components contain trainable parameters in the usual transformer block?",
+      "bodyMd": "Which components contain trainable parameters in the usual transformer block?\n\n- ( ) The Q/K/V/output projections\n- ( ) The two FFN linear layers\n- ( ) Layer norm's scale and bias\n- ( ) A residual addition by itself",
+      "options": [
+        {
+          "id": "A",
+          "text": "The Q/K/V/output projections"
+        },
+        {
+          "id": "B",
+          "text": "The two FFN linear layers"
+        },
+        {
+          "id": "C",
+          "text": "Layer norm's scale and bias"
+        },
+        {
+          "id": "D",
+          "text": "A residual addition by itself"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "solutionMd": "Projections and FFN layers have weights/biases. Layer norm has learned \\(\\gamma\\) and \\(\\beta\\). A residual path is simply an addition such as \\(x+\\operatorname{MHA}(x)\\), so it does not introduce a parameter tensor.\n\n**Answer:** A, B and C",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q13",
+      "num": "Q13",
+      "title": "Why residual paths? (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "What is the main role of a residual connection such as \\(x+\\operatorname{FFN}(x)\\)?",
+      "bodyMd": "What is the main role of a residual connection such as \\(x+\\operatorname{FFN}(x)\\)?\n\n- ( ) It removes the need for attention\n- ( ) It gives information and gradients a direct route through the layer\n- ( ) It makes all token vectors identical\n- ( ) It replaces the vocabulary softmax",
+      "options": [
+        {
+          "id": "A",
+          "text": "It removes the need for attention"
+        },
+        {
+          "id": "B",
+          "text": "It gives information and gradients a direct route through the layer"
+        },
+        {
+          "id": "C",
+          "text": "It makes all token vectors identical"
+        },
+        {
+          "id": "D",
+          "text": "It replaces the vocabulary softmax"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "The layer learns a useful modification to \\(x\\) while retaining a direct identity route. This supports stable optimization in deep stacks.\n\n**Memory hook:** residual means “keep the original, add the refinement.”\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q14",
+      "num": "Q14",
+      "title": "Where is the nonlinearity? (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Which component normally supplies a pointwise nonlinearity such as ReLU or GELU?",
+      "bodyMd": "Which component normally supplies a pointwise nonlinearity such as ReLU or GELU?\n\n- ( ) The feed-forward network\n- ( ) The causal-mask triangle\n- ( ) The vocabulary index\n- ( ) The residual addition alone",
+      "options": [
+        {
+          "id": "A",
+          "text": "The feed-forward network"
+        },
+        {
+          "id": "B",
+          "text": "The causal-mask triangle"
+        },
+        {
+          "id": "C",
+          "text": "The vocabulary index"
+        },
+        {
+          "id": "D",
+          "text": "The residual addition alone"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "The FFN is typically\n\n\\[\n\\operatorname{FFN}(x)=W_2\\,\\sigma(W_1x+b_1)+b_2,\n\\]\n\nwhere \\(\\sigma\\) is the nonlinearity. It processes each token position independently after attention has shared context.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-03-transformer-blocks-q15",
+      "num": "Q15",
+      "title": "Decoder count formula (Short Answer)",
+      "type": "text",
+      "context": null,
+      "questionText": "Write the component-level parameter formula for one decoder layer, using the symbols MHA, FFN, and LN.",
+      "bodyMd": "Write the component-level parameter formula for one decoder layer, using the symbols MHA, FFN, and LN.",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "2 MHA + FFN + 3 LN"
+      },
+      "solutionMd": "The decoder contains masked self-attention, cross-attention, an FFN, and three layer norms:\n\n\\[\n2\\operatorname{MHA}+\\operatorname{FFN}+3\\operatorname{LN}.\n\\]\n\nUse this structure before inserting any dimensions; it prevents double-counting or missing cross-attention.\n\n**Answer:** `2 MHA + FFN + 3 LN`",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

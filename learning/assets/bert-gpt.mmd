@@ -1,0 +1,10 @@
+flowchart LR
+    BInput["[CLS] The [MASK] barked [SEP]"] --> BERT["BERT encoder\nbidirectional attention"]
+    BERT --> BOut["Predict the masked token\nusing left + right context"]
+    GInput["The dog"] --> GPT["GPT decoder\ncausal attention"]
+    GPT --> GOut["Predict one next token\nusing earlier tokens only"]
+
+    classDef bert fill:#e8f1ff,stroke:#1355a6,color:#102a43;
+    classDef gpt fill:#fff4e5,stroke:#d97706,color:#5b3500;
+    class BInput,BERT,BOut bert;
+    class GInput,GPT,GOut gpt;

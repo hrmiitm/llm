@@ -3,6 +3,7 @@
     "id": "ga1",
     "week": 1,
     "title": "Week 1 — Graded Assignment 1",
+    "category": "GA",
     "topics": [
       "Context Length",
       "Embedding Tensors",
@@ -19,6 +20,7 @@
     "id": "ga2",
     "week": 2,
     "title": "Week 2 — Graded Assignment 2",
+    "category": "GA",
     "topics": [
       "Multi-Head Attention",
       "Parameter Counting",
@@ -35,6 +37,7 @@
     "id": "ga3",
     "week": 3,
     "title": "Week 3 — Graded Assignment 3",
+    "category": "GA",
     "topics": [
       "GPT Architecture",
       "Causal LM",
@@ -51,6 +54,7 @@
     "id": "ga4",
     "week": 4,
     "title": "Week 4 — Graded Assignment 4",
+    "category": "GA",
     "topics": [
       "BERT Architecture",
       "MLM",
@@ -67,6 +71,7 @@
     "id": "ga5",
     "week": 5,
     "title": "Week 5 — Graded Assignment 5",
+    "category": "GA",
     "topics": [
       "Vocabulary Construction",
       "BPE",
@@ -83,6 +88,7 @@
     "id": "ga7",
     "week": 7,
     "title": "Week 7 — Graded Assignment 7",
+    "category": "GA",
     "topics": [
       "BART",
       "T5",
@@ -99,6 +105,7 @@
     "id": "ga8",
     "week": 8,
     "title": "Week 8 — Graded Assignment 8",
+    "category": "GA",
     "topics": [
       "LLM Taxonomy",
       "Pre-training Data",
@@ -115,6 +122,7 @@
     "id": "ga11",
     "week": 11,
     "title": "Week 11 — Graded Assignment 11",
+    "category": "GA",
     "topics": [
       "Attention Complexity",
       "FLOP Counting",
@@ -131,6 +139,7 @@
     "id": "ga12",
     "week": 12,
     "title": "Week 12 — Graded Assignment 12",
+    "category": "GA",
     "topics": [
       "Positional Encodings",
       "RoPE",
@@ -142,5 +151,167 @@
     "submittedDate": "Sun, 30 Aug 2026",
     "questionCount": 6,
     "durationMinutes": 30
+  },
+  {
+    "id": "pyq-may-2026-quiz-1",
+    "week": 0,
+    "title": "May-2026-Quiz-1",
+    "category": "PYQ",
+    "label": "May-2026-Quiz-1",
+    "topics": [
+      "Attention",
+      "Transformer Architecture",
+      "Autoregressive Decoding",
+      "Tokenization"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 16,
+    "durationMinutes": 48
+  },
+  {
+    "id": "pyq-may-2026-quiz-2",
+    "week": 0,
+    "title": "May-2026-Quiz-2",
+    "category": "PYQ",
+    "label": "May-2026-Quiz-2",
+    "topics": [
+      "Encoder-Decoder Transformers",
+      "T5",
+      "BART",
+      "Scaling Laws"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 18,
+    "durationMinutes": 54
+  },
+  {
+    "id": "learning-01-foundations",
+    "week": 1,
+    "title": "Learning 01 — From Text to Transformer Inputs",
+    "category": "LEARNING",
+    "label": "Learning 01 — Foundations",
+    "topics": [
+      "Tokens",
+      "Context Length",
+      "Embeddings",
+      "Positions"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 15,
+    "durationMinutes": 45
+  },
+  {
+    "id": "learning-02-attention",
+    "week": 2,
+    "title": "Learning 02 — Attention from First Principles",
+    "category": "LEARNING",
+    "label": "Learning 02 — Attention",
+    "topics": [
+      "Queries, Keys, Values",
+      "Softmax",
+      "Attention Scores",
+      "Weighted Sums"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 15,
+    "durationMinutes": 45
+  },
+  {
+    "id": "learning-03-transformer-blocks",
+    "week": 3,
+    "title": "Learning 03 — Multi-Head Attention and Transformer Blocks",
+    "category": "LEARNING",
+    "label": "Learning 03 — Blocks & Parameters",
+    "topics": [
+      "Multi-Head Attention",
+      "Encoder-Decoder",
+      "FFN",
+      "Parameter Counting"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 15,
+    "durationMinutes": 45
+  },
+  {
+    "id": "learning-04-gpt",
+    "week": 4,
+    "title": "Learning 04 — GPT, Positions, and Causal Masks",
+    "category": "LEARNING",
+    "label": "Learning 04 — GPT & Masks",
+    "topics": [
+      "Positional Encoding",
+      "Causal Masks",
+      "Teacher Forcing",
+      "GPT Training"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 15,
+    "durationMinutes": 45
+  },
+  {
+    "id": "learning-05-decoding",
+    "week": 5,
+    "title": "Learning 05 — Sequence Probability and Decoding",
+    "category": "LEARNING",
+    "label": "Learning 05 — Decoding",
+    "topics": [
+      "Chain Rule",
+      "Greedy Search",
+      "Top-k / Top-p",
+      "Beam Search"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 15,
+    "durationMinutes": 45
+  },
+  {
+    "id": "learning-06-bert",
+    "week": 6,
+    "title": "Learning 06 — BERT and Masked Language Modelling",
+    "category": "LEARNING",
+    "label": "Learning 06 — BERT",
+    "topics": [
+      "Bidirectional Attention",
+      "MLM Loss",
+      "[CLS]",
+      "[SEP]"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 15,
+    "durationMinutes": 45
+  },
+  {
+    "id": "learning-07-capstone",
+    "week": 7,
+    "title": "Learning 07 — Weeks 1–4 Capstone",
+    "category": "LEARNING",
+    "label": "Learning 07 — Capstone",
+    "topics": [
+      "Integrated Shapes",
+      "Attention",
+      "Decoding",
+      "BERT vs GPT"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 15,
+    "durationMinutes": 45
   }
 ]

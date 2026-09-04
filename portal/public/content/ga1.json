@@ -2,6 +2,7 @@
   "id": "ga1",
   "week": 1,
   "title": "Week 1 — Graded Assignment 1",
+  "category": "GA",
   "topics": [
     "Context Length",
     "Embedding Tensors",

@@ -27,9 +27,13 @@ export function HomePage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const totalScore = catalog.reduce((s, c) => s + (c.score ?? 0), 0);
-  const totalMax   = catalog.reduce((s, c) => s + (c.maxScore ?? 100), 0);
-  const avgScore   = catalog.length > 0 ? Math.round((totalScore / totalMax) * 100) : 0;
+  const scoredCatalog = catalog.filter(item => item.score !== null && item.maxScore !== null);
+  const totalScore = scoredCatalog.reduce((s, c) => s + (c.score ?? 0), 0);
+  const totalMax   = scoredCatalog.reduce((s, c) => s + (c.maxScore ?? 0), 0);
+  const avgScore   = totalMax > 0 ? Math.round((totalScore / totalMax) * 100) : 0;
+  const learningCatalog = catalog.filter(item => item.category === 'LEARNING');
+  const gaCatalog = catalog.filter(item => item.category !== 'PYQ' && item.category !== 'LEARNING');
+  const pyqCatalog = catalog.filter(item => item.category === 'PYQ');
 
   if (loading) return (
     <div className="page-home">
@@ -115,24 +119,77 @@ export function HomePage() {
         </div>
       )}
 
+      {/* Learning Grid */}
+      {learningCatalog.length > 0 && <CatalogSection
+        id="learning"
+        eyebrow="Guided learning path"
+        title="Learning Assignments"
+        note="Start with Learning 01 and progress in order"
+        items={learningCatalog}
+        activeAttempts={activeAttempts}
+      />}
+
       {/* GA Grid */}
-      <div id="assignments" className="home-section-heading">
-        <div>
-          <div className="section-eyebrow">Available question papers</div>
-          <div className="section-title">All Assignments</div>
-        </div>
-        <span className="home-section-note">Select an assignment to begin</span>
-      </div>
-      <div className="ga-grid">
-        {catalog.map(ga => (
-          <GaCard key={ga.id} ga={ga} hasActiveAttempt={activeAttempts[ga.id]} />
-        ))}
-      </div>
+      <CatalogSection
+        id="assignments"
+        eyebrow="Available question papers"
+        title="All Assignments"
+        note="Select an assignment to begin"
+        items={gaCatalog}
+        activeAttempts={activeAttempts}
+      />
+
+      {/* PYQ Grid */}
+      {pyqCatalog.length > 0 && <CatalogSection
+        id="pyq"
+        eyebrow="Previous year questions"
+        title="PYQ Papers"
+        note="Practice the May 2026 papers"
+        items={pyqCatalog}
+        activeAttempts={activeAttempts}
+      />}
     </div>
   );
 }
 
+function CatalogSection({
+  id,
+  eyebrow,
+  title,
+  note,
+  items,
+  activeAttempts,
+}: {
+  id: string;
+  eyebrow: string;
+  title: string;
+  note: string;
+  items: GACatalogItem[];
+  activeAttempts: Record<string, boolean>;
+}) {
+  if (items.length === 0) return null;
+
+  return (
+    <section id={id}>
+      <div className="home-section-heading">
+        <div>
+          <div className="section-eyebrow">{eyebrow}</div>
+          <div className="section-title">{title}</div>
+        </div>
+        <span className="home-section-note">{note}</span>
+      </div>
+      <div className="ga-grid">
+        {items.map(item => (
+          <GaCard key={item.id} ga={item} hasActiveAttempt={activeAttempts[item.id]} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function GaCard({ ga, hasActiveAttempt }: { ga: GACatalogItem; hasActiveAttempt?: boolean }) {
+  const isPyq = ga.category === 'PYQ';
+  const isLearning = ga.category === 'LEARNING';
   const isPerfect = ga.score !== null && ga.score === ga.maxScore;
   const scoreText = ga.score !== null ? `${ga.score} / ${ga.maxScore ?? 100}` : null;
 
@@ -141,7 +198,7 @@ function GaCard({ ga, hasActiveAttempt }: { ga: GACatalogItem; hasActiveAttempt?
       <div className="ga-card-header">
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap', marginBottom: '0.3rem' }}>
-            <span className="ga-week-badge">Week {ga.week}</span>
+            <span className="ga-week-badge">{isLearning ? 'LEARNING' : isPyq ? 'PYQ' : `Week ${ga.week}`}</span>
             {scoreText && (
               <span className="ga-score-badge" style={{ background: isPerfect ? '#15803d' : 'var(--accent)' }}>
                 {isPerfect ? '✓ ' : ''}{scoreText}
@@ -151,7 +208,7 @@ function GaCard({ ga, hasActiveAttempt }: { ga: GACatalogItem; hasActiveAttempt?
               <span className="ga-score-badge" style={{ background: '#f59e0b' }}>⏸ In Progress</span>
             )}
           </div>
-          <div className="ga-card-title">GA {ga.week < 10 ? ga.week : ga.week} — {ga.title.split('—')[1]?.trim() || 'Graded Assignment'}</div>
+          <div className="ga-card-title">{isLearning || isPyq ? (ga.label || ga.title) : `GA ${ga.week} — ${ga.title.split('—')[1]?.trim() || 'Graded Assignment'}`}</div>
         </div>
       </div>
 

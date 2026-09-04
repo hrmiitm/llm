@@ -130,6 +130,26 @@ export function QuestionRenderer({ question, selectedAnswer, onAnswer, showCorre
           )}
         </div>
       )}
+
+      {type === 'text' && (
+        <div className="numeric-input-area">
+          <label htmlFor={`text-${question.id}`}>Your Answer</label>
+          <input
+            id={`text-${question.id}`}
+            type="text"
+            className="numeric-input"
+            value={selected[0] ?? ''}
+            onChange={e => onAnswer(e.target.value || null)}
+            disabled={disabled}
+            placeholder="Enter your answer…"
+          />
+          {showCorrect && answer && (
+            <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#15803d' }}>
+              ✓ Correct answer: <strong>{String(answer.value)}</strong>
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

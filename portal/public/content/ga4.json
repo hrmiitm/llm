@@ -2,6 +2,7 @@
   "id": "ga4",
   "week": 4,
   "title": "Week 4 — Graded Assignment 4",
+  "category": "GA",
   "topics": [
     "BERT Architecture",
     "MLM",

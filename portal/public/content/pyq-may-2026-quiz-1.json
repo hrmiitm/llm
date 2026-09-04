@@ -1,0 +1,451 @@
+{
+  "id": "pyq-may-2026-quiz-1",
+  "week": 0,
+  "title": "May-2026-Quiz-1",
+  "category": "PYQ",
+  "label": "May-2026-Quiz-1",
+  "topics": [
+    "Attention",
+    "Transformer Architecture",
+    "Autoregressive Decoding",
+    "Tokenization"
+  ],
+  "notesFile": null,
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 16,
+  "durationMinutes": 48,
+  "questions": [
+    {
+      "id": "pyq-may-2026-quiz-1-q1",
+      "num": "Q2",
+      "title": "Traditional Attention (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Which statements are true about traditional attention used in sequence-to-sequence models? (Select all that apply.)",
+      "bodyMd": "**Which statements are true about traditional attention used in sequence-to-sequence models? (Select all that apply.)**\n\n- ( ) The decoder decides which encoder states are important.\n- ( ) Attention weights are computed over all decoder hidden states.\n- ( ) The context vector is a weighted sum of encoder states.\n- ( ) Encoder hidden states are ignored after encoding.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The decoder decides which encoder states are important."
+        },
+        {
+          "id": "B",
+          "text": "Attention weights are computed over all decoder hidden states."
+        },
+        {
+          "id": "C",
+          "text": "The context vector is a weighted sum of encoder states."
+        },
+        {
+          "id": "D",
+          "text": "Encoder hidden states are ignored after encoding."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** A and C\n\n#### Step-by-step solution\n\n**Step 1 — Identify the objects in encoder-decoder attention.**\n\nThe encoder produces hidden states $h_1,h_2,ldots,h_T$. At decoder step $t$, the decoder state supplies a query that scores how relevant each encoder state is:\n\n$$e_{t,j} = operatorname{score}(s_{t-1},h_j),\\qquad a_{t,j}=operatorname{softmax}(e_{t,j}).$$\n\n**Step 2 — Form the context vector.**\n\nThe context passed to the decoder is the weighted sum\n\n$$c_t=sum_{j=1}^{T}a_{t,j}h_j.$$\n\nSo the decoder does decide which encoder states matter, and the context vector is a weighted sum of them.\n\n![Kroki-style attention pipeline](assets/attention-pipeline.svg)\n\n**Step 3 — Eliminate the false statements.**\n\n- **B is false:** attention weights are computed over encoder states (the keys/values), not over all decoder hidden states.\n- **D is false:** encoder states are precisely what attention uses after the encoder has finished.\n\nTherefore, the correct selections are $\\boxed{\\text{A, C}}$.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q2",
+      "num": "Q3",
+      "title": "Diagonal sum of $Q^T K$ (Short Answer)",
+      "type": "numeric",
+      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "questionText": "Compute $Q^T K$ for the final scaled dot-product attention and submit the sum of the diagonal elements of the $Q^T K$ matrix.",
+      "bodyMd": "**Compute $Q^T K$ for the final scaled dot-product attention and submit the sum of the diagonal elements of the $Q^T K$ matrix.**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "4"
+      },
+      "solutionMd": "**Answer:** $\\boxed{4}$\n\n#### Step-by-step solution\n\n**Step 1 — Compute $Q$ and $K$.**\n\nBecause both projection matrices are identity matrices,\n\n$$Q=W_QX=X,\\qquad K=W_KX=X.$$\n\nWritten token-by-token, the vectors are\n\n$$q_{\\text{learn}}=k_{\\text{learn}}=\\begin{bmatrix}1\\\\0\\end{bmatrix},\\quad\nq_{\\text{easy}}=k_{\\text{easy}}=\\begin{bmatrix}0\\\\1\\end{bmatrix},\\quad\nq_{\\text{math}}=k_{\\text{math}}=\\begin{bmatrix}1\\\\1\\end{bmatrix}.$$\n\n**Step 2 — Take all query-key dot products.**\n\nThe entry in row $i$, column $j$ is $q_i^Tk_j$:\n\n$$Q^TK=X^TX\n=\\begin{bmatrix}1&0&1\\\\0&1&1\\\\1&1&2\\end{bmatrix}.$$\n\n**Step 3 — Add the diagonal entries.**\n\n$$\\operatorname{tr}(Q^TK)=1+1+2=\\boxed{4}.$$\n\nThe factor $1/\\sqrt{d_k}$ is applied later to scale the scores; it does not change the requested unscaled $Q^TK$ matrix.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q3",
+      "num": "Q4",
+      "title": "Least attention-score token pair (MCQ)",
+      "type": "single_choice",
+      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "questionText": "Choose the token pair with the least attention score.",
+      "bodyMd": "**Choose the token pair with the least attention score.**\n\n- ( ) `{learn, easy}`\n- ( ) `{learn, math}`\n- ( ) `{easy, math}`\n- ( ) `{learn, learn}`\n- ( ) `{easy, easy}`",
+      "options": [
+        {
+          "id": "A",
+          "text": "`{learn, easy}`"
+        },
+        {
+          "id": "B",
+          "text": "`{learn, math}`"
+        },
+        {
+          "id": "C",
+          "text": "`{easy, math}`"
+        },
+        {
+          "id": "D",
+          "text": "`{learn, learn}`"
+        },
+        {
+          "id": "E",
+          "text": "`{easy, easy}`"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "**Answer:** A — `{learn, easy}`\n\n#### Step-by-step solution\n\n**Step 1 — Read the relevant dot products.**\n\nFrom\n\n$$Q^TK=\\begin{bmatrix}1&0&1\\\\0&1&1\\\\1&1&2\\end{bmatrix},$$\n\nthe candidate pair scores are:\n\n| Pair | Dot product |\n|---|---:|\n| learn, easy | $0$ |\n| learn, math | $1$ |\n| easy, math | $1$ |\n| learn, learn | $1$ |\n| easy, easy | $1$ |\n\n**Step 2 — Compare the scores.**\n\nThe smallest score is $0$, for the pair **learn/easy**. Scaling by the positive number $\\sqrt{d_k}$ preserves this ordering, and softmax is monotonic in each score when comparing the same row.\n\n$$\\boxed{\\text{learn, easy}}$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q4",
+      "num": "Q5",
+      "title": "Additional attention scores (Short Answer)",
+      "type": "numeric",
+      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "questionText": "A Transformer processes a sequence containing 6 tokens using Multi-Head Attention. It initially uses 4 heads. If the number of heads is doubled to 8 while the sequence length remains unchanged, how many additional attention scores are computed across all heads?",
+      "bodyMd": "**A Transformer processes a sequence containing 6 tokens using Multi-Head Attention. It initially uses 4 heads. If the number of heads is doubled to 8 while the sequence length remains unchanged, how many additional attention scores are computed across all heads?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "144"
+      },
+      "solutionMd": "**Answer:** $\\boxed{144}$\n\n#### Step-by-step solution\n\n**Step 1 — Count scores in one head.**\n\nSelf-attention compares every query position with every key position. For sequence length $T=6$, one head forms a $6\\times6$ score matrix:\n\n$$6^2=36\\text{ scores per head}.$$\n\n**Step 2 — Count the newly added heads.**\n\nThe number of heads increases from 4 to 8, so\n\n$$8-4=4\\text{ additional heads}.$$\n\n**Step 3 — Multiply.**\n\n$$4\\times36=\\boxed{144}\\text{ additional scores}.$$\n\nThe query/key projection size can change the cost of computing each score, but it does not change the number of entries in the score matrices for a fixed $T$.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q5",
+      "num": "Q6",
+      "title": "Output tensor volume (Short Answer)",
+      "type": "numeric",
+      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "questionText": "A batch of 8 sentences passes through a 6-layer Transformer Encoder with 8 attention heads. After padding, each sentence has maximum length 32 and $d_{model}=128$. What is the total number of elements in the output tensor produced by the final encoder layer for the entire batch?",
+      "bodyMd": "**A batch of 8 sentences passes through a 6-layer Transformer Encoder with 8 attention heads. After padding, each sentence has maximum length 32 and $d_{model}=128$. What is the total number of elements in the output tensor produced by the final encoder layer for the entire batch?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "32768"
+      },
+      "solutionMd": "**Answer:** $\\boxed{32768}$\n\n#### Step-by-step solution\n\n**Step 1 — Write the output shape.**\n\nThe final encoder layer returns one $d_{model}$-dimensional vector for each token in each sentence. Thus the batch output shape is\n\n$$B\\times T\\times d_{model}=8\\times32\\times128.$$\n\n**Step 2 — Compute the volume.**\n\n$$8\\times32=256,\\qquad 256\\times128=\\boxed{32768}.$$\n\nThe 6 layers and 8 heads affect the computation used to produce the output, but not the final tensor shape.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q6",
+      "num": "Q7",
+      "title": "Entries masked by a causal mask (Short Answer)",
+      "type": "numeric",
+      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "questionText": "A masked multi-head attention layer uses context length $T=128$. How many entries in the causal mask are set to $-\\infty$?",
+      "bodyMd": "**A masked multi-head attention layer uses context length $T=128$. How many entries in the causal mask are set to $-\\infty$?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "8128"
+      },
+      "solutionMd": "**Answer:** $\\boxed{8128}$\n\n#### Step-by-step solution\n\n**Step 1 — Identify future positions.**\n\nAt row $i$, the query at position $i$ must not attend to positions $j>i$. The masked entries form the strict upper triangle of a $T\\times T$ matrix.\n\n**Step 2 — Count the triangle.**\n\nThe first row has $127$ future positions, the next has $126$, and so on down to $0$:\n\n$$127+126+\\cdots+1+0=\\frac{128\\times127}{2}.$$\n\n**Step 3 — Evaluate.**\n\n$$\\frac{128\\times127}{2}=64\\times127=\\boxed{8128}.$$\n\nThe vocabulary size and $d_{model}$ do not affect the number of entries in the $T\\times T$ causal mask.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q7",
+      "num": "Q8",
+      "title": "Positional-encoding norm (Short Answer)",
+      "type": "numeric",
+      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "questionText": "For $d_{model}=512$, compute the squared Euclidean norm of the sinusoidal positional-encoding vector for $pos=3$.",
+      "bodyMd": "**For $d_{model}=512$, compute the squared Euclidean norm of the sinusoidal positional-encoding vector for $pos=3$.**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "256"
+      },
+      "solutionMd": "**Answer:** $\\boxed{256}$\n\n#### Step-by-step solution\n\n**Step 1 — Pair the dimensions.**\n\nSince $d_{model}=512$, there are $512/2=256$ sine/cosine pairs. For each $i$ define\n\n$$\\theta_i=\\frac{3}{10000^{2i/512}}.$$\n\nThe two coordinates in that pair are $\\sin(\\theta_i)$ and $\\cos(\\theta_i)$.\n\n**Step 2 — Use the Pythagorean identity.**\n\nEach pair contributes\n\n$$\\sin^2(\\theta_i)+\\cos^2(\\theta_i)=1.$$\n\n**Step 3 — Sum all pairs.**\n\n$$\\lVert PE(3)\\rVert_2^2=256\\times1=\\boxed{256}.$$\n\nThe actual value of $pos$ changes the coordinates, but not this squared norm.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q8",
+      "num": "Q9",
+      "title": "Teacher forcing (MCQ)",
+      "type": "single_choice",
+      "context": "Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of\n\n$$X=\\begin{bmatrix}1&0&1\\\\0&1&1\\end{bmatrix}.$$\n\nThe projection matrices are\n\n$$W_Q=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_K=\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix},\\qquad W_V=\\begin{bmatrix}0&1\\\\1&0\\end{bmatrix}.$$\n\nThe scaled dot-product attention is\n\n$$\\operatorname{Attention}(Q,K,V)=\\operatorname{softmax}\\left(\\frac{Q^{T}K}{\\sqrt{d_k}}\\right)V^{T}.$$\n\nBased on these data, answer Q3 and Q4.",
+      "questionText": "Consider the following statements about teacher forcing in autoregressive sequence-to-sequence training.",
+      "bodyMd": "**Consider the following statements about teacher forcing in autoregressive sequence-to-sequence training.**\n\n**Statement 1:** Teacher forcing passes the input token to a larger Teacher model whose output becomes the next token.\n**Statement 2:** Teacher forcing helps prevent compounding early incorrect predictions that can destabilize training.\n\n- ( ) Statement 1 is true but Statement 2 is false.\n- ( ) Statement 1 is false but Statement 2 is true.\n- ( ) Both statements are true.\n- ( ) Both statements are false.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Statement 1 is true but Statement 2 is false."
+        },
+        {
+          "id": "B",
+          "text": "Statement 1 is false but Statement 2 is true."
+        },
+        {
+          "id": "C",
+          "text": "Both statements are true."
+        },
+        {
+          "id": "D",
+          "text": "Both statements are false."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** B — Statement 1 is false but Statement 2 is true.\n\n#### Step-by-step solution\n\n**Step 1 — Define teacher forcing correctly.**\n\nDuring training, the decoder receives the **ground-truth previous target token**, even if its own previous prediction would have been wrong:\n\n$$y_{t-1}^{\\text{input}}=y_{t-1}^{\\text{true}}.$$\n\nThere is no requirement for a separate, larger “Teacher” model. Thus Statement 1 is false.\n\n**Step 2 — Explain the stabilizing effect.**\n\nIf the model fed its own prediction back during early training, one error could become the input to the next step, producing a chain of increasingly unreliable inputs. Ground-truth prefixes prevent this compounding during training, so Statement 2 is true.\n\n$$\\boxed{\\text{Statement 1: False; Statement 2: True}}$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q9",
+      "num": "Q10",
+      "title": "Probability of “you eat apples” (Short Answer)",
+      "type": "numeric",
+      "context": "The language model generates three word tokens after `<START>`. The table shows the relevant conditional probabilities; the actual vocabulary may be larger.\n\n| From | To | Probability |\n|---|---|---:|\n| `<START>` | i | 0.5 |\n| `<START>` | you | 0.4 |\n| i | like | 0.6 |\n| i | eat | 0.3 |\n| you | like | 0.4 |\n| you | eat | 0.5 |\n| i like | apples | 0.7 |\n| i like | bananas | 0.2 |\n| i eat | apples | 0.4 |\n| i eat | bananas | 0.6 |\n| you like | apples | 0.4 |\n| you like | bananas | 0.5 |\n| you eat | apples | 0.9 |\n| you eat | bananas | 0.1 |\n\n![Kroki-style language-model probability tree](assets/decoder-search.svg)",
+      "questionText": "Compute the joint probability of the sentence “you eat apples”. Give the answer to two digits after the decimal.",
+      "bodyMd": "**Compute the joint probability of the sentence “you eat apples”. Give the answer to two digits after the decimal.**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.18"
+      },
+      "solutionMd": "**Answer:** $\\boxed{0.18}$\n\n#### Step-by-step solution\n\n**Step 1 — Apply the chain rule.**\n\nFor a three-token sequence,\n\n$$P(y_1,y_2,y_3)=P(y_1\\mid\\text{START})P(y_2\\mid y_1)P(y_3\\mid y_1,y_2).$$\n\n**Step 2 — Substitute the table values.**\n\nFor `you eat apples`:\n\n$$P(\\text{you})=0.4,\\quad P(\\text{eat}\\mid\\text{you})=0.5,\\quad P(\\text{apples}\\mid\\text{you eat})=0.9.$$\n\n**Step 3 — Multiply the factors.**\n\n$$0.4\\times0.5\\times0.9=0.20\\times0.9=\\boxed{0.18}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q10",
+      "num": "Q11",
+      "title": "Most probable listed sentence (MCQ)",
+      "type": "single_choice",
+      "context": "The language model generates three word tokens after `<START>`. The table shows the relevant conditional probabilities; the actual vocabulary may be larger.\n\n| From | To | Probability |\n|---|---|---:|\n| `<START>` | i | 0.5 |\n| `<START>` | you | 0.4 |\n| i | like | 0.6 |\n| i | eat | 0.3 |\n| you | like | 0.4 |\n| you | eat | 0.5 |\n| i like | apples | 0.7 |\n| i like | bananas | 0.2 |\n| i eat | apples | 0.4 |\n| i eat | bananas | 0.6 |\n| you like | apples | 0.4 |\n| you like | bananas | 0.5 |\n| you eat | apples | 0.9 |\n| you eat | bananas | 0.1 |\n\n![Kroki-style language-model probability tree](assets/decoder-search.svg)",
+      "questionText": "Choose the option corresponding to the sentence with the highest joint probability.",
+      "bodyMd": "**Choose the option corresponding to the sentence with the highest joint probability.**\n\n- ( ) `i eat apples`\n- ( ) `apples like you`\n- ( ) `i eat bananas`\n- ( ) `you like bananas`\n- ( ) `you like apples`",
+      "options": [
+        {
+          "id": "A",
+          "text": "`i eat apples`"
+        },
+        {
+          "id": "B",
+          "text": "`apples like you`"
+        },
+        {
+          "id": "C",
+          "text": "`i eat bananas`"
+        },
+        {
+          "id": "D",
+          "text": "`you like bananas`"
+        },
+        {
+          "id": "E",
+          "text": "`you like apples`"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** C — `i eat bananas`\n\n#### Step-by-step solution\n\nCompute each listed valid path using the chain rule:\n\n| Sentence | Product | Joint probability |\n|---|---|---:|\n| `i eat apples` | $0.5\\times0.3\\times0.4$ | 0.060 |\n| `i eat bananas` | $0.5\\times0.3\\times0.6$ | **0.090** |\n| `you like bananas` | $0.4\\times0.4\\times0.5$ | 0.080 |\n| `you like apples` | $0.4\\times0.4\\times0.4$ | 0.064 |\n\n`apples like you` is not represented as a valid path in the supplied tree. Among the listed valid sentences, $0.090$ is the largest.\n\n$$\\boxed{\\text{C — i eat bananas}}$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q11",
+      "num": "Q12",
+      "title": "$P(\\text{apples}\\mid\\text{like})$ (Short Answer)",
+      "type": "numeric",
+      "context": "The language model generates three word tokens after `<START>`. The table shows the relevant conditional probabilities; the actual vocabulary may be larger.\n\n| From | To | Probability |\n|---|---|---:|\n| `<START>` | i | 0.5 |\n| `<START>` | you | 0.4 |\n| i | like | 0.6 |\n| i | eat | 0.3 |\n| you | like | 0.4 |\n| you | eat | 0.5 |\n| i like | apples | 0.7 |\n| i like | bananas | 0.2 |\n| i eat | apples | 0.4 |\n| i eat | bananas | 0.6 |\n| you like | apples | 0.4 |\n| you like | bananas | 0.5 |\n| you eat | apples | 0.9 |\n| you eat | bananas | 0.1 |\n\n![Kroki-style language-model probability tree](assets/decoder-search.svg)",
+      "questionText": "Using the probability tree, calculate $P(\\text{apples}\\mid\\text{like})$. Submit $-1$ if the information is insufficient.",
+      "bodyMd": "**Using the probability tree, calculate $P(\\text{apples}\\mid\\text{like})$. Submit $-1$ if the information is insufficient.**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "-1"
+      },
+      "solutionMd": "**Answer:** $\\boxed{-1}$\n\n#### Step-by-step solution\n\n**Step 1 — Inspect the conditioning history.**\n\nThe table gives two different `like` histories:\n\n$$P(\\text{apples}\\mid\\text{i like})=0.7,\n\\qquad P(\\text{apples}\\mid\\text{you like})=0.4.$$\n\n**Step 2 — Notice the missing condition.**\n\nThe probability $P(\\text{apples}\\mid\\text{like})$ does not specify whether the previous subject was `i` or `you`. These two histories have different values, so a unique conditional probability cannot be recovered.\n\n**Step 3 — Return the specified sentinel value.**\n\nBecause the supplied information is insufficient,\n\n$$\\boxed{-1}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q12",
+      "num": "Q13",
+      "title": "GPT decoder-layer components (MSQ)",
+      "type": "multiple_select",
+      "context": "The language model generates three word tokens after `<START>`. The table shows the relevant conditional probabilities; the actual vocabulary may be larger.\n\n| From | To | Probability |\n|---|---|---:|\n| `<START>` | i | 0.5 |\n| `<START>` | you | 0.4 |\n| i | like | 0.6 |\n| i | eat | 0.3 |\n| you | like | 0.4 |\n| you | eat | 0.5 |\n| i like | apples | 0.7 |\n| i like | bananas | 0.2 |\n| i eat | apples | 0.4 |\n| i eat | bananas | 0.6 |\n| you like | apples | 0.4 |\n| you like | bananas | 0.5 |\n| you eat | apples | 0.9 |\n| you eat | bananas | 0.1 |\n\n![Kroki-style language-model probability tree](assets/decoder-search.svg)",
+      "questionText": "Which components are found within a GPT decoder layer? (Select all that apply.)",
+      "bodyMd": "**Which components are found within a GPT decoder layer? (Select all that apply.)**\n\n- ( ) Causal (masked) multi-head self-attention\n- ( ) Position-wise feed-forward network\n- ( ) Multi-head cross-attention\n- ( ) Recurrent neural network (RNN) layer\n- ( ) Add & Norm layer",
+      "options": [
+        {
+          "id": "A",
+          "text": "Causal (masked) multi-head self-attention"
+        },
+        {
+          "id": "B",
+          "text": "Position-wise feed-forward network"
+        },
+        {
+          "id": "C",
+          "text": "Multi-head cross-attention"
+        },
+        {
+          "id": "D",
+          "text": "Recurrent neural network (RNN) layer"
+        },
+        {
+          "id": "E",
+          "text": "Add & Norm layer"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "E"
+        ]
+      },
+      "solutionMd": "**Answer:** A, B, and E\n\n#### Step-by-step solution\n\n**Step 1 — Recall the GPT block.**\n\nGPT is decoder-only. A standard block contains causal self-attention followed by a position-wise feed-forward network, with residual connections and layer normalization around the sublayers.\n\n**Step 2 — Check each option.**\n\n| Option | Present? | Reason |\n|---|:---:|---|\n| A | ✓ | Causal masking prevents a token from seeing future tokens. |\n| B | ✓ | The FFN transforms each position after attention. |\n| C | ✗ | Cross-attention needs a separate encoder and is not part of GPT's decoder-only block. |\n| D | ✗ | GPT uses Transformer sublayers, not an RNN layer. |\n| E | ✓ | Residual addition and normalization stabilize each sublayer. |\n\n$$\\boxed{\\text{A, B, E}}$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q13",
+      "num": "Q14",
+      "title": "Greedy sequence probability (Short Answer)",
+      "type": "numeric",
+      "context": "The table gives the conditional probability of each vocabulary token at each decoding timestep. For all calculations, use only the seven listed tokens as the vocabulary.\n\n| Token | $t=1$ | $t=2$ | $t=3$ | $t=4$ | $t=5$ | $t=6$ |\n|---|---:|---:|---:|---:|---:|---:|\n| abandoned | 0.12 | 0.05 | 0.05 | 0.30 | 0.10 | 0.40 |\n| but | 0.05 | 0.05 | 0.10 | 0.07 | 0.45 | 0.20 |\n| castle | 0.05 | 0.40 | 0.10 | 0.02 | 0.05 | 0.05 |\n| historic | 0.38 | 0.30 | 0.10 | 0.20 | 0.15 | 0.15 |\n| majestic | 0.05 | 0.05 | 0.10 | 0.35 | 0.10 | 0.10 |\n| the | 0.30 | 0.05 | 0.05 | 0.03 | 0.05 | 0.05 |\n| was | 0.05 | 0.10 | 0.50 | 0.03 | 0.10 | 0.05 |",
+      "questionText": "Use greedy decoding to determine the most likely sequence of six tokens and compute its probability. Round to three decimal places.",
+      "bodyMd": "**Use greedy decoding to determine the most likely sequence of six tokens and compute its probability. Round to three decimal places.**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.005"
+      },
+      "solutionMd": "**Answer:** $\\boxed{0.005}$\n\n#### Step-by-step solution\n\n**Step 1 — Choose the largest probability in each column.**\n\n| Timestep | Largest probability | Greedy token |\n|---:|---:|---|\n| 1 | 0.38 | historic |\n| 2 | 0.40 | castle |\n| 3 | 0.50 | was |\n| 4 | 0.35 | majestic |\n| 5 | 0.45 | but |\n| 6 | 0.40 | abandoned |\n\nThus the greedy sequence is **historic castle was majestic but abandoned**.\n\n**Step 2 — Multiply the selected probabilities.**\n\n$$P=0.38\\times0.40\\times0.50\\times0.35\\times0.45\\times0.40.$$\n\nProgressively,\n\n$$0.38\\times0.40=0.152,\\quad 0.152\\times0.50=0.076,$$\n$$0.076\\times0.35=0.0266,\\quad 0.0266\\times0.45=0.01197,$$\n$$0.01197\\times0.40=0.004788.$$\n\nRounded to three decimal places,\n\n$$\\boxed{0.005}.$$",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q14",
+      "num": "Q15",
+      "title": "Exhaustive-search decoder runs (Short Answer)",
+      "type": "numeric",
+      "context": "The table gives the conditional probability of each vocabulary token at each decoding timestep. For all calculations, use only the seven listed tokens as the vocabulary.\n\n| Token | $t=1$ | $t=2$ | $t=3$ | $t=4$ | $t=5$ | $t=6$ |\n|---|---:|---:|---:|---:|---:|---:|\n| abandoned | 0.12 | 0.05 | 0.05 | 0.30 | 0.10 | 0.40 |\n| but | 0.05 | 0.05 | 0.10 | 0.07 | 0.45 | 0.20 |\n| castle | 0.05 | 0.40 | 0.10 | 0.02 | 0.05 | 0.05 |\n| historic | 0.38 | 0.30 | 0.10 | 0.20 | 0.15 | 0.15 |\n| majestic | 0.05 | 0.05 | 0.10 | 0.35 | 0.10 | 0.10 |\n| the | 0.30 | 0.05 | 0.05 | 0.03 | 0.05 | 0.05 |\n| was | 0.05 | 0.10 | 0.50 | 0.03 | 0.10 | 0.05 |",
+      "questionText": "Use exhaustive search to identify the most probable sequence of four tokens. How many decoder runs are required in total?",
+      "bodyMd": "**Use exhaustive search to identify the most probable sequence of four tokens. How many decoder runs are required in total?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2800"
+      },
+      "solutionMd": "**Answer:** $\\boxed{2800}$\n\n#### Step-by-step solution\n\n**Step 1 — Count the choices at each depth.**\n\nThe vocabulary contains $V=7$ tokens. An exhaustive decoder tree has:\n\n- $7$ one-token prefixes;\n- $7^2=49$ two-token prefixes;\n- $7^3=343$ three-token prefixes;\n- $7^4=2401$ complete four-token sequences.\n\n**Step 2 — Count one decoder run per generated prefix.**\n\nEach node is produced by one autoregressive decoder forward pass. Therefore the total number of runs is\n\n$$\\sum_{t=1}^{4}V^t=7+49+343+2401.$$\n\n**Step 3 — Add the levels.**\n\n$$7+49=56,\\quad 343+2401=2744,\\quad 56+2744=\\boxed{2800}.$$\n\nThe $2401$ figure is only the number of complete sequences; the question asks for the total decoder runs across all prefix levels.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q15",
+      "num": "Q16",
+      "title": "Top-$k$ probability at $t=4$ (Short Answer)",
+      "type": "numeric",
+      "context": "The table gives the conditional probability of each vocabulary token at each decoding timestep. For all calculations, use only the seven listed tokens as the vocabulary.\n\n| Token | $t=1$ | $t=2$ | $t=3$ | $t=4$ | $t=5$ | $t=6$ |\n|---|---:|---:|---:|---:|---:|---:|\n| abandoned | 0.12 | 0.05 | 0.05 | 0.30 | 0.10 | 0.40 |\n| but | 0.05 | 0.05 | 0.10 | 0.07 | 0.45 | 0.20 |\n| castle | 0.05 | 0.40 | 0.10 | 0.02 | 0.05 | 0.05 |\n| historic | 0.38 | 0.30 | 0.10 | 0.20 | 0.15 | 0.15 |\n| majestic | 0.05 | 0.05 | 0.10 | 0.35 | 0.10 | 0.10 |\n| the | 0.30 | 0.05 | 0.05 | 0.03 | 0.05 | 0.05 |\n| was | 0.05 | 0.10 | 0.50 | 0.03 | 0.10 | 0.05 |",
+      "questionText": "Use top-$k$ sampling at timestep $t=4$ with $k=3$. Compute the renormalized probability of the most probable candidate. Round to three decimal places.",
+      "bodyMd": "**Use top-$k$ sampling at timestep $t=4$ with $k=3$. Compute the renormalized probability of the most probable candidate. Round to three decimal places.**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.412"
+      },
+      "solutionMd": "**Answer:** $\\boxed{0.412}$\n\n#### Step-by-step solution\n\n**Step 1 — Rank the $t=4$ probabilities.**\n\nAt $t=4$ the largest three values are:\n\n| Candidate | Original probability |\n|---|---:|\n| majestic | 0.35 |\n| abandoned | 0.30 |\n| historic | 0.20 |\n\n**Step 2 — Compute the retained probability mass.**\n\n$$Z_{top-3}=0.35+0.30+0.20=0.85.$$\n\n**Step 3 — Renormalize the most probable token.**\n\n$$P_{top-3}(\\text{majestic})=\\frac{0.35}{0.85}=0.411764\\ldots\\approx\\boxed{0.412}.$$\n\nDo not divide by $k$; top-$k$ renormalizes by the sum of the retained probabilities.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-may-2026-quiz-1-q16",
+      "num": "Q17",
+      "title": "Beam width for a target sequence (Short Answer)",
+      "type": "numeric",
+      "context": "The table gives the conditional probability of each vocabulary token at each decoding timestep. For all calculations, use only the seven listed tokens as the vocabulary.\n\n| Token | $t=1$ | $t=2$ | $t=3$ | $t=4$ | $t=5$ | $t=6$ |\n|---|---:|---:|---:|---:|---:|---:|\n| abandoned | 0.12 | 0.05 | 0.05 | 0.30 | 0.10 | 0.40 |\n| but | 0.05 | 0.05 | 0.10 | 0.07 | 0.45 | 0.20 |\n| castle | 0.05 | 0.40 | 0.10 | 0.02 | 0.05 | 0.05 |\n| historic | 0.38 | 0.30 | 0.10 | 0.20 | 0.15 | 0.15 |\n| majestic | 0.05 | 0.05 | 0.10 | 0.35 | 0.10 | 0.10 |\n| the | 0.30 | 0.05 | 0.05 | 0.03 | 0.05 | 0.05 |\n| was | 0.05 | 0.10 | 0.50 | 0.03 | 0.10 | 0.05 |",
+      "questionText": "For the sequence “the castle was abandoned”, what is the minimum beam width required to guarantee that the sequence is retained during beam search at timestep $t=4$?",
+      "bodyMd": "**For the sequence “the castle was abandoned”, what is the minimum beam width required to guarantee that the sequence is retained during beam search at timestep $t=4$?**\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "2"
+      },
+      "solutionMd": "**Answer:** $\\boxed{2}$\n\n#### Step-by-step solution\n\n**Step 1 — Find the rank of the target token at each timestep.**\n\n| Timestep | Target token | Relevant probabilities | Target rank |\n|---:|---|---|---:|\n| 1 | the | historic 0.38, **the 0.30**, … | 2 |\n| 2 | castle | **castle 0.40**, historic 0.30, … | 1 |\n| 3 | was | **was 0.50**, … | 1 |\n| 4 | abandoned | majestic 0.35, **abandoned 0.30**, … | 2 |\n\n**Step 2 — Take the worst rank along the path.**\n\nBeam width $b$ must be at least the target's rank whenever that target is selected. The maximum rank is\n\n$$\\max(2,1,1,2)=\\boxed{2}.$$\n\nWith beam width 1, the first token `the` would be discarded in favor of `historic`, so the target sequence could not be retained. Width 2 is sufficient under the supplied timestep-wise probabilities.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

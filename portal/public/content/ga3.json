@@ -2,6 +2,7 @@
   "id": "ga3",
   "week": 3,
   "title": "Week 3 — Graded Assignment 3",
+  "category": "GA",
   "topics": [
     "GPT Architecture",
     "Causal LM",
@@ -95,8 +96,11 @@
         }
       ],
       "answer": {
-        "type": "text",
-        "value": "Statements A and D."
+        "type": "option",
+        "value": [
+          "A",
+          "D"
+        ]
       },
       "solutionMd": "**Answer:** Statements A and D.\n\n### ✏️ Step-by-Step Solution\n\n**Step 1 — Analyse each statement.**\n\n**Statement A: \"All parameters of GPT are randomly initialized during pre-training.\"**\n\n✅ **CORRECT.**\n\nDuring pre-training, the model starts with **random weights** and learns from a large unlabelled corpus. The training objective is CLM:\n\n$`\\displaystyle \\mathcal{L}_{\\text{CLM}} = -\\sum_{t} \\log P(x_t \\mid x_1, x_2, \\ldots, x_{t-1})`$\n\n**Statement B: \"The model minimizes the CLM objective during fine-tuning.\"**\n\n❌ **INCORRECT.**\n\nDuring fine-tuning, the objective changes to match the **downstream task** (e.g., cross-entropy for classification, NER loss, etc.). CLM is the *pre-training* objective, not the fine-tuning objective.\n\n**Statement C: \"All parameters of GPT are randomly initialized during fine-tuning.\"**\n\n❌ **INCORRECT.**\n\nDuring fine-tuning, we start from the **pre-trained weights** (not random). This is the entire point of transfer learning — we leverage the knowledge already captured during pre-training.\n\n$`\\displaystyle \\theta_{\\text{fine-tune, init}} = \\theta_{\\text{pre-trained}} \\quad (\\text{NOT random})`$\n\n**Statement D: \"In general, fine-tuning requires a dataset with labels.\"**\n\n✅ **CORRECT.**\n\nFine-tuning on a downstream task (sentiment analysis, NER, QA, etc.) typically requires **labelled examples** $(x_i, y_i)$ for supervised learning. This contrasts with pre-training which uses **unlabelled** text.\n\n$`\\displaystyle \\boxed{\\text{Correct: A and D}}`$",
       "marks": {

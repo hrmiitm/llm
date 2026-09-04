@@ -1,0 +1,1246 @@
+Chad GPT is powered by a model called
+GPT which is based on a deep learning
+architecture called Transformers
+Transformers is the reason behind modern
+day AI boom as an AI Enthusiast when you
+start learning Transformers you will
+come across this complex diagram which
+will start giving you a headache
+immediately my goal for today's video is
+to explain you Transformers in a most
+simplified and intuitive manner we need
+to cover many different topics so this
+is going to be a long video attention
+and patience is all I need from you
+today when you type in a sentence in
+Gmail it tries to predict next word or
+next set of words this is possible
+because of a machine learning model
+called language model Google for example
+has this popular language model called
+bird which is powering hundreds of AI
+applications throughout the world GPT
+which is a model behind chat GPT is a
+large language model the reason it is
+called large language model is because
+it has billions of parameters it is much
+more capable and Powerful compared to
+bird and it is trained on humongous
+amount of data fundamentally though it
+is also doing the same thing which is
+when you type in a question in chat GPT
+it will predict the next word in that
+sentence and then it will take the
+original question and the next predicted
+word as an input and then predict the
+next word and then the next word and so
+on in the end it produces is a complete
+answer which almost sounds like a magic
+to summarize the goal of a language
+model is to predict a next word in a
+sentence now that we have understood
+this fundamental let's look into some of
+the topics which needs to be clarified
+before we dig into the actual
+architecture the first concept we need
+to understand is word embedding machine
+learning models do not understand text
+they understand numbers so we need to
+represent text as numbers let's say you
+have this word King you want to
+numerically represent it how would you
+do that well you can assign a fixed
+number you can have a vocabulary and you
+can assign just fixed static number but
+that will not capture the meaning of it
+when you're building a language model
+you have to represent words in such a
+way that they capture the meaning of
+that word one way to capture the meaning
+of this word King and represent it
+numerically is to ask bunch of questions
+for example does this person has
+Authority yes one do they have a tail no
+horse has a tail King doesn't have a
+tail are they Rich yes gender minus one
+is male one is female and so on what we
+just did is we created this Vector list
+of numbers which is a vector to
+represent this word King similarly we
+can represent the word queen as well not
+only that we can can represent bunch of
+words such as battle horse King and so
+on by asking set of questions okay so
+for battle they don't have authority are
+they an event yes do battle has tail no
+battle is an event it it doesn't have
+tail and so on similarly horse do they
+have authority well we'll just say 01 if
+it is King's horse maybe they have some
+Authority or maybe they have authority
+over their horse kids and so on
+similarly we can represent all these
+words in a numeric format and then we
+can take the vector of this word King
+and maybe we can do some mathematics
+with it we can say King minus man so
+here I'm taking the vector of man right
+which is uh this particular Vector plus
+woman which is this particular vector
+and when you do the math which is like 1
+- 2 + 2 will be
+Z and so on you get a vector which looks
+similar to Queen now this sounds like a
+magic we can do math with Words which is
+King minus man plus woman is equal to
+Queen here King was represented in five
+Dimensions when you look at the real
+life for example Google's word to wack
+model it has 300 dimensions and what are
+all these questions by the way well we
+actually don't know this has been
+trained through a neural network and we
+have processed huge amount of text such
+as all the Wikipedia articles all the
+books and text on internet to understand
+the relationship between these words and
+through that neural network training
+back propagation we came up with this
+Vector the example that I gave for King
+where we asked these questions Authority
+and so on that was just a madeup example
+for building intuition for word
+embeddings in real life we do not know
+what all these number means all we can
+say is these numbers are the features
+for this word and they capture the
+meaning of this word King let's say king
+is a three-dimensional embedding if you
+have to represent that in this 3D
+embedding space you can represent it
+like this where x axis has three like
+this three number y AIS has this eight
+number z-axis has this two number and so
+on I use three dimensions because as
+humans we can view only three dimensions
+we can't possibly view this 300
+Dimension okay but mathematically those
+300 dimensions are possible models like
+GPT uses an embedding Vector which is
+even 12,000 Dimensions okay so it's a
+very rich High dimensional space that we
+are working with in threedimensional
+space you can have vectors for King king
+and queen that looks something like this
+and if you look at this Vector which is
+joining king and queen you can think of
+that as a gender Direction the benefit
+of this gender Direction Vector is that
+when you have another embedding for
+Uncle you can add that gender Direction
+and get the embedding for word Aunt
+similarly if you have father you can get
+mother if you have man you can uh get
+woman and so on and that allows you to
+do this amazing math such as king minus
+Queen plus uncle is equal to Aunt
+another example is you can have country
+to Capital City Direction Vector which
+you can use to add it in this embeding
+of Russia to get the embedding of Moscow
+you can do Russia minus Moscow plus
+Delhi equal to India now the embedding
+that we're talking about are static
+embeddings wtu and glow are two popular
+models
+which helps you get the static embedding
+static means fixed embedding for all
+these words you may ask how these
+embeddings are generated well I already
+answered the question which is you train
+a neural network model on humongous
+amount of text Wikipedia books and so on
+to understand the relationship between
+the words I'm not going to go into the
+mathematical details of word to you can
+refer to some other material on internet
+I have YouTube videos for that I'm not
+going to go into the math of that but
+just think that uh the neural network
+tries to understand the relationship
+between these words and creates these
+static embeddings now the problem with
+static embedding is that you can have a
+static embedding for this word track but
+based on a sentence that track can me
+mean different things right like here
+I'm saying the train will run on the
+track and my package is late help me
+track it so the meaning of track is
+little different and when you have
+static embedding you get into this
+problem where you're not able to
+represent this word properly based on
+the context of this sentence you will
+see same issue here for Dish you can
+have a fixed embedding but in this
+sentence I'm talking about rice dish if
+I had a cheese dish then the embedding
+of dish should be a little different
+because the meaning of that dish word is
+little different when I say rice dish
+versus cheese dish when you are working
+on predicting the next word for this
+sentence you can have words such as
+risotto itly Mexican rice but when I say
+I made an Indian rice dish call all of a
+sudden the probabilities of my next
+words will change I will have words such
+as idly Biryani ke if I add one more
+adjective and say I made a sweet Indian
+rice dish in that case again it will
+change I will not have Biryani as a next
+word prediction I will probably have K
+or Pongal to summarize to build an
+application like CH GPT just the static
+word embeddings are not enough what you
+need is contextual embedding let's
+understand contextual embedding a bit
+more in detail when you represent this
+word dish in your embedding space it is
+aesthetic embedding when you say rise
+this maybe there is another Vector in
+the same space which can accurately
+describe rice dis or which can correctly
+capture the meaning of word rice dish
+which can be Roto Biryani and so on the
+direction from dish to rice dish we can
+call it ress and when you add that ress
+Vector to Dish what you get is the
+embedding for a rice dish there is
+another vector or embedding for Indian
+rice dis and to go from Rice dis to
+Indian rice dis you need to probably add
+this vector or a direction called
+indianness and same thing for sweet
+Indian rice dish in order to generate
+contextual embedding what we need to do
+is take the original static embedding
+for the word dish and have all these
+other words influence that static
+embedding or change that static
+embedding so that it can capture the
+meaning of all these adjectives once you
+have done that and once you have a a
+contextual embedding for dash it won't
+be hard to predict the next word which
+is K look at this another sentence where
+I'm saying D loves Dosa Dola and Millet
+and so on B loves pasta and so on they
+both went out for a dinner and here BN
+said bro we'll go to a restaurant that
+you like and after some time they were
+in Indian restaurant now the way you
+predicted this word Indian was based on
+this cont
+such as D LS all these items which are
+part of the Indian Cuisine also bin said
+to D bro will go to a restaurant you
+like if bin said here instead of you if
+he had said I this word will become
+Italian instead of Indian right also
+instead of B if there was double here
+then also this thing will become Italian
+so you can understand that this uh
+prediction Indian uh is influenced by
+not just the few words which are prior
+to that word but it can be influenced by
+some words which are far out in that
+paragraph okay to summarize the
+objective for this intelligent teacher
+cat is to generate a contextual
+embedding and if you think about this
+embedding space mathematically speaking
+what you're doing is taking the static
+embedding for the word Dash and then
+adding the embeddings for all these
+vectors ress indianness all these
+adjectives and getting your final
+contextual embedding let's now dig into
+the Transformer architecture the
+architecture has two components encoder
+and decoder the purpose of encoder is to
+take the input sentence and generate the
+contextual embedding for each of the
+words or each of the tokens in that
+sentence once the contextual embedding
+is generated we feed that to a decoder
+here and we try to predict the next word
+so if you're working on the next word
+prediction you will predict the next
+word here for example it will be here
+when you talk about natural language
+processing there are multiple tasks so
+one task is to predict the next word the
+other task would be to translate the
+sentence here I'm translating the
+sentence from English English to Hindi
+in that case you will still produce the
+contextual embedding from encoder you
+feed that to decoder and decoder will
+start predicting the next word so here
+it will start with this fixed start
+token and then it will uh produce the
+probability of the next word so here the
+probability of this word man is highest
+and here you can have the entire
+vocabulary for example in the case of
+bird you have some 30,000 words so
+you'll have all the words in your
+language and you will say okay what is
+the highest probability of my next word
+then you put that word man into this
+input okay so there are two inputs
+actually one is the contextual embedding
+which is coming uh from here from the
+encoder and the other one is whatever
+output you have produced so far from the
+previous step you feed that okay as an
+input here and then it will produce the
+next word which is K once again you
+provide key here and it produces banai
+So eventually it produces the entire
+translated sentence all right so that's
+the objective of your encoder and
+decoder part whatever I talked about so
+far I was referring to an inference
+stage of uh neural networks whenever you
+have these uh deep learning model you
+have two stages one stage is the model
+is not trained it's like a baby baby is
+not trained yet and you train them right
+you send them to school you train them
+uh in your home at some point they
+become adult and they can figure things
+out on their own similarly a machine
+learning model goes through a training
+phase and when it is ready it starts
+working on the real world problem and
+that is called inference so whatever I
+talked about for for predicting the next
+word or translating sentence I was
+referring to inference stage throughout
+the discussion we'll be referring to two
+specific models called bird and GPT if
+you look at this architecture that's a
+generic architecture for a Transformer
+model Transformer model is a general
+concept whereas bird and GPT are
+specific model or specific
+implementations based on Transformer
+architecture if you look at bird
+architecture it has only the encoder
+part okay so only this part decoder part
+is missing so but will take the input
+sentence it will produce the contextual
+embedding and that's it whereas GPT has
+only decoder so it still takes the input
+it will produce the contextual embedding
+and so on and then here it will predict
+the next word I mean it sounds like it
+has encoder decoder both but
+fundamentally the architecture looks
+little different for GPT but it is still
+based on the Transformer architecture
+the way they're trained is you take all
+the text from Wikipedia crawl text from
+internet book Corpus and you train these
+models when you have this article for
+example and you are having this sentence
+developing an advanced crude see if I
+give you this sentence most likely you
+will say spacecraft or vehicle as a next
+word you'll not say banana right like so
+probability of having banana as a next
+word in this sentence is very less
+whereas these two words have a high
+probability so we as humans have read so
+much text so now we have learned this
+art of predicting next word and same
+thing goes on for B and GPT where they
+understand the relationship between the
+words the context in which they appear
+so let's say if B during the training
+has encountered so much text and every
+time after this word crude if it has
+seen this word spacecraft of or vehicle
+uh it would not have seen words like
+crude chair or crude banana right that
+kind of words usually when it is going
+through training it will not see it so
+it will learn to predict the high
+probability worse right so for word like
+banana probability is going to be lower
+same thing for this article when you go
+through this kind of sentences right SI
+engaging both alliances and hostilities
+and there will be many more artic on
+battles and Warriors and everywhere
+after alliances there will be either
+hostilities or negotiations there will
+not be a word like chair so probability
+of that will be very very low now when
+you go through the training you are
+going through all these words right so
+all these words will form something
+called a vocabulary so for a Model A
+vocabulary will look something like this
+now there is a difference between a word
+and a token so for example here playing
+is a word and one of the way to tokenize
+is to have two token so one token is
+play second token is ing okay so token
+wise there are two tokens but word is
+just once but just for uh understanding
+purpose just for easy explanation you
+can think of word as tokens technically
+they're different but you can think of
+words as token only okay so let's say
+you have a vocabulary of all these
+tokens let's say
+30,000 words what happens here is for
+each of these words during the training
+it will create those static embeddings
+so for word made or let's say for word
+and seven is the index and let's say
+this is the static embedding vector and
+the dimension or the size see there is a
+dot dot dot so what is the size of this
+well for bird it is 768 for GPT it's
+12,228 right so based on model the
+dimension of your embedding Vector can
+vary when you go through this training
+for every token in your vocabulary you
+will have this static embedding and this
+whole table is called Static embedding
+Matrix during the training it will also
+learn few other things such as WQ WK WV
+and you are like what the hell this is
+well we will talk about this later but
+for now just remember when you train
+these models they are having this static
+word embedding metrix which is the
+static embedding for every token in your
+entire vocabulary as well as they're
+having the special metries WQ WK WV
+which we'll talk about later let's have
+a look inside the encoder and review
+this specific two steps so you give a
+sentence to your Transformer and it will
+first tokenize it tokens are kind of
+like words but for a word called there
+will be two tokens call and Ed so it
+will tokenize it and there are various
+ways to tokenize your sentence this is
+one of the ways it will also add special
+tokens at the end and at the beginning
+CLS and sep sep is for separators so if
+you have two sentences between two
+sentences there will be a separator and
+CLS will be added at the beginning and
+this I'm talking about bird then it will
+also generate token IDs so for each of
+these words there will be an index into
+your vocabulary for example made is
+2532 which means in your entire
+vocabulary which is just like a list
+made word is at position
+2532 if you talk about bird it has total
+30,00 , 522 tokens and GPT has around
+50,000 tokens from these token ID so
+step number one was generate token and
+token IDs then you uh get the static
+embedding for each of these tokens and
+from where do you get it well we just
+saw right during the training you are
+generating this static word embedding
+metrix so for each of the words or
+tokens you have
+the static word embedding so in the case
+of bird the size of this will be 768 if
+it is GPT it will be 12,000 you know
+that long embedding metrics so you
+produce that for each of the tokens and
+then you will also create something
+called a positional embedding now in the
+language the word order matters okay so
+if I put made before I it will change
+the meaning of that sentence so the
+order matters and the way Transformer
+works is it will process the entire
+input or sequence in parallel it is not
+like RNN where it will process these
+words one by one it will process this
+sequence All In Parallel now it needs to
+have knowledge on the order okay so for
+that it uses a special technique called
+positional embedding where it will add a
+small Vector in each of these embeddings
+okay so let's say this is the vector for
+position number one this is the vector
+for position number two and so on and
+when you get uh this resulting Vector
+this Vector will embed the knowledge of
+position so this Vector will have a
+knowledge that this is the first word
+this Vector will have a knowledge that
+this is the second word now how exactly
+that is done well there is a math behind
+it I'm not going to go into the math but
+I'm showing you the formula from the
+original Transformer paper so using this
+formula you are essentially uh deriving
+all these positional embeddings all
+right so that was step two the first
+step was to produce the static embedding
+for each of the tokens and then the
+second step is to add positional
+embedding like this is a plus sign so
+here at this point what you get is this
+kind of position
+embedding just like how my nephew needs
+my attention words also need attention
+of surrounding words in order to produce
+the contextual embedding in
+2017 a groundbreaking research was done
+when this paper attention is all you
+need was published by bunch of Google
+researchers and that completely
+transformed the landscape of AI okay and
+and this is the architecture that we are
+talking about the architecture is taken
+from this attention is all you need
+paper so the way it works is when you
+have this sentence the word Indian needs
+attention from Dosa Dola Etc you can say
+that all these words are attending to
+this word Indian even the word b instead
+of B in let's say here if I had Dil this
+will become Italian instead of Indian so
+this word bin is attending to this word
+Indian Dosa Dola Etc is also attending
+to this word Indian similarly uh words
+Sweet Indian rice Etc are attending to
+this word dish now how much they're
+attending to this word well that
+attention weight or attention score
+might be different for example sweet
+might be attending to this word dish by
+36 person let's say Indian is attending
+in it by 14 person rice is attending it
+by 18 person these are the adjectives
+which will enrich the meaning of word
+dish on the other hand the word I made
+Etc are not enriching the meaning of
+word this that much because instead of I
+if I had Rahul or moan or David the
+meaning of this word will not change
+that much but instead of sweet if I have
+spicy all of a sudden the embedding or
+the meaning of this dish changes because
+as a next word I will immediately have
+Biryani instead of K the goal here is to
+build this kind of attention weight or
+attention score okay for each of these
+words it's a matrix because for Dish all
+the other words in that same sentence
+are they are enriching the meaning of
+that word okay so for word dish let's
+say sweet is attending it by 36 person
+Indian is attending it by 11 person and
+so on and by the way I have just made up
+these numbers just for explanation
+purpose the word dish also uh attends to
+that word itself right because dish
+itself has some meaning dish means dish
+right so that will also attend to itself
+so for every word see right now for Dish
+I have all this scores for Rice you will
+have scores for Indian for every word
+you will try to compute these attention
+scores and then you will use this
+concept of query key and value to uh
+come up with the contextual embedding
+now let me explain you query key and
+value by going over analogy let's say
+you're going to a library looking for a
+book on quantum physics especially
+Quantum computation you might have this
+query that hey I'm looking for this
+quantum physics book and this particular
+person who is a librarian will use the
+book index so he'll go to his computer
+try to search for that book or maybe he
+will go to this rack and locate a
+specific rack which has a label quantum
+mechanics okay so for him the key or the
+index to locate that book is the label
+on the rack you know in library you see
+like history drama science those kind of
+labels or you have book description okay
+so based on book description the rack
+label you will figure out the
+appropriate book so The Book Rack book
+description Etc is called key and then
+the actual book content is your value so
+let's say you pull this book okay and
+whatever content the actual content of
+that book is value let me give you
+another example let's say there is a
+college professor who wants to write an
+essay on Quantum Computing and he needs
+help help of bunch of students so when
+he talks to these students moan says
+that I know linear algebra Mera says
+that I know quantum mechanics Bob will
+say hey I know philosophy same way Kathy
+knows computer science so here whatever
+moan mea Bob Kathy are claiming about
+their knowledge is called key and what
+happens after that is each of these
+students will start writing an essay so
+teacher will say okay just go and write
+um some bunch of paragraphs so mea moan
+Kathy Bob wrote all these paragraphs
+which are called value and then teacher
+knows that mea knows most about quantum
+mechanics okay so he will take 60% of
+mea's content or mea's value he will
+take 29% of kath's value because
+computer science and quantum Computing
+so that it's kind of related so he will
+use 60% of mea's content 29% of Kathy's
+content to formulate that final essay on
+the other hand Bob's content he will use
+only one person because the query and
+key are not matching that much see Bob
+has a knowledge on philosophy but our
+query requires Quantum Computing so
+query and key we can say they're not
+matching in terms of math you can think
+about Dot produ so let's say dot product
+between query and key Vector is less
+let's say only one person okay but in
+the other case mea query and key dot
+product is higher let's say 60% so you
+will take 60% of mea's value which is
+the essay written by mea on Quantum
+Computing now same way for our sentence
+the query for Dish is I want to know
+about my modifiers okay I'm just giving
+you analogy by the way way the real
+working is little different but let's
+say you are generating contextual
+embedding for the word dish and the
+query may look something like I want to
+know about my modifiers right like my
+adjectives all these adjectives which
+modifies my meaning and the key will be
+uh the description that each of these
+words are giving about themselves for
+example I will say I'm the subject of
+the sentence made will say I indicate an
+action or a verb similarly sweet will
+say say I am an adjective describing
+taste and so on so these are called keys
+and based on the dot product between
+query and key yeah you're trying to find
+out you know which things are matching
+so if if dish wants to know about
+modifiers I think these are the
+adjectives which modifies the meaning of
+word dish so the score attention score
+for these will be higher whereas the
+tension score for these will be lower
+now once you get all these attention
+scores you need value so each of these
+words will now say the value value means
+uh the component that it is contributing
+to that query so I will say Indian will
+say the style or origin is Indian sweet
+will say The Taste is sweet similarly
+all these words will have specific value
+and then uh let's consider the values of
+only these four words I mean as such it
+will use values of all the words but for
+simpl let's say only these four words
+these values by the way will be some
+kind of vector we'll look into how
+exactly those vectors are derived but
+let's say these values are all these
+vectors and query also has like dish
+also has its own Vector right like this
+is the static embedding so this is its
+own vector and now what you do is in
+static embedding you add all these
+vectors and all these vectors you can
+think about as ress indianness okay so
+see this is how you add all of them okay
+you add all of them actually the vector
+of all the other words and you get the
+final context of where embedding in
+terms of the embedding space it is like
+going from dish to ress indan ress and
+so on so these vectors right ress
+indianness sweetness are these vectors
+okay this is just a mathematical
+representation now let's look at how
+those vectors are built so here you have
+a query for Dish okay so let me just
+represent it as a horizontal right this
+was a vertical format this is horizontal
+format the same thing for each of these
+words or tokens you will first get their
+embedding from our stating embedding
+Matrix okay so these are static
+embeddings for each of these words in
+the case of bird the dimension is 768
+for GPT is 12,000 something let's say
+for word dish this is my embedding let's
+call it E7 that E7 you will multiply
+with a special Matrix called WQ which
+will have a
+dimension uh of 64 by 768 so 768 is the
+columns in order to perform matrix
+multiplication The Columns in the first
+Matrix should be equal to rows in the
+second Matrix so this is 6 768 this is
+768 the rows in The Matrix the first
+Matrix is 64 for bir for GPT is
+different and when you do
+uh this kind of matrix multiplication
+you will get uh this quy Vector okay so
+you will multiply this row with this
+column okay so you multiply 50 with this
+0.9
+minus5 with
+1.07 65 with this and then you add them
+all up you put them here then you take
+the second row multiply 23 with this
+minus 71 with this 1.58 with this and
+you put that here and so on okay so this
+is how you build a query Vector now WQ
+here knows how to encode query of a
+token for attention computation when we
+train the model we already got the WQ
+and WQ after the training is done it it
+doesn't change okay after you do that
+training sometime it is referred as
+pre-training on huge amount of data you
+build this WQ Matrix which doesn't
+change okay so for a train model uh this
+WQ will not change you multiply that
+with specific embedding E7 let's say
+this is a positional embedding you get
+Q7 which is the query Vector for the
+word dish and you repeat the same
+process for all the words okay so how
+you have Q7 for dish for Rice you will
+have q6 Indian you have uh Q5 and so on
+to summarize WQ here knows how to encode
+query of a token for attention
+computation and remember in one of the
+previous slides I said that when the
+model is strained it will have static
+embedding metrix but it will also have
+this WQ WK WV and that is what I was
+referring to okay so we just talked
+about WQ here the question now is during
+the training how exactly we get WQ WK WV
+well we take this Transformer
+architecture and we train it on huge
+amount of data so we take all the
+Wikipedia text and we generate this kind
+of X and Y pairs okay so you don't have
+to manually label it this is called uh
+self-supervised data set uh you don't
+need a person to label it because you
+can just split a sentence you can have a
+sentence and the next word is your y
+okay so this is your X this is your y
+you feed X as an input and when the
+model is not train TR it will not
+predict right things it will make error
+so let's say for this it produce Mexican
+which is your why hat okay it's a
+predicted value your actual value is
+Indian so that is why you calculate
+error and then you back propagate that
+error through back propagation and chain
+rule partial derivative and so on folks
+you need to have understanding of how
+back propagation Works what is a chain
+rule you need to know all those deep
+learning fundamentals okay I have
+covered that in other modules if you're
+part of my courses or boot camp you
+would have seen those if you're watching
+it from YouTube Again YouTube has uh
+these kind of tutorials my channel has
+these tutorials so you need to know how
+the back propagation Works essentially
+you are feeding this data set you're
+Computing the error and you're back
+propagating it throughout this
+architecture and during that back
+propagation when let's say you train
+this on millions and millions of
+sentences that is the time when uh this
+WQ WK WV will be finalized inside this
+model architecture now going back for
+Dish query we computed this particular
+query Vector next step is to compute the
+key vectors okay so I gave this kind of
+analogy description to uh get you an
+intuitive understanding but in reality
+these will be the vectors so let's see
+how those vectors are formed so here I'm
+taking the first token I and the keys
+look something like this okay so here
+you will take the positional embedding
+the static embedding for the word I and
+you will multiply that with another
+magical Matrix WK once again WK after
+your pre-training after that model is
+trained it is fixed so you take that
+Matrix and you uh figure out your K1
+okay here WK knows how to encode key of
+a token for the attention computation
+then you go to the next word compute K2
+next word compute K3 you do that for all
+the words so now for all these words we
+have these key vectors okay so you have
+Q7 uh query Vector you have key vectors
+and you take the dot product between
+these two okay so q1 K1 Dot Q7 okay so
+if you take these dot product between
+these two vectors you'll get some number
+right like
+3.33 57 101 whatever that number is it
+it's a single number you will get that
+for all the tokens okay and then you let
+it pass through a soft Max function from
+Deep planning fundamentals you should
+know about softmax softmax will convert
+bunch of values into probability distrib
+ution so that when you add all these
+values it will be one so soft Max is
+converting all these discrete values
+into probability distribution so that
+you can express them as percentages and
+the sum of all these percentage will be
+one mathematically you can represent
+this operation as soft Max between q and
+KT now KT is K transpose okay so here Q
+was a vector but if you talk about let's
+say this K right so K is k1 K2 K3 so
+it's not just one vector actually it's
+like bunch of vectors so this can be
+thought of as a matrix and to multiply
+that you need to do a transpose see if
+you are multiplying Q7 with K1 like a
+single Vector you don't need to do
+transpose but when you have Matrix you
+need to do transpose okay so we'll use
+this formula later on in the final
+attention formula but for now just
+remember that there is this kind of
+formula as a Next Step once you have
+comp Ed these attention scores or
+attention weights you need to find the
+value Vector right so this was a
+descriptive uh understanding of value
+Vector but the way value vectors are
+derived is similar for each of the
+tokens you get positional embedding
+static embedding then you multiply that
+with another Vector called WV you get V1
+and here WV knows how to encode value of
+a token for attention computation okay
+so you do that for all the words so V1
+V2 V3 V4 V7 and so on okay so for all
+these words you will uh get their values
+and you multiply that with the weight so
+you will have more component from this
+V4 Vector because it's like 36 person
+but the component that you will use from
+V1 will be very less 7 person okay so
+see the sweetness you're taking
+36% uh here I don't have things in order
+but you essentially add all the vectors
+okay so you just add all of this
+everything okay so here I'm not showing
+everything but you kind of get an idea
+so from static embedding you go all the
+way to context aware embedding here's
+the mathematical formula for attention
+qk V where DK is a dimension of a key
+vector
+in case of GPT this is 128 so what they
+do is they take um the entire 12
+228 Dimension right for GPT the
+dimension of the contextual embeddings
+is 12 228 and you divide it by the
+number of attention heads I think for
+GPT is 96 and that's how you get 128 I
+will explain this 96 a little later but
+there is a way to derive this number 128
+so you do division by square root of
+that just for numerical stability you
+don't want this dot products to become
+very high okay so to bring down that
+number we do kind of scaling here and
+you do soft Max and you multiply that
+with this value V so far what we talked
+about is a single attention block
+actually there are multiple attention
+blocks so that's what we'll cover next
+let's understand what is multi head
+attention so far we have seen this
+picture where you take positional
+embedding for each of the words in your
+input sequence you let it go through
+attention head which is basically taking
+this WQ WK
+WV and coming up with context our aware
+embedding so that whole portion is
+called one attention head in reality you
+have multiple attention heads okay so
+you have multiple attention heads each
+of these heads are producing their own
+context aware embedding which you will
+add them up all together to get the
+final context aware embedding now what
+is the purpose of this multiple
+attention heads one attention head will
+be working on adjectives okay so for the
+word dish sweet Indian rice Etc are
+adjectives the second attention head
+might be working on on a verb okay so
+how this verb made uh affects the
+contextual embedding of the word dish
+the third attention block might be
+looking at pronoun so you can think of
+this as looking at different aspects of
+a language or different aspects of that
+context okay for the other sentence the
+first attention head might be looking at
+a cultural context such as Dosa Dola
+Millet bread are all Indian Delicacies
+whereas the second attention head might
+be looking at the pronoun where instead
+of the and B if I exchange the order of
+these two uh here you will have Italian
+similarly instead of you if I say I
+again here you will have a different
+word so there is a pronoun context the
+third attention uh head might be looking
+at action and timing you know you're
+driving 20 minutes Drive Etc so the
+purpose of multi- attention heads is to
+allow the model
+to focus on different aspects or
+different types of relationships between
+tokens in a language when you have
+multiple tokens there is a different
+type of relationship between these
+tokens such as semantic positional
+syntactic uh
+simultaneously uh enriching the
+contextual understanding of each uh
+token so I want you to read this
+sentence again uh I hope hope you get an
+idea it is basically looking at
+different aspects or different
+relationship between the tokens to
+enrich the
+contextual understanding of each token
+so here in this particular architecture
+diagram see first we produced this uh
+static embedding then we added this
+positional encoding right so you got
+positional encoding here uh you ignore
+this normalization part for now
+normalization is simple actually it's
+like uh normal izing it to Value which
+is zero mean and one standard deviation
+and then looking at v k q kind of metrix
+to uh use multi-headed attention to
+derive ec1 ec2 these
+individual uh contextual embedding and
+you add all of them up to produce your
+final context of our embedding which
+will come here and by the way this is a
+residual connection uh if you know about
+deep learning you will have uh this um
+residual connection that helps you uh
+with a smooth gradient flow after this
+block the next block is feed forward
+Network so you'll ask me okay I already
+have context over embedding now why do I
+need this feed forward Network well the
+thing is you don't have your final
+context aware embedding yet so here at
+this point
+the embeddings are enriched but they are
+not still fully furnished yet you have
+to let it go through this feed forward
+Network so what happens is you passed
+your positional embedding through bunch
+of attention heads and you got this
+enriched contextual embedding that will
+go through a fully connected neural
+network layer okay so here the input
+neurons will be same number of uh
+elements as this embedding so in case of
+bir let's say this will be
+768 for GPT it will be 12
+228 and then in the hidden layer you can
+have uh n n number of neurons and in the
+output layer again you'll have same as
+this one because this input and this
+output will have a same size so if this
+is 768 this will also be 768 okay so you
+let it go through this feed forward
+Network and the resulting embedding that
+you get is even more enrich it's like a
+more furnac product now this neural
+network weights you know this will have
+a lot of weights and parameters those
+weights and parameters are set once
+again during that training process so
+when you're going through this XY pairs
+right your training pairs you might have
+hundreds and thousands of these
+sentences when you're training that
+Network during that training look at
+this feed forward Network you know
+during back propagation
+those weights are getting adjusted and
+it will help you refine your sentence
+further now once you get enriched
+embedding you will add that into your
+original embedding and you get the final
+now it is final now it's a final
+contextually Rich embedding so the
+purpose of feed forward network is it
+will enrich each token embedding by
+applying nonlinear transformation
+because in the attention head you are
+applying linear transformation here you
+get an opportunity to apply nonlinear
+transformation independently enabling
+the model to learn complex patterns and
+higher order features Beyond just the
+contextual relationship see multi-head
+attention is just capturing those
+contextual relationships how these words
+are related to each other but language
+is nonlinear it's not just the
+relationship right there are like some
+nuances nonlinearity complexity all of
+that can be captured by this fully
+connected layer or feed forward Network
+so to better visualize each of the words
+in your sentence let's say you have I
+made dish every word will go through
+positional embedding and every
+positional embedding goes through
+multiple attention head so the embedding
+for I will go through all the heads okay
+so in GPT if you have 96 heads it will
+go through all those 96 heads similarly
+made will also go through 96 heads and
+this this is happening in parallel it's
+not like you process I first and made no
+all of these things are happening in
+parallel and each of these uh vectors
+will also go through the feed forward
+Network parall at the same time right so
+the same network is available for each
+of these words and you get all these
+contextually enriched embeddings okay so
+that comes here so after feed forward
+Network here at this point you get all
+these m Bings okay and then you have
+this uh plus sign and normalization so
+normalization layer by the way this Norm
+is uh just it's ensuring that you have
+stable learning improving the gradient
+flow if you have deep learning
+fundamentals you will understand what I
+mean uh in machine learning generally
+when you have all these wide range of
+values if you normalize them let's say
+you normalize them to zero and one you
+get better control over your training
+now you also notice this anx layers so
+anx layers is basically for B let's say
+if you have a b base model you have 12
+such layers okay so this is a
+Transformer block so you kind of repeat
+so you have one block then after that
+you have another block so in case of BT
+base model you have 12 layers B large
+you have 24 layers in case of GPT again
+there will be different number of layers
+so that's what this NX layers means all
+right f finally we are done with
+understanding encoder I just want to
+summarize we had an input sequence we
+generated a static embedding here then
+here we generated a positional embedding
+then we have one Transformer block or NX
+layer where we first normalize we use
+vkv uh to compute attention score or
+attention weight we have multiple such
+heads and then you go through
+normalization you have feed forward
+Network you kind of ADD remember like
+you have original embedding and then you
+add that output and you get the final
+contextual embedding you normalize it
+and here at this point you are getting a
+final
+contextual uh very enriched embedding we
+have covered most of the Transformer
+architecture decoder is not going to
+take uh much time so let's spend few
+minutes understanding decoder so the
+output of encoder is a contextual
+embedding or context Rich embedding
+which you give it as an input to decoder
+and decoder will produce the next word
+if you're working on next word
+prediction if you're working on language
+translation it will uh start with this
+special token called start and then it
+will produce May then another work here
+banay and so on okay so that's a goal of
+a decoder now here you will notice one
+thing which is called
+multi-headed cross attention okay so
+let's understand what exactly is cross
+attention let's say you have this
+sentence I made kir which you want to
+translate into Hindi here you will have
+key vectors and value vectors as we have
+discussed before but the query Vector
+will be little different so query Vector
+will be start and it will be like I'm
+starting to generate translation what
+part of the input should I focus on and
+then when you have next word which is
+man which is the first word in your
+translation it will be like I generated
+the subject what is the subject okay
+then you will have here I generated the
+subject and object help me complate the
+sentence with a verb form so the query
+part is little different see in the
+previous example you had only one
+sentence so I made key so you'll
+generate a query from made let's say and
+you will have key and value from same
+sentence in case of language translation
+it's little different uh so here we need
+to use cross cross attention why cross
+attention because query you are using it
+from the translated sentence in Hindi
+whereas key and values are being used
+from the original sentence in English so
+that is why it's called cross attention
+in the diagram you can see here the V
+and K values are coming from your
+encoder encoder has processed this im
+here okay so V and K are coming from
+encod see this is the arrow whereas Q is
+coming from the decoder itself right so
+you know that Hindi sequence will be
+produced here so man K banai Etc so that
+query part is coming from here that is
+why it is called cross attention in the
+case of B we all know that there is only
+encoder part decoder part is not there
+in case of GPT the Transformer
+architecture is little different okay so
+that's the encoder part remaining part
+we have already understood now let me uh
+show one nice tool which can visually
+show you this architecture someone has
+built this nice visualization tool you
+can go to Pol club. github.io
+Transformer explainer and here you can
+look into different examples right so
+for example let's look at this sentence
+as the space ship was approaching the it
+will try to autocomplete that word and
+say station right now each of these
+words has the space ship first you had
+this Dropout layer so we talking about
+Transformer here so it will have a
+Dropout layer the architecture is little
+customized compared to the base
+Transformer architecture then you have
+this residual connection okay so
+residual connection will take you from
+here to here if you talk about
+embeddings you have token embeddings for
+each of these right see 768 is the size
+then you have positional embedding okay
+you add all this position and you get
+final Vector this is a
+positional embedding of a sentence and
+you have residual connection then you
+have q KV computation so if you look at
+this particular block here qkv it will
+kind of visually show you how you
+compute q k v and get all those three
+vectors right like query Vector key
+vector and value vector and then uh you
+have this output which you feed it to
+MLP is your feed forward neural network
+that we talked about okay so feed
+forward neural network then you again
+have a residual block and then you have
+layer normalization and this is one
+Transformer block you have multiple of
+them like 11 okay so that Annex layer
+that I was referring to is one block so
+you have repeated blocks and in the end
+you get this kind of soft Max
+probability see the probability here is
+a station okay so just play with this
+particular Tool uh to get a better
+understanding of this thing and I want
+to give credits uh to this amazing
+Channel called 3 blue one brown so if
+you go to YouTube and type in
+Transformer explain 3 blue one brown you
+will find all these videos so I want you
+to watch from video number 5678 onwards
+he will have more videos as well uh
+especially these three video dl5 dl6 dl7
+these three videos you must watch it
+will enhance your understanding further
+I myself learned a lot from this channel
+so due credits to three blue one brown
+all right that's it folks so that's that
+was about Transformer I know it was a
+long discussion there were many topics
+that we covered but hopefully your
+understanding is clear if you have any
+question please feel free to ask
+[Music]
+a
+[Music]

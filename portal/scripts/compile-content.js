@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * compile-content.js
- * Parses GA/*.md files and emits public/content/catalog.json + public/content/ga-{n}.json
+ * Parses GA/*.md and pyq/*.md files and emits public/content/catalog.json
+ * plus one JSON question pack per source file.
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync, cpSync } from 'fs';
@@ -11,8 +12,12 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 const GA_DIR = join(ROOT, '..', 'GA');
+const PYQ_DIR = join(ROOT, '..', 'pyq');
+const LEARNING_DIR = join(ROOT, '..', 'learning');
 const OUT_DIR = join(ROOT, 'public', 'content');
 const GA_ASSETS = join(GA_DIR, 'assets');
+const PYQ_ASSETS = join(PYQ_DIR, 'assets');
+const LEARNING_ASSETS = join(LEARNING_DIR, 'assets');
 const OUT_ASSETS = join(ROOT, 'public', 'assets');
 
 if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
@@ -22,6 +27,18 @@ if (existsSync(GA_ASSETS)) {
   if (!existsSync(OUT_ASSETS)) mkdirSync(OUT_ASSETS, { recursive: true });
   cpSync(GA_ASSETS, OUT_ASSETS, { recursive: true });
   console.log(`✓ Synchronized assets from ${GA_ASSETS} to ${OUT_ASSETS}`);
+}
+
+if (existsSync(PYQ_ASSETS)) {
+  if (!existsSync(OUT_ASSETS)) mkdirSync(OUT_ASSETS, { recursive: true });
+  cpSync(PYQ_ASSETS, OUT_ASSETS, { recursive: true });
+  console.log(`✓ Synchronized assets from ${PYQ_ASSETS} to ${OUT_ASSETS}`);
+}
+
+if (existsSync(LEARNING_ASSETS)) {
+  if (!existsSync(OUT_ASSETS)) mkdirSync(OUT_ASSETS, { recursive: true });
+  cpSync(LEARNING_ASSETS, OUT_ASSETS, { recursive: true });
+  console.log(`✓ Synchronized assets from ${LEARNING_ASSETS} to ${OUT_ASSETS}`);
 }
 
 // ──────────────────────────────────────────────
@@ -37,6 +54,91 @@ const GA_META = {
   ga8:  { week: 8,  topics: ['LLM Taxonomy', 'Pre-training Data', 'Kaplan Scaling Law', 'Dataset Sizing'], notesFile: 'week8-learning-notes.md' },
   ga11: { week: 11, topics: ['Attention Complexity', 'FLOP Counting', 'KV Caching', 'Local Window Attention'], notesFile: 'week11-learning-notes.md' },
   ga12: { week: 12, topics: ['Positional Encodings', 'RoPE', 'ALiBi', 'Length Extrapolation'], notesFile: 'week12-learning-notes.md' },
+};
+
+const PYQ_META = {
+  'pyq-may-2026-quiz-1': {
+    sourceFile: 'May-2026-Quiz-1.md',
+    category: 'PYQ',
+    week: 0,
+    title: 'May-2026-Quiz-1',
+    topics: ['Attention', 'Transformer Architecture', 'Autoregressive Decoding', 'Tokenization'],
+    notesFile: null,
+  },
+  'pyq-may-2026-quiz-2': {
+    sourceFile: 'May-2026-Quiz-2.md',
+    category: 'PYQ',
+    week: 0,
+    title: 'May-2026-Quiz-2',
+    topics: ['Encoder-Decoder Transformers', 'T5', 'BART', 'Scaling Laws'],
+    notesFile: null,
+  },
+};
+
+const LEARNING_META = {
+  'learning-01-foundations': {
+    sourceFile: 'Learning-01-Foundations.md',
+    category: 'LEARNING',
+    week: 1,
+    title: 'Learning 01 — From Text to Transformer Inputs',
+    label: 'Learning 01 — Foundations',
+    topics: ['Tokens', 'Context Length', 'Embeddings', 'Positions'],
+    notesFile: 'vid/transformer-notes.md',
+  },
+  'learning-02-attention': {
+    sourceFile: 'Learning-02-Attention.md',
+    category: 'LEARNING',
+    week: 2,
+    title: 'Learning 02 — Attention from First Principles',
+    label: 'Learning 02 — Attention',
+    topics: ['Queries, Keys, Values', 'Softmax', 'Attention Scores', 'Weighted Sums'],
+    notesFile: 'GA/week1-week2-learning-notes.md',
+  },
+  'learning-03-transformer-blocks': {
+    sourceFile: 'Learning-03-Transformer-Blocks.md',
+    category: 'LEARNING',
+    week: 3,
+    title: 'Learning 03 — Multi-Head Attention and Transformer Blocks',
+    label: 'Learning 03 — Blocks & Parameters',
+    topics: ['Multi-Head Attention', 'Encoder-Decoder', 'FFN', 'Parameter Counting'],
+    notesFile: 'GA/week1-week2-learning-notes.md',
+  },
+  'learning-04-gpt': {
+    sourceFile: 'Learning-04-GPT-and-Masks.md',
+    category: 'LEARNING',
+    week: 4,
+    title: 'Learning 04 — GPT, Positions, and Causal Masks',
+    label: 'Learning 04 — GPT & Masks',
+    topics: ['Positional Encoding', 'Causal Masks', 'Teacher Forcing', 'GPT Training'],
+    notesFile: 'GA/week3-week4-learning-notes.md',
+  },
+  'learning-05-decoding': {
+    sourceFile: 'Learning-05-Decoding-and-Probability.md',
+    category: 'LEARNING',
+    week: 5,
+    title: 'Learning 05 — Sequence Probability and Decoding',
+    label: 'Learning 05 — Decoding',
+    topics: ['Chain Rule', 'Greedy Search', 'Top-k / Top-p', 'Beam Search'],
+    notesFile: 'GA/week3-week4-learning-notes.md',
+  },
+  'learning-06-bert': {
+    sourceFile: 'Learning-06-BERT.md',
+    category: 'LEARNING',
+    week: 6,
+    title: 'Learning 06 — BERT and Masked Language Modelling',
+    label: 'Learning 06 — BERT',
+    topics: ['Bidirectional Attention', 'MLM Loss', '[CLS]', '[SEP]'],
+    notesFile: 'GA/week3-week4-learning-notes.md',
+  },
+  'learning-07-capstone': {
+    sourceFile: 'Learning-07-Capstone.md',
+    category: 'LEARNING',
+    week: 7,
+    title: 'Learning 07 — Weeks 1–4 Capstone',
+    label: 'Learning 07 — Capstone',
+    topics: ['Integrated Shapes', 'Attention', 'Decoding', 'BERT vs GPT'],
+    notesFile: 'vid/transformer-notes.md',
+  },
 };
 
 // ──────────────────────────────────────────────
@@ -58,7 +160,9 @@ function parseHeader(lines) {
 
 function parseQType(text) {
   const t = text.toLowerCase();
+  if (t.includes('msq') || t.includes('multiple select')) return 'multiple_select';
   if (t.includes('numeric input') || t.includes('*(numeric')) return 'numeric';
+  if (t.includes('short answer')) return 'text';
   if (t.includes('select all') || t.includes('(select all') || t.includes('which of the following is (are)') || t.includes('select all that apply')) return 'multiple_select';
   return 'single_choice';
 }
@@ -91,8 +195,16 @@ function extractAnswer(detailsContent, options) {
   if (/^true$/i.test(ansText)) return { type: 'boolean', value: 'True' };
   if (/^false$/i.test(ansText)) return { type: 'boolean', value: 'False' };
 
-  // Option letters (A, B, C, D or option text)
+  // Option letters (A, B, C, D or option text). Supporting multiple
+  // letters here is important for MSQs such as "A, C".
   if (options.length > 0) {
+    const letterMatches = [...ansText.matchAll(/\b([A-Z])\b/g)]
+      .map(match => match[1])
+      .filter(letter => options.some(opt => opt.id === letter));
+    if (letterMatches.length > 0) {
+      return { type: 'option', value: [...new Set(letterMatches)] };
+    }
+
     // Try to match by option letter
     for (const opt of options) {
       if (ansText.toLowerCase().includes(`$${opt.id.toLowerCase()}$`) || 
@@ -118,20 +230,19 @@ function extractAnswer(detailsContent, options) {
       }
     }
   }
-  return { type: 'text', value: ansText };
+  return { type: 'text', value: ansText.replace(/`/g, '').trim() };
 }
 
 // ──────────────────────────────────────────────
 // Main parser
 // ──────────────────────────────────────────────
 
-function parseGAFile(gaId) {
-  const filePath = join(GA_DIR, `${gaId}.md`);
+function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
+  const filePath = join(sourceDir, sourceFile);
   let raw;
   try { raw = readFileSync(filePath, 'utf-8'); } catch { return null; }
 
   const lines = raw.split('\n');
-  const meta = GA_META[gaId];
   const header = parseHeader(lines);
 
   const questions = [];
@@ -172,7 +283,7 @@ function parseGAFile(gaId) {
 
       const bodyText = bodyLines.join('\n').trim();
       const options = extractOptions(bodyLines);
-      const qType = parseQType(bodyText);
+      const qType = parseQType(`${qTitle}\n${bodyText}`);
 
       // Find the bold question (first bold line or first non-empty line)
       let questionText = '';
@@ -204,7 +315,7 @@ function parseGAFile(gaId) {
 
       qIndex++;
       questions.push({
-        id: `${gaId}-q${qIndex}`,
+        id: `${packId}-q${qIndex}`,
         num: qNum,
         title: qTitle,
         type: qType,
@@ -223,9 +334,11 @@ function parseGAFile(gaId) {
   }
 
   return {
-    id: gaId,
+    id: packId,
     week: meta.week,
-    title: `Week ${meta.week} — Graded Assignment ${meta.week === 11 ? 11 : meta.week === 12 ? 12 : meta.week}`,
+    title: meta.title || `Week ${meta.week} — Graded Assignment ${meta.week}`,
+    category: meta.category || 'GA',
+    label: meta.label || meta.title,
     topics: meta.topics,
     notesFile: meta.notesFile,
     score: header.score,
@@ -241,11 +354,10 @@ function parseGAFile(gaId) {
 // Execute
 // ──────────────────────────────────────────────
 
-const gaIds = Object.keys(GA_META);
 const catalog = [];
 
-for (const gaId of gaIds) {
-  const data = parseGAFile(gaId);
+for (const gaId of Object.keys(GA_META)) {
+  const data = parsePackFile(gaId, GA_DIR, GA_META[gaId]);
   if (!data) { console.warn(`Skipping ${gaId} — file not found`); continue; }
 
   const packPath = join(OUT_DIR, `${gaId}.json`);
@@ -256,6 +368,54 @@ for (const gaId of gaIds) {
     id: data.id,
     week: data.week,
     title: data.title,
+    category: data.category,
+    label: data.label,
+    topics: data.topics,
+    score: data.score,
+    maxScore: data.maxScore,
+    submittedDate: data.submittedDate,
+    questionCount: data.questionCount,
+    durationMinutes: data.durationMinutes,
+  });
+}
+
+for (const pyqId of Object.keys(PYQ_META)) {
+  const data = parsePackFile(pyqId, PYQ_DIR, PYQ_META[pyqId], PYQ_META[pyqId].sourceFile);
+  if (!data) { console.warn(`Skipping ${pyqId} — file not found`); continue; }
+
+  const packPath = join(OUT_DIR, `${pyqId}.json`);
+  writeFileSync(packPath, JSON.stringify(data, null, 2));
+  console.log(`✓ ${pyqId}: ${data.questionCount} questions → ${packPath}`);
+
+  catalog.push({
+    id: data.id,
+    week: data.week,
+    title: data.title,
+    category: data.category,
+    label: data.label,
+    topics: data.topics,
+    score: data.score,
+    maxScore: data.maxScore,
+    submittedDate: data.submittedDate,
+    questionCount: data.questionCount,
+    durationMinutes: data.durationMinutes,
+  });
+}
+
+for (const learningId of Object.keys(LEARNING_META)) {
+  const data = parsePackFile(learningId, LEARNING_DIR, LEARNING_META[learningId], LEARNING_META[learningId].sourceFile);
+  if (!data) { console.warn(`Skipping ${learningId} — file not found`); continue; }
+
+  const packPath = join(OUT_DIR, `${learningId}.json`);
+  writeFileSync(packPath, JSON.stringify(data, null, 2));
+  console.log(`✓ ${learningId}: ${data.questionCount} questions → ${packPath}`);
+
+  catalog.push({
+    id: data.id,
+    week: data.week,
+    title: data.title,
+    category: data.category,
+    label: data.label,
     topics: data.topics,
     score: data.score,
     maxScore: data.maxScore,
@@ -268,4 +428,4 @@ for (const gaId of gaIds) {
 const catalogPath = join(OUT_DIR, 'catalog.json');
 writeFileSync(catalogPath, JSON.stringify(catalog, null, 2));
 console.log(`\n✓ catalog.json → ${catalogPath}`);
-console.log(`\nDone! ${catalog.length} GAs compiled.`);
+console.log(`\nDone! ${catalog.length} question packs compiled.`);

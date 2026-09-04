@@ -1,0 +1,23 @@
+flowchart TD
+    START[START]
+    START --> I[i 0.5]
+    START --> YOU[you 0.4]
+    I --> IL[like 0.6]
+    I --> IE[eat 0.3]
+    YOU --> YL[like 0.4]
+    YOU --> YE[eat 0.5]
+    IL --> ILA[apples 0.7]
+    IL --> ILB[bananas 0.2]
+    IE --> IEA[apples 0.4]
+    IE --> IEB[bananas 0.6]
+    YL --> YLA[apples 0.4]
+    YL --> YLB[bananas 0.5]
+    YE --> YEA[apples 0.9]
+    YE --> YEB[bananas 0.1]
+
+    classDef root fill:#e8f1ff,stroke:#1355a6,color:#102a43;
+    classDef branch fill:#fff4e5,stroke:#d97706,color:#5b3500;
+    classDef leaf fill:#ecfdf5,stroke:#15803d,color:#14532d;
+    class START root;
+    class I,YOU,IL,IE,YL,YE branch;
+    class ILA,ILB,IEA,IEB,YLA,YLB,YEA,YEB leaf;

@@ -2,6 +2,7 @@
   "id": "ga12",
   "week": 12,
   "title": "Week 12 — Graded Assignment 12",
+  "category": "GA",
   "topics": [
     "Positional Encodings",
     "RoPE",

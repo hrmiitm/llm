@@ -2,6 +2,7 @@
   "id": "ga2",
   "week": 2,
   "title": "Week 2 — Graded Assignment 2",
+  "category": "GA",
   "topics": [
     "Multi-Head Attention",
     "Parameter Counting",

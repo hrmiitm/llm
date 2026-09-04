@@ -1,0 +1,14 @@
+flowchart LR
+    Scores[Raw score matrix\nall query-key pairs] --> Mask[Add -∞ to future positions]
+    Mask --> Softmax[Row-wise softmax]
+    Softmax --> Weights[Causal attention weights\nonly present and past tokens remain]
+
+    subgraph Matrix[Lower-triangular visibility]
+        V[1 0 0 0\n1 1 0 0\n1 1 1 0\n1 1 1 1]
+    end
+    Mask -. enforces .-> Matrix
+
+    classDef op fill:#fff4e5,stroke:#d97706,color:#5b3500;
+    classDef result fill:#ecfdf5,stroke:#15803d,color:#14532d;
+    class Scores,Mask,Softmax op;
+    class Weights,Matrix result;

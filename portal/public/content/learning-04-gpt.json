@@ -1,0 +1,515 @@
+{
+  "id": "learning-04-gpt",
+  "week": 4,
+  "title": "Learning 04 — GPT, Positions, and Causal Masks",
+  "category": "LEARNING",
+  "label": "Learning 04 — GPT & Masks",
+  "topics": [
+    "Positional Encoding",
+    "Causal Masks",
+    "Teacher Forcing",
+    "GPT Training"
+  ],
+  "notesFile": "GA/week3-week4-learning-notes.md",
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 15,
+  "durationMinutes": 45,
+  "questions": [
+    {
+      "id": "learning-04-gpt-q1",
+      "num": "Q1",
+      "title": "Why positions? (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Why are positional embeddings or positional encodings needed in a transformer?",
+      "bodyMd": "Why are positional embeddings or positional encodings needed in a transformer?\n\n- ( ) Self-attention alone has no inherent notion of token order\n- ( ) They make all vocabulary items share one embedding\n- ( ) They remove the need for a causal mask\n- ( ) They directly choose the next token",
+      "options": [
+        {
+          "id": "A",
+          "text": "Self-attention alone has no inherent notion of token order"
+        },
+        {
+          "id": "B",
+          "text": "They make all vocabulary items share one embedding"
+        },
+        {
+          "id": "C",
+          "text": "They remove the need for a causal mask"
+        },
+        {
+          "id": "D",
+          "text": "They directly choose the next token"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "Without position information, reordering the input rows merely reorders the same attention computation. The model needs a location signal to distinguish “dog bites man” from “man bites dog.”\n\n**Mnemonic:** embeddings say **what**; positions say **where**.\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q2",
+      "num": "Q2",
+      "title": "Position table shape (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "If one sequence has five positions and \\(d_{\\text{model}}=128\\), what is the shape of its position-embedding matrix before adding it to token embeddings?",
+      "bodyMd": "If one sequence has five positions and \\(d_{\\text{model}}=128\\), what is the shape of its position-embedding matrix before adding it to token embeddings?\n\n- ( ) \\(5\\times128\\)\n- ( ) \\(128\\times5\\times5\\)\n- ( ) \\(5\\times5\\)\n- ( ) \\(128\\times128\\)",
+      "options": [
+        {
+          "id": "A",
+          "text": "\\(5\\times128\\)"
+        },
+        {
+          "id": "B",
+          "text": "\\(128\\times5\\times5\\)"
+        },
+        {
+          "id": "C",
+          "text": "\\(5\\times5\\)"
+        },
+        {
+          "id": "D",
+          "text": "\\(128\\times128\\)"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "There is one 128-dimensional position vector for every one of the 5 slots, so the shape matches the per-example token embedding matrix: \\(5\\times128\\).\n\n**Answer:** A",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q3",
+      "num": "Q3",
+      "title": "Sinusoidal position zero (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "For sinusoidal encodings, every sine coordinate at position \\(p=0\\) is \\(\\sin(0)=0\\) and every cosine coordinate is \\(\\cos(0)=1\\). If \\(d_{\\text{model}}=128\\), what is the squared \\(L_2\\) norm of the position-0 encoding?",
+      "bodyMd": "For sinusoidal encodings, every sine coordinate at position \\(p=0\\) is \\(\\sin(0)=0\\) and every cosine coordinate is \\(\\cos(0)=1\\). If \\(d_{\\text{model}}=128\\), what is the squared \\(L_2\\) norm of the position-0 encoding?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "64"
+      },
+      "solutionMd": "There are 64 sine coordinates equal to 0 and 64 cosine coordinates equal to 1:\n\n\\[\n\\|PE_0\\|_2^2=64(0^2)+64(1^2)=64.\n\\]\n\n**Answer:** \\(\\boxed{64}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q4",
+      "num": "Q4",
+      "title": "Future cells in a causal mask (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "For \\(T=5\\), how many entries lie strictly above the main diagonal and must be blocked in a left-to-right causal attention mask?",
+      "bodyMd": "For \\(T=5\\), how many entries lie strictly above the main diagonal and must be blocked in a left-to-right causal attention mask?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "10"
+      },
+      "solutionMd": "The blocked future cells are\n\n\\[\n1+2+3+4=\\frac{5(5-1)}2=10.\n\\]\n\nThe diagonal remains visible: a token may attend to itself.\n\n**Answer:** \\(\\boxed{10}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q5",
+      "num": "Q5",
+      "title": "Mask shape (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "What is the attention-mask shape for one five-token self-attention sequence before broadcasting over batch and heads?",
+      "bodyMd": "What is the attention-mask shape for one five-token self-attention sequence before broadcasting over batch and heads?\n\n- ( ) \\(5\\times128\\)\n- ( ) \\(5\\times5\\)\n- ( ) \\(4\\times32\\)\n- ( ) \\(128\\times128\\)",
+      "options": [
+        {
+          "id": "A",
+          "text": "\\(5\\times128\\)"
+        },
+        {
+          "id": "B",
+          "text": "\\(5\\times5\\)"
+        },
+        {
+          "id": "C",
+          "text": "\\(4\\times32\\)"
+        },
+        {
+          "id": "D",
+          "text": "\\(128\\times128\\)"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "Every query position needs a permission decision for every key position, producing a \\(T\\times T\\) table.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q6",
+      "num": "Q6",
+      "title": "Visible history (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Using zero-based positions \\(0,1,2,3,4\\), how many key positions may query position \\(3\\) attend to in standard left-to-right causal attention?",
+      "bodyMd": "Using zero-based positions \\(0,1,2,3,4\\), how many key positions may query position \\(3\\) attend to in standard left-to-right causal attention?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "4"
+      },
+      "solutionMd": "It may see positions \\(0,1,2,3\\): all past tokens plus itself.\n\n\\[\n3+1=4.\n\\]\n\n**Answer:** \\(\\boxed{4}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q7",
+      "num": "Q7",
+      "title": "Right-to-left text (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "If the written language is right-to-left but tokens are stored in their natural generation order, what happens to the causal-mask rule?",
+      "bodyMd": "If the written language is right-to-left but tokens are stored in their natural generation order, what happens to the causal-mask rule?\n\n- ( ) The mask must always be flipped visually\n- ( ) The rule is still “allow earlier generated positions, block later ones”\n- ( ) Causal masking is unnecessary\n- ( ) The model must use an encoder only",
+      "options": [
+        {
+          "id": "A",
+          "text": "The mask must always be flipped visually"
+        },
+        {
+          "id": "B",
+          "text": "The rule is still “allow earlier generated positions, block later ones”"
+        },
+        {
+          "id": "C",
+          "text": "Causal masking is unnecessary"
+        },
+        {
+          "id": "D",
+          "text": "The model must use an encoder only"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "The mask follows the *token-index/generation order*, not the page's visual direction. If the sequence is indexed in generation order, position \\(i\\) may attend to \\(j\\le i\\).\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q8",
+      "num": "Q8",
+      "title": "GPT architecture (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Which transformer stack is GPT fundamentally based on?",
+      "bodyMd": "Which transformer stack is GPT fundamentally based on?\n\n- ( ) Encoder-only, bidirectional attention\n- ( ) Decoder-only, masked self-attention\n- ( ) Encoder followed by a separate decoder for every token\n- ( ) A recurrent network with no attention",
+      "options": [
+        {
+          "id": "A",
+          "text": "Encoder-only, bidirectional attention"
+        },
+        {
+          "id": "B",
+          "text": "Decoder-only, masked self-attention"
+        },
+        {
+          "id": "C",
+          "text": "Encoder followed by a separate decoder for every token"
+        },
+        {
+          "id": "D",
+          "text": "A recurrent network with no attention"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "GPT is a decoder-only transformer. Its self-attention is masked so each position predicts from its preceding context rather than peeking at future tokens.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q9",
+      "num": "Q9",
+      "title": "Causal-language-model target (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "For the token sequence \\([x_1,x_2,x_3,x_4]\\), what is the usual next-token prediction target at the position containing \\(x_2\\)?",
+      "bodyMd": "For the token sequence \\([x_1,x_2,x_3,x_4]\\), what is the usual next-token prediction target at the position containing \\(x_2\\)?\n\n- ( ) \\(x_1\\)\n- ( ) \\(x_2\\)\n- ( ) \\(x_3\\)\n- ( ) All vocabulary tokens at once",
+      "options": [
+        {
+          "id": "A",
+          "text": "\\(x_1\\)"
+        },
+        {
+          "id": "B",
+          "text": "\\(x_2\\)"
+        },
+        {
+          "id": "C",
+          "text": "\\(x_3\\)"
+        },
+        {
+          "id": "D",
+          "text": "All vocabulary tokens at once"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "C"
+        ]
+      },
+      "solutionMd": "Causal language modeling shifts the labels one step left:\n\n\\[\nP(x_1,x_2,x_3,x_4)=\\prod_t P(x_t\\mid x_{<t}).\n\\]\n\nThe state at \\(x_2\\)'s position is trained to predict the next token \\(x_3\\).\n\n**Answer:** C",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q10",
+      "num": "Q10",
+      "title": "Training and inference (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Which statements correctly compare teacher-forced training with inference?",
+      "bodyMd": "Which statements correctly compare teacher-forced training with inference?\n\n- ( ) During training, the true previous tokens can be supplied as context.\n- ( ) During inference, a generated token becomes context for the next step.\n- ( ) During inference, the model sees all future ground-truth tokens.\n- ( ) Exposure to its own earlier errors is an inference challenge.",
+      "options": [
+        {
+          "id": "A",
+          "text": "During training, the true previous tokens can be supplied as context."
+        },
+        {
+          "id": "B",
+          "text": "During inference, a generated token becomes context for the next step."
+        },
+        {
+          "id": "C",
+          "text": "During inference, the model sees all future ground-truth tokens."
+        },
+        {
+          "id": "D",
+          "text": "Exposure to its own earlier errors is an inference challenge."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "D"
+        ]
+      },
+      "solutionMd": "Training can score all shifted next-token targets in parallel while conditioning on true prefixes. At inference, no future ground truth exists; generated history is fed back, so an early mistake can affect later choices.\n\n**Answer:** A, B and D",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q11",
+      "num": "Q11",
+      "title": "Weight tying intuition (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "If the input embedding matrix and output vocabulary classifier are tied, why can a rare token receive a useful gradient even when it is not the correct next token?",
+      "bodyMd": "If the input embedding matrix and output vocabulary classifier are tied, why can a rare token receive a useful gradient even when it is not the correct next token?\n\n- ( ) Tying creates an extra vocabulary\n- ( ) It appears in the softmax denominator as a competing output class\n- ( ) It turns attention into convolution\n- ( ) It prevents any gradients from reaching embeddings",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tying creates an extra vocabulary"
+        },
+        {
+          "id": "B",
+          "text": "It appears in the softmax denominator as a competing output class"
+        },
+        {
+          "id": "C",
+          "text": "It turns attention into convolution"
+        },
+        {
+          "id": "D",
+          "text": "It prevents any gradients from reaching embeddings"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "Every vocabulary logit participates in softmax normalization. With tied weights, the output-side gradient also updates the corresponding input embedding vector. This can give rare tokens learning signal beyond their few input occurrences.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q12",
+      "num": "Q12",
+      "title": "Per-head width (Numeric Input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "What is \\(d_h\\) for \\(d_{\\text{model}}=128\\) and \\(h=4\\)?",
+      "bodyMd": "What is \\(d_h\\) for \\(d_{\\text{model}}=128\\) and \\(h=4\\)?\n\n*(Numeric input)*",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "32"
+      },
+      "solutionMd": "\\[\nd_h=\\frac{128}{4}=32.\n\\]\n\n**Answer:** \\(\\boxed{32}\\)",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q13",
+      "num": "Q13",
+      "title": "Pretraining and fine-tuning (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Which statements are correct?",
+      "bodyMd": "Which statements are correct?\n\n- ( ) GPT-style pretraining can learn next-token prediction from raw text.\n- ( ) Fine-tuning adapts pretrained parameters to a downstream task or instruction behavior.\n- ( ) Fine-tuning means discarding the pretrained model and starting with random weights.\n- ( ) Both stages can use gradients to update parameters.",
+      "options": [
+        {
+          "id": "A",
+          "text": "GPT-style pretraining can learn next-token prediction from raw text."
+        },
+        {
+          "id": "B",
+          "text": "Fine-tuning adapts pretrained parameters to a downstream task or instruction behavior."
+        },
+        {
+          "id": "C",
+          "text": "Fine-tuning means discarding the pretrained model and starting with random weights."
+        },
+        {
+          "id": "D",
+          "text": "Both stages can use gradients to update parameters."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "D"
+        ]
+      },
+      "solutionMd": "Pretraining learns broad language patterns from a self-supervised next-token objective. Fine-tuning begins from those learned weights and adjusts them using more specific data/objectives. It is not a restart.\n\n**Answer:** A, B and D",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q14",
+      "num": "Q14",
+      "title": "The causal permission rule (Short Answer)",
+      "type": "text",
+      "context": null,
+      "questionText": "Using query index \\(i\\) and key index \\(j\\), state the rule for an allowed entry in a standard left-to-right causal mask.",
+      "bodyMd": "Using query index \\(i\\) and key index \\(j\\), state the rule for an allowed entry in a standard left-to-right causal mask.",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "j ≤ i"
+      },
+      "solutionMd": "An entry is allowed when the key is not from the future:\n\n\\[\nj\\le i.\n\\]\n\nAll entries with \\(j>i\\) receive a very negative score before softmax, making their probability effectively zero.\n\n**Answer:** `j ≤ i`",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "learning-04-gpt-q15",
+      "num": "Q15",
+      "title": "One-sentence checkpoint (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Which statement best summarizes the GPT learning loop?",
+      "bodyMd": "Which statement best summarizes the GPT learning loop?\n\n- ( ) Read every future token, then classify the first token\n- ( ) Use a causal prefix to predict the next token, then append the chosen token at generation time\n- ( ) Encode source tokens with unrestricted attention only\n- ( ) Replace all probabilities with a fixed lookup table",
+      "options": [
+        {
+          "id": "A",
+          "text": "Read every future token, then classify the first token"
+        },
+        {
+          "id": "B",
+          "text": "Use a causal prefix to predict the next token, then append the chosen token at generation time"
+        },
+        {
+          "id": "C",
+          "text": "Encode source tokens with unrestricted attention only"
+        },
+        {
+          "id": "D",
+          "text": "Replace all probabilities with a fixed lookup table"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "GPT learns a probability distribution for the next token from a causal prefix. At generation time, it selects or samples a token and extends the prefix, repeating the same operation.\n\n**Answer:** B",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}
