@@ -1,0 +1,13 @@
+flowchart LR
+    Text[Raw text] --> Tokenizer[Tokenizer]
+    Tokenizer --> IDs[Token IDs]
+    IDs --> Lookup[Embedding lookup]
+    Lookup --> Position[Add positional information]
+    Position --> States["Input hidden states H(0)"]
+
+    classDef input fill:#e8f1ff,stroke:#1355a6,color:#102a43;
+    classDef op fill:#fff4e5,stroke:#d97706,color:#5b3500;
+    classDef result fill:#ecfdf5,stroke:#15803d,color:#14532d;
+    class Text,IDs input;
+    class Tokenizer,Lookup,Position op;
+    class States result;

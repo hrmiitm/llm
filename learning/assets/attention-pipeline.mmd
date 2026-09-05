@@ -1,0 +1,14 @@
+flowchart LR
+    X[Token states X] --> Q[Q = X W_Q]
+    X --> K[K = X W_K]
+    X --> V[V = X W_V]
+    Q --> S[Scores S = Q K^T / sqrt d_k]
+    K --> S
+    S --> A[Attention weights A = softmax S]
+    A --> Z[Context states Z = A V]
+    V --> Z
+
+    classDef tensor fill:#e8f1ff,stroke:#1355a6,color:#102a43;
+    classDef op fill:#fff4e5,stroke:#d97706,color:#5b3500;
+    class X,Q,K,V,Z tensor;
+    class S,A op;
