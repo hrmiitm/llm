@@ -1,5 +1,7 @@
 # IIT Madras NPTEL — Large Language Models (LLM) Exam Portal
 
+> **New: [Transformer Visual Lab](transformer-lab/README.md)** — eight guided lessons, interactive architecture and calculations, and 38 explained exercises covering GA 1–4 and Quiz 1. Open **Visual Lab** in the portal navigation.
+
 [![Deploy LLM Exam Portal to GitHub Pages](https://github.com/hrmiitm/llm/actions/workflows/deploy.yml/badge.svg)](https://github.com/hrmiitm/llm/actions/workflows/deploy.yml)
 [![Live Site](https://img.shields.io/badge/Live%20Portal-GitHub%20Pages-blue?style=flat&logo=github)](https://hrmiitm.github.io/llm/)
 

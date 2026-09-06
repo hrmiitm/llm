@@ -5,6 +5,7 @@ import { PracticePage } from './features/practice/PracticePage';
 import { ResultsPage } from './features/results/ResultsPage';
 import { HistoryPage } from './features/history/HistoryPage';
 import { CustomExamPage } from './features/custom/CustomExamPage';
+import { VisualLabPage } from './features/visual-lab/VisualLabPage';
 import './styles/index.css';
 
 function AppShell() {
@@ -28,6 +29,7 @@ function AppShell() {
             <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>
               Home
             </NavLink>
+            <NavLink to="/visual-lab" className={({ isActive }) => isActive ? 'active' : ''}>Visual Lab</NavLink>
             <NavLink to="/history" className={({ isActive }) => isActive ? 'active' : ''}>
               History
             </NavLink>
@@ -42,6 +44,7 @@ function AppShell() {
         <Route path="/" element={<HomePage />} />
         <Route path="/exam/:gaId" element={<ExamPage />} />
         <Route path="/practice/:gaId" element={<PracticePage />} />
+        <Route path="/visual-lab" element={<VisualLabPage />} />
         <Route path="/custom" element={<CustomExamPage />} />
         <Route path="/results/:attemptId" element={<ResultsPage />} />
         <Route path="/history" element={<HistoryPage />} />

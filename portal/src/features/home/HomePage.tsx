@@ -63,6 +63,7 @@ export function HomePage() {
         <h2>Prepare like the real test.</h2>
         <p>NPTEL · IIT Madras — take timed computer-based exams, practise with instant feedback, or create a custom test from any available assignment.</p>
         <div className="hero-actions">
+          <Link to="/visual-lab" className="btn btn-accent">Explore the Transformer Visual Lab</Link>
           <Link to="/custom" className="btn btn-accent">＋ Create Custom Test</Link>
           <a href="#assignments" className="btn btn-hero-ghost">Browse Assignments</a>
         </div>
