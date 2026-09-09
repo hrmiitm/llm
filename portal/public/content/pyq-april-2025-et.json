@@ -1,0 +1,863 @@
+{
+  "id": "pyq-april-2025-et",
+  "week": 0,
+  "title": "April-2025-ET",
+  "category": "PYQ",
+  "label": "April-2025-ET",
+  "topics": [
+    "Scaling Laws",
+    "Positional Encoding",
+    "WordPiece",
+    "Sparse Attention",
+    "Decoding"
+  ],
+  "notesFile": null,
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 22,
+  "durationMinutes": 66,
+  "questions": [
+    {
+      "id": "pyq-april-2025-et-q1",
+      "num": "Q3",
+      "title": "Scaling-law formula (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Identify the correct scaling laws formula. The symbols have usual meaning.",
+      "bodyMd": "Identify the correct scaling laws formula. The symbols have usual meaning.\n\n\n> **Source:** PDF p. 3 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "$L(N,D)=\\left[\\left(\\frac{N_c}{N}\\right)^{\\alpha_N/\\alpha_D}+\\frac{D_c}{D}\\right]^{\\alpha_D}$"
+        },
+        {
+          "id": "B",
+          "text": "$L(N,D)=\\left[\\left(\\frac{N_c}{N}\\right)^{\\alpha_D/\\alpha_N}+\\frac{D_c}{D}\\right]^{\\alpha_D}$"
+        },
+        {
+          "id": "C",
+          "text": "$L(N,D)=\\left[\\left(\\frac{N_c}{N}\\right)^{\\alpha_N/\\alpha_D}+\\frac{D_c}{D}\\right]^{\\alpha_N}$"
+        },
+        {
+          "id": "D",
+          "text": "$L(N,D)=\\left[\\left(\\frac{D_c}{D}\\right)^{\\alpha_N/\\alpha_D}+\\frac{N_c}{N}\\right]^{\\alpha_D}$"
+        },
+        {
+          "id": "E",
+          "text": "None of these"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "**Answer:** A\n\n#### Step-by-step solution\n\n1. In the model-limited regime, loss must reduce to $(N_c/N)^{\\alpha_N}$; in the data-limited regime it must reduce to $(D_c/D)^{\\alpha_D}$.\n2. In option A, let $D\\to\\infty$. The two exponents multiply: $(\\alpha_N/\\alpha_D)\\alpha_D=\\alpha_N$.\n3. Let $N\\to\\infty$. The remaining term is $(D_c/D)^{\\alpha_D}$. The other options exchange exponents or scales and fail these checks in general.\n\nThis is the joint finite-data formula in [Kaplan et al., Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361). Here $N$ counts model parameters, not layers alone.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q2",
+      "num": "Q4",
+      "title": "Scaling model and data (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Suppose we are given a Model A with N layers and a dataset with D tokens. Choose the correct statements according to the scaling law.",
+      "bodyMd": "Suppose we are given a Model A with N layers and a dataset with D tokens. Choose the correct statements according to the scaling law.\n\n\n> **Source:** PDF p. 3 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "Increasing the model size requires a proportionate increase in the dataset size to reduce the test loss"
+        },
+        {
+          "id": "B",
+          "text": "Increasing the model size requires a proportionate increase in the dataset size to reduce the training loss"
+        },
+        {
+          "id": "C",
+          "text": "Increasing the model size requires us to double the dataset size to reduce the test loss"
+        },
+        {
+          "id": "D",
+          "text": "Increasing the model size requires us to double the dataset size to reduce the train loss"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "**Answer:** A\n\n#### Step-by-step solution\n\n1. Increasing capacity can make a model data-limited. Scaling data as well as capacity can continue improving held-out (test) loss.\n2. A is the intended qualitative statement. Increasing data is not required merely to fit the training set better; a larger model can lower training loss by fitting the same examples more closely.\n3. No change in model size is specified, so an unconditional instruction to double data (C or D) cannot follow.\n\n**Precision note:** “requires” and “proportionate” are loose wording. The formula in Q3 permits some reduction in test loss at fixed $D$. Keeping its two terms balanced gives $D\\propto N^{\\alpha_N/\\alpha_D}$, not necessarily $D\\propto N$. The source also calls $N$ the number of layers, whereas the scaling law uses parameter count. A is the best available interpretation, not a literal theorem.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q3",
+      "num": "Q5",
+      "title": "KV caching in BERT (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "The statement that KV caching is not helpful during inference in encoder models like BERT is",
+      "bodyMd": "The statement that KV caching is not helpful during inference in encoder models like BERT is\n\n\n> **Source:** PDF p. 4 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "TRUE"
+        },
+        {
+          "id": "B",
+          "text": "FALSE"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "**Answer:** A\n\n#### Step-by-step solution\n\n1. Autoregressive KV caching reuses earlier tokens' keys and values across successive decoding steps.\n2. BERT normally processes the complete input with bidirectional attention in one pass, rather than repeatedly extending an unchanged causal prefix.\n3. Adding a token can change earlier hidden states in a bidirectional encoder, invalidating deeper-layer cached keys and values. Thus the usual incremental decoding cache does not provide the same benefit. This does not rule out caching the output of an entirely unchanged input.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q4",
+      "num": "Q6",
+      "title": "Relative-position tensor shape (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "The pre-attention score $e_{ij}$ in Relative Position Encoding (RPE) can be written in matrix form as follows:",
+      "bodyMd": "The pre-attention score $e_{ij}$ in Relative Position Encoding (RPE) can be written in matrix form as follows:\n\n$$E=XW_Q(XW_K+P_K)^T.$$\n\nWhat will be the dimension of $P_K$? In all the options, $T$ denotes context length.\n\n\n> **Source:** PDF p. 4 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "$T\\times T\\times T\\times d_{model}$"
+        },
+        {
+          "id": "B",
+          "text": "$T\\times T\\times d_{model}$"
+        },
+        {
+          "id": "C",
+          "text": "$T\\times d_{model}$"
+        },
+        {
+          "id": "D",
+          "text": "$T\\times T$"
+        },
+        {
+          "id": "E",
+          "text": "None of these."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** B\n\n#### Step-by-step solution\n\n1. A relative key-position vector depends on a pair of positions: $p^K_{ij}=p^K_{j-i}$.\n2. Materializing one $d_{model}$-dimensional vector for every query-key pair gives $T\\times T\\times d_{model}$ entries, hence B (assuming the head/key width equals $d_{model}$).\n3. The precise scalar operation is $e_{ij}=(x_iW_Q)\\cdot(x_jW_K+p^K_{j-i})$. The printed “matrix form” suppresses broadcasting and contraction over the feature axis.\n\n**Notation caveat:** If the printed expression is interpreted as ordinary two-dimensional matrix addition, C would be required, but that cannot express general pair-dependent RPE. B uses the stated RPE interpretation. A stored table can be smaller, for example $(2T-1)\\times d_k$ before clipping; it is different from the expanded pair tensor.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q5",
+      "num": "Q7",
+      "title": "Extrapolating absolute positions (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Consider the problem of length extrapolation using the Absolute Position Encoding (APE) scheme. Suppose the context length of a model during training is 512. Which of the following approaches allows the model to extrapolate to a context length of 1024 tokens",
+      "bodyMd": "Consider the problem of length extrapolation using the Absolute Position Encoding (APE) scheme. Suppose the context length of a model during training is 512. Which of the following approaches allows the model to extrapolate to a context length of 1024 tokens\n\n\n> **Source:** PDF p. 4 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "Fixed Sinusoidal Encoding"
+        },
+        {
+          "id": "B",
+          "text": "Parameterized APE"
+        },
+        {
+          "id": "C",
+          "text": "ALiBi"
+        },
+        {
+          "id": "D",
+          "text": "T5"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "**Answer:** A\n\n#### Step-by-step solution\n\n1. Fixed sinusoidal APE defines position vectors by formulas, such as $PE(p,2i)=\\sin(p/10000^{2i/d})$. The formula can be evaluated for positions beyond 511.\n2. A learned 512-position table has no learned rows for positions 512 through 1023 unless it is extended or adapted.\n3. ALiBi and T5 use relative biases, so they are not answers within the stated **APE scheme**. Under that restriction, choose A.\n\n**Scope caveat:** Computing unseen position vectors does not guarantee good accuracy at twice the training length. Without the APE restriction, ALiBi is also specifically designed for length extrapolation; the single-choice wording would then be ambiguous.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q6",
+      "num": "Q8",
+      "title": "Sinusoidal encoding properties (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Select correct statements about sinusoidal positional encoding:",
+      "bodyMd": "Select correct statements about sinusoidal positional encoding:\n\n\n> **Source:** PDF p. 4-5 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "It produces a unique encoding for each time-step (token’s position in a sentence)"
+        },
+        {
+          "id": "B",
+          "text": "Distance between two tokens at time-steps 3 and 4 is independent of the length of the input sequence."
+        },
+        {
+          "id": "C",
+          "text": "It is non-deterministic."
+        },
+        {
+          "id": "D",
+          "text": "None of these."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** A, B\n\n#### Step-by-step solution\n\n1. Each position is mapped to a vector of sine/cosine phases at several frequencies. In the intended position range these distinguish the token positions, so A is correct.\n2. The vectors for positions 3 and 4 depend on those positions and the fixed frequency schedule, not on how many other tokens occur. Their distance is unchanged when the sequence is extended, so B is correct.\n3. The same position and frequency schedule always yield the same vector. C is false and therefore D is false. Finite-precision arithmetic is not a guarantee of unique vectors over arbitrarily large position indices.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q7",
+      "num": "Q9",
+      "title": "Teacher forcing and training (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Suppose we have a dataset for machine translation tasks with thousands of samples. Suppose a team considers training the transformer model. The model could be trained using two approaches:",
+      "bodyMd": "Suppose we have a dataset for machine translation tasks with thousands of samples. Suppose a team considers training the transformer model. The model could be trained using two approaches:\n\nA. Autoregressive training B. Teacher forcing\n\nChoose the correct statements.\n\n\n> **Source:** PDF p. 5 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "Approach A helps the model to converge faster than approach B"
+        },
+        {
+          "id": "B",
+          "text": "Approach B helps the model to converge faster than approach A"
+        },
+        {
+          "id": "C",
+          "text": "One can start the training with approach B first and then switch to approach A after some training steps"
+        },
+        {
+          "id": "D",
+          "text": "Once the training starts with approach A and then switching to approach B after some training steps cannot be done"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B",
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** B, C\n\n#### Step-by-step solution\n\n1. Here approach A must mean feeding the model's own previous predictions, while B feeds ground-truth previous tokens. Teacher forcing is itself compatible with an autoregressive objective.\n2. Correct prefixes give a stable supervised training signal; causal masking permits parallel calculation of token losses. B expresses the usual faster/easier convergence compared with free-running training, not a guarantee for every experiment.\n3. The training input policy can be changed, including a transition toward model-generated prefixes (scheduled sampling). C is possible.\n4. The reverse transition is also possible, so D is false. There is no general reason for A's claimed faster convergence.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q8",
+      "num": "Q10",
+      "title": "Character tokenization (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Select correct statements regarding character level tokenization:",
+      "bodyMd": "Select correct statements regarding character level tokenization:\n\n**Note:** Assume that the character level vocabulary has English uppercase letters, lowercase letters, digits, special symbols, etc.\n\n\n> **Source:** PDF p. 5 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "The size of the vocabulary with character-level tokenization will be larger than that with word-level tokenization if the corpus consists of all the books published on Harry Potter (in English)."
+        },
+        {
+          "id": "B",
+          "text": "The vocabulary will not expand if new English words/sentences are added to the corpus."
+        },
+        {
+          "id": "C",
+          "text": "No issue of handling unknown tokens as long as the unknown tokens are from English vocabulary"
+        },
+        {
+          "id": "D",
+          "text": "None of these."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B",
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** B, C\n\n#### Step-by-step solution\n\n1. A character alphabet has far fewer distinct entries than the words in the English Harry Potter books. A is false; character tokenization typically increases sequence length, not vocabulary size.\n2. Any new word made from existing characters can be decomposed into those characters. No new token is needed, so B is correct under the supplied alphabet assumption.\n3. The same decomposition handles previously unseen English words, so C is correct. A genuinely new character outside the assumed alphabet would still need handling; that case is excluded here.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q9",
+      "num": "Q11",
+      "title": "C4 filtering (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Consider the C4 pipeline. Which of the following will NOT pass through it as it is?",
+      "bodyMd": "Consider the C4 pipeline. Which of the following will NOT pass through it as it is?\n\nFor option B, the displayed code is:\n\n```python\ndef fibo(n):\n    if n <= 1:\n        return n\n    return fibo(n - 1)\n    + fibo(n - 2)\n```\n\n\n> **Source:** PDF p. 5-6 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "ir a la escuela es un buen habito. (Above sentence is Spanish translation of “Going to school is a good habit”)"
+        },
+        {
+          "id": "B",
+          "text": "Following function computes $n$-th Fibonacci number: (code above)"
+        },
+        {
+          "id": "C",
+          "text": "Lorem ipsum dolor sit amet..."
+        },
+        {
+          "id": "D",
+          "text": "Please enable JavaScript to use our site. / Home / Products / Shipping / Contact / FAQ / ..."
+        },
+        {
+          "id": "E",
+          "text": "D Gukesh defeated defending champion Ding Liren at the World Chess Championship. D Gukesh defeated defending champion Ding Liren at the World Chess Championship."
+        },
+        {
+          "id": "F",
+          "text": "Sardar Vallabhbhai Patel was the first deputy prime minister of independent India."
+        },
+        {
+          "id": "G",
+          "text": "None of these."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ]
+      },
+      "solutionMd": "**Answer:** A, B, C, D, E\n\n#### Step-by-step solution\n\n1. **Intended classroom interpretation:** A is non-English; B contains code rather than prose; C is placeholder text; D is a JavaScript warning/navigation menu; E repeats a sentence. These illustrate filtering or deduplication, whereas F is ordinary English prose.\n2. The exact original C4 rules are more specific: English language filtering, terminal-punctuation and minimum-length checks, JavaScript-line removal, lorem-ipsum-page removal, a curly-brace code heuristic, and repeated **three-sentence** span removal. See [T5, section 2.2](https://www.jmlr.org/papers/volume21/20-074/20-074.pdf).\n3. B's Python code contains no curly brace, though its displayed lines fail the punctuation rule. E's two identical sentences alone do **not** establish a repeated three-sentence span. If each option is a whole page, even F fails the five-sentence minimum.\n\n**Ambiguity:** A-E is an inferred educational key, not a rigorously determined output of the exact C4 implementation. Page boundaries and surrounding content are missing, so the literal pipeline question has no unique fully justified option set. The original options are preserved rather than silently rewritten.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q10",
+      "num": "Q12",
+      "title": "LLM design choices (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Which of the following are design choices for building a large language model?",
+      "bodyMd": "Which of the following are design choices for building a large language model?\n\n\n> **Source:** PDF p. 6 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "Activation function in feed forward layer"
+        },
+        {
+          "id": "B",
+          "text": "Training dataset."
+        },
+        {
+          "id": "C",
+          "text": "Positional encoding"
+        },
+        {
+          "id": "D",
+          "text": "Attention mechanism."
+        },
+        {
+          "id": "E",
+          "text": "None of these."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "solutionMd": "**Answer:** A, B, C, D\n\n#### Step-by-step solution\n\n1. The feed-forward activation determines the nonlinearity, for example GELU or a gated variant.\n2. The dataset determines the training distribution and available coverage.\n3. Position encoding determines how order/distance enters computation, and the attention mechanism determines which token interactions are computed.\n4. All four can be selected by the model designer; E is therefore false.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q11",
+      "num": "Q13",
+      "title": "Degenerate generation (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "Consider the following set of GPT-based text generative models (represented by $M_i$ with $i\\in\\{1,2,3,4\\}$) and the corresponding text generated with the prompt “I had to leave the party”.",
+      "bodyMd": "Consider the following set of GPT-based text generative models (represented by $M_i$ with $i\\in\\{1,2,3,4\\}$) and the corresponding text generated with the prompt “I had to leave the party”.\n\n1. $M_1$: I had to leave the party because had to leave the party.\n2. $M_2$: I had to leave the party leave leave\n3. $M_3$: I had to leave the party because because\n4. $M_4$: I had to leave the party because I received an SOS message from my cousin\n\nSelect the model(s) that is(are) degenerative.\n\n\n> **Source:** PDF p. 6-7 | **Marks:** 3",
+      "options": [
+        {
+          "id": "A",
+          "text": "$M_1$"
+        },
+        {
+          "id": "B",
+          "text": "$M_2$"
+        },
+        {
+          "id": "C",
+          "text": "$M_3$"
+        },
+        {
+          "id": "D",
+          "text": "$M_4$"
+        },
+        {
+          "id": "E",
+          "text": "None of these."
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** A, B, C\n\n#### Step-by-step solution\n\n1. Degeneration includes unhelpful repetitive continuations and local loops.\n2. $M_1$ repeats the prompt's phrase instead of supplying a meaningful reason. $M_2$ loops on “leave”; $M_3$ loops on “because”.\n3. $M_4$ supplies a coherent new reason and does not exhibit that repetition. Select the first three outputs. These samples demonstrate degeneration in the outputs; a single sample does not establish that the corresponding model always degenerates.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q12",
+      "num": "Q14",
+      "title": "Sentinel target sequence (MSQ)",
+      "type": "multiple_select",
+      "context": null,
+      "questionText": "The strikeout words in the passage given below denote the words to be dropped from the original sentence.",
+      "bodyMd": "The strikeout words in the passage given below denote the words to be dropped from the original sentence.\n\n“These models can’t read ~~your mind~~. If outputs are too long, ~~ask for brief replies~~. If outputs are too simple, ask for expert-level writing. If you dislike the format, ~~demonstrate the format~~ you’d like to see. The ~~less the model has to guess~~ at what you want, the more likely you’ll get it.”\n\nWhich of the following represents the correct target sequence, with sentinel tokens, to the baseline model that uses pre-training denoising objectives? [z] represents the end of the sentinel token in a sentence. The characters inside the square brackets are the sentinel tokens.\n\n\n> **Source:** PDF p. 7 | **Marks:** 3",
+      "options": [
+        {
+          "id": "A",
+          "text": "[a] your mind [b] ask for brief replies [c] demonstrate the format [d] less the model has to guess [z]"
+        },
+        {
+          "id": "B",
+          "text": "[a] your mind [b] ask for brief replies [c] demonstrate the format [d] less the model has to guess"
+        },
+        {
+          "id": "C",
+          "text": "[v] your mind [w] ask for brief replies [x] demonstrate the format [y] less the model has to guess"
+        },
+        {
+          "id": "D",
+          "text": "[v] your mind [w] ask for brief replies [x] demonstrate the format [y] less the model has to guess [z]"
+        },
+        {
+          "id": "E",
+          "text": "[a] your mind [b] demonstrate the format [c] ask for brief replies [d] less the model has to guess"
+        },
+        {
+          "id": "F",
+          "text": "None of these"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "D"
+        ]
+      },
+      "solutionMd": "**Answer:** A, D\n\n#### Step-by-step solution\n\n1. Read the deleted spans left to right: “your mind”; “ask for brief replies”; “demonstrate the format”; “less the model has to guess”. Preserve the order and all words inside each span.\n2. The target concatenates a distinct sentinel followed by each missing span, and ends with the extra terminal sentinel stipulated as [z].\n3. A and D have the correct span order and ending. The letters naming sentinels may differ because the corrupted input's actual sentinel assignment is not supplied; they must match that assignment when used in a real training example.\n4. B and C omit [z]. E also swaps the second and third spans.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q13",
+      "num": "Q15",
+      "title": "Strided attention entry count (Short Answer)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "How many entries of the unnormalized attention matrix $QK^T$ will be calculated with the strided attention mechanism with $c=5$. The sequence length is $T=32$.",
+      "bodyMd": "How many entries of the unnormalized attention matrix $QK^T$ will be calculated with the strided attention mechanism with $c=5$. The sequence length is $T=32$.\n\n*(Numeric input)*\n\n\n\n> **Source:** PDF p. 7 | **Marks:** 2",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "160"
+      },
+      "solutionMd": "**Answer:** $\\boxed{160}$\n\n#### Step-by-step solution\n\n1. Using the course's fixed-window counting convention, $c$ is the number of keys attended to by each query.\n2. There are $T=32$ query rows and $c=5$ calculated entries in each row, giving $Tc=32\\cdot5=160$.\n3. This is fewer than the $T^2=1024$ dense entries.\n\n**Assumption:** The question does not provide a mask or boundary rule. This answer uses the $Tc$ convention in the repository's Week 11 notes. A truncated causal window would instead contain $1+2+3+4+28\\cdot5=150$ entries. A centered radius-5 band or a stride-of-5 pattern would be different again; an exact count is not uniquely specified without the convention.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q14",
+      "num": "Q17",
+      "title": "Top-p threshold for hilly (Short Answer)",
+      "type": "numeric",
+      "context": "**Source Q16, PDF pp. 7-8 (0 marks).** Consider the following distribution generated by a GPT model after feeding the sentence “I love Manali because it is so”. Words are listed in decreasing order of their probabilities.\n\n| Token | Probability |\n|---|---:|\n| beautiful | 0.6 |\n| snowy | 0.15 |\n| hilly | 0.08 |\n| cold | 0.05 |\n| good | 0.01 |\n| bad | 0.005 |\n| … | … |\n\nBased on the above data, answer the given subquestions. The omitted tail has total probability $0.105$; it must not be removed or renormalized before choosing the nucleus.",
+      "questionText": "If you are using the Top-P sampling method, what should be the minimum value of P to make sure that “hilly” could be selected as an output?",
+      "bodyMd": "If you are using the Top-P sampling method, what should be the minimum value of P to make sure that “hilly” could be selected as an output?\n\n*(Numeric input)*\n\n\n\n> **Source:** PDF p. 8 | **Marks:** 2",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "-1"
+      },
+      "solutionMd": "**Answer:** $\\boxed{-1}$\n\n#### Step-by-step solution\n\n1. Sort order is already supplied. The cumulative probabilities are $0.60$, $0.75$, $0.83$ for beautiful, snowy and hilly.\n2. Standard nucleus sampling retains the shortest leading prefix whose mass is at least $P$. Thus hilly is eligible precisely when $P>0.75$; at $P=0.75$, the first two tokens suffice. See [the nucleus-sampling definition](https://arxiv.org/html/1904.09751v2).\n3. There is no smallest real number strictly above $0.75$. For any eligible $P$, $(P+0.75)/2$ is smaller and still eligible. The infimum is $0.75$, but it is not an eligible minimum.\n4. Therefore the question as written has no numerical minimum. The practice answer uses the paper's **-1 convention for insufficiently specified numerical questions**. If $P$ were restricted to two decimal places, the minimum would be $0.76$; no such restriction on $P$ is stated. Keeping at least two digits in calculations does not impose that grid.\n\n**Common intended answer:** $0.83$ is the cumulative mass through hilly and is sufficient, but it is not the minimum (e.g. $0.80$ also includes hilly). No official answer is visible in the source.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q15",
+      "num": "Q18",
+      "title": "Top-p eligibility of bad (MSQ)",
+      "type": "multiple_select",
+      "context": "**Source Q16, PDF pp. 7-8 (0 marks).** Consider the following distribution generated by a GPT model after feeding the sentence “I love Manali because it is so”. Words are listed in decreasing order of their probabilities.\n\n| Token | Probability |\n|---|---:|\n| beautiful | 0.6 |\n| snowy | 0.15 |\n| hilly | 0.08 |\n| cold | 0.05 |\n| good | 0.01 |\n| bad | 0.005 |\n| … | … |\n\nBased on the above data, answer the given subquestions. The omitted tail has total probability $0.105$; it must not be removed or renormalized before choosing the nucleus.",
+      "questionText": "What value of P will allow “bad” to be selected in the output?",
+      "bodyMd": "What value of P will allow “bad” to be selected in the output?\n\n\n> **Source:** PDF p. 8 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "1"
+        },
+        {
+          "id": "B",
+          "text": "0.9"
+        },
+        {
+          "id": "C",
+          "text": "0.95"
+        },
+        {
+          "id": "D",
+          "text": "0.005"
+        },
+        {
+          "id": "E",
+          "text": "0.75"
+        },
+        {
+          "id": "F",
+          "text": "0.88"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "solutionMd": "**Answer:** A, B, C\n\n#### Step-by-step solution\n\n1. Mass before bad is $0.60+0.15+0.08+0.05+0.01=0.89$.\n2. To require inclusion of bad, the nucleus threshold must exceed $0.89$. Mass through bad is $0.895$; larger thresholds include bad and some omitted tail tokens as necessary.\n3. $1$, $0.90$ and $0.95$ all qualify. $0.005$, $0.75$ and $0.88$ stop before bad. The probability of bad itself, $0.005$, is not the required nucleus threshold.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q16",
+      "num": "Q20",
+      "title": "Initial vocabulary (Short Answer)",
+      "type": "numeric",
+      "context": "**Source Q19, PDF p. 8 (0 marks).** Consider the following dictionary with the number of word occurrences in a corpus:\n\n```text\nwo = {\"taught\": 2,\n      \"laughter\": 1,\n      \"drought\": 4,\n      \"tough\": 5}\n```\n\n**Note:** Append `</w>` to each word at the end. You will be working with the WordPiece algorithm; answer the given subquestions in that context. Treat `</w>` as one end-of-word token. Use frequency-weighted pair scores $s(a,b)=f(ab)/(f(a)f(b))$ and preserve the listed word order for tie-breaking.",
+      "questionText": "How many tokens are there in the initial vocabulary?",
+      "bodyMd": "How many tokens are there in the initial vocabulary?\n\n*(Numeric input)*\n\n\n\n> **Source:** PDF p. 9 | **Marks:** 2",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "11"
+      },
+      "solutionMd": "**Answer:** $\\boxed{11}$\n\n#### Step-by-step solution\n\n1. Split the words into individual characters plus one end marker each: `t a u g h t </w>`, `l a u g h t e r </w>`, `d r o u g h t </w>`, `t o u g h </w>`.\n2. The distinct letters are `{a, d, e, g, h, l, o, r, t, u}`, totaling 10.\n3. Add the single token `</w>`: $10+1=11$. Frequencies change scores, not the count of distinct initial tokens.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q17",
+      "num": "Q21",
+      "title": "Least WordPiece score (MCQ)",
+      "type": "single_choice",
+      "context": "**Source Q19, PDF p. 8 (0 marks).** Consider the following dictionary with the number of word occurrences in a corpus:\n\n```text\nwo = {\"taught\": 2,\n      \"laughter\": 1,\n      \"drought\": 4,\n      \"tough\": 5}\n```\n\n**Note:** Append `</w>` to each word at the end. You will be working with the WordPiece algorithm; answer the given subquestions in that context. Treat `</w>` as one end-of-word token. Use frequency-weighted pair scores $s(a,b)=f(ab)/(f(a)f(b))$ and preserve the listed word order for tie-breaking.",
+      "questionText": "Which of the following pairs has the least score before any merge?",
+      "bodyMd": "Which of the following pairs has the least score before any merge?\n\n\n> **Source:** PDF p. 9 | **Marks:** 3",
+      "options": [
+        {
+          "id": "A",
+          "text": "`('h', '</w>')`"
+        },
+        {
+          "id": "B",
+          "text": "`('r', '</w>')`"
+        },
+        {
+          "id": "C",
+          "text": "`('l', 'a')`"
+        },
+        {
+          "id": "D",
+          "text": "`('r', 'o')`"
+        },
+        {
+          "id": "E",
+          "text": "`('t', 'e')`"
+        },
+        {
+          "id": "F",
+          "text": "`('u', 'g')`"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** B\n\n#### Step-by-step solution\n\n1. Count occurrences weighted by word frequency. The token frequencies are:\n\n| Token | t | a | u | g | h | l | e | r | d | o | `</w>` |\n|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n| Frequency | 14 | 3 | 12 | 12 | 12 | 1 | 1 | 5 | 4 | 9 | 12 |\n\n2. Apply $s(a,b)=f(ab)/(f(a)f(b))$ to each option:\n\n| Option | Pair frequency | Score |\n|---|---:|---:|\n| A | 5 | $5/(12\\cdot12)=0.034722\\ldots$ |\n| B | 1 | $1/(5\\cdot12)=0.016667\\ldots$ |\n| C | 1 | $1/(1\\cdot3)=0.333333\\ldots$ |\n| D | 4 | $4/(5\\cdot9)=0.088889\\ldots$ |\n| E | 1 | $1/(14\\cdot1)=0.071429\\ldots$ |\n| F | 12 | $12/(12\\cdot12)=0.083333\\ldots$ |\n\n3. B is the smallest. Count both t's in taught: that word contributes $2\\cdot2=4$ occurrences to $f(t)$, a frequent source of counting errors.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q18",
+      "num": "Q22",
+      "title": "First WordPiece merge (Short Answer)",
+      "type": "text",
+      "context": "**Source Q19, PDF p. 8 (0 marks).** Consider the following dictionary with the number of word occurrences in a corpus:\n\n```text\nwo = {\"taught\": 2,\n      \"laughter\": 1,\n      \"drought\": 4,\n      \"tough\": 5}\n```\n\n**Note:** Append `</w>` to each word at the end. You will be working with the WordPiece algorithm; answer the given subquestions in that context. Treat `</w>` as one end-of-word token. Use frequency-weighted pair scores $s(a,b)=f(ab)/(f(a)f(b))$ and preserve the listed word order for tie-breaking.",
+      "questionText": "Which pair will be merged in the very first merge? Say the pair is (‘a’,‘b’), then enter “ab” (without quotes and white spaces). If there is a tie between two or more candidates, pick the one that occurs first in the original vocabulary outlined in the question.",
+      "bodyMd": "Which pair will be merged in the very first merge? Say the pair is (‘a’,‘b’), then enter “ab” (without quotes and white spaces). If there is a tie between two or more candidates, pick the one that occurs first in the original vocabulary outlined in the question.\n\n**Note:** Enter the exact answer without any extra space in the beginning or at the end.\n\n\n\n> **Source:** PDF p. 9 | **Marks:** 3",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "la"
+      },
+      "solutionMd": "**Answer:** `la`\n\n#### Step-by-step solution\n\n1. WordPiece chooses the greatest normalized pair score, not the most frequent pair.\n2. All initial candidate scores are:\n\n| Pair | Score | Pair | Score | Pair | Score |\n|---|---:|---|---:|---|---:|\n| t,a | $1/21$ | a,u | $1/12$ | u,g | $1/12$ |\n| g,h | $1/12$ | h,t | $1/24$ | t,`</w>` | $1/28$ |\n| l,a | $1/3$ | t,e | $1/14$ | e,r | $1/5$ |\n| r,`</w>` | $1/60$ | d,r | $1/5$ | r,o | $4/45$ |\n| o,u | $1/12$ | t,o | $5/126$ | h,`</w>` | $5/144$ |\n\n3. The unique largest score is $s(l,a)=1/3$. Merge l and a to form `la`; no tie-break is needed for the first merge.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q19",
+      "num": "Q23",
+      "title": "First merge score (Short Answer)",
+      "type": "numeric",
+      "context": "**Source Q19, PDF p. 8 (0 marks).** Consider the following dictionary with the number of word occurrences in a corpus:\n\n```text\nwo = {\"taught\": 2,\n      \"laughter\": 1,\n      \"drought\": 4,\n      \"tough\": 5}\n```\n\n**Note:** Append `</w>` to each word at the end. You will be working with the WordPiece algorithm; answer the given subquestions in that context. Treat `</w>` as one end-of-word token. Use frequency-weighted pair scores $s(a,b)=f(ab)/(f(a)f(b))$ and preserve the listed word order for tie-breaking.",
+      "questionText": "What is the score of the pair merged in the very first merge?",
+      "bodyMd": "What is the score of the pair merged in the very first merge?\n\n*(Numeric input)*\n\n\n\n> **Source:** PDF p. 9 | **Marks:** 3",
+      "options": [],
+      "answer": {
+        "type": "numeric",
+        "value": "0.33"
+      },
+      "solutionMd": "**Answer:** $\\boxed{0.33}$\n\n#### Step-by-step solution\n\n1. The first merged pair is `(l,a)`, occurring once in laughter, whose frequency is 1.\n2. Therefore $f(la)=1$, $f(l)=1$, and $f(a)=2+1=3$ (two taught occurrences and one laughter).\n3. The score is $1/(1\\cdot3)=1/3=0.333333\\ldots$, or **0.33** to two decimals. Preserve the exact fraction while comparing scores; rounding too early can create false ties.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q20",
+      "num": "Q24",
+      "title": "Tokenization after two merges (MCQ)",
+      "type": "single_choice",
+      "context": "**Source Q19, PDF p. 8 (0 marks).** Consider the following dictionary with the number of word occurrences in a corpus:\n\n```text\nwo = {\"taught\": 2,\n      \"laughter\": 1,\n      \"drought\": 4,\n      \"tough\": 5}\n```\n\n**Note:** Append `</w>` to each word at the end. You will be working with the WordPiece algorithm; answer the given subquestions in that context. Treat `</w>` as one end-of-word token. Use frequency-weighted pair scores $s(a,b)=f(ab)/(f(a)f(b))$ and preserve the listed word order for tie-breaking.",
+      "questionText": "Assuming that the algorithm was stopped after two merges only, how will the word `later</w>` be tokenized with this vocabulary? Please note that `</w>` is already appended to the word.",
+      "bodyMd": "Assuming that the algorithm was stopped after two merges only, how will the word `later</w>` be tokenized with this vocabulary? Please note that `</w>` is already appended to the word.\n\n\n> **Source:** PDF p. 9-10 | **Marks:** 3",
+      "options": [
+        {
+          "id": "A",
+          "text": "`la, t, er, </w>`"
+        },
+        {
+          "id": "B",
+          "text": "`l, a, t, er, </w>`"
+        },
+        {
+          "id": "C",
+          "text": "`la, t, e, r, </w>`"
+        },
+        {
+          "id": "D",
+          "text": "`l, a, t, e, r, </w>`"
+        },
+        {
+          "id": "E",
+          "text": "`l, a, ter, </w>`"
+        },
+        {
+          "id": "F",
+          "text": "`lat, e, r, </w>`"
+        },
+        {
+          "id": "G",
+          "text": "None of these"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "solutionMd": "**Answer:** A\n\n#### Step-by-step solution\n\n1. First merge l+a into `la`. The counts become $f(a)=2$, $f(la)=1$; the remaining relevant counts $f(e)=1$, $f(r)=5$, $f(d)=4$ are unchanged.\n2. Recompute pair scores. The largest are $s(e,r)=1/(1\\cdot5)=1/5$ and $s(d,r)=4/(4\\cdot5)=1/5$.\n3. e,r appears in laughter before d,r appears in drought in the source dictionary. The stated first-occurrence tie rule therefore chooses `er` as merge two.\n4. The resulting vocabulary contains `la` and `er`, but not `lat` or `ter`. Longest matching segmentation of `later</w>` is `la`, `t`, `er`, `</w>`, option A. The second-merge tie matters.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q21",
+      "num": "Q26",
+      "title": "Valid block permutations (MSQ)",
+      "type": "multiple_select",
+      "context": "**Source Q25, PDF p. 10 (0 marks).** The diagram below shows a few possible permutation blocks (for four attention heads) to be used in the masking matrix $M$ in the block-wise attention mechanism.\n\n![Original four block masks, from left to right a, b, c, d](assets/april-2025-et-block-permutations.png)\n\nRows and columns run from 0 to 7. Each block contains two consecutive tokens. The isolated **white** blocks represent the selected pairings in this source figure; this is the opposite of the August paper's explicitly stated color convention. Based on the above data, answer the given subquestions.",
+      "questionText": "Of these 4 blocks, choose the block(s) that is (are) proper permutation of 4 blocks.",
+      "bodyMd": "Of these 4 blocks, choose the block(s) that is (are) proper permutation of 4 blocks.\n\n\n> **Source:** PDF p. 10 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "a"
+        },
+        {
+          "id": "B",
+          "text": "b"
+        },
+        {
+          "id": "C",
+          "text": "c"
+        },
+        {
+          "id": "D",
+          "text": "d"
+        },
+        {
+          "id": "E",
+          "text": "None of these"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      "solutionMd": "**Answer:** A, B, C, D\n\n#### Step-by-step solution\n\n1. Compress each $2\\times2$ white square into one selected cell of a $4\\times4$ block matrix.\n2. Reading selected column numbers from top row to bottom row, using one-based block numbers:\n\n| Mask | Selected columns |\n|---|---|\n| a | $(2,3,1,4)$ |\n| b | $(2,3,4,1)$ |\n| c | $(2,4,1,3)$ |\n| d | $(2,4,3,1)$ |\n\n3. Each row selects exactly one column, and each list contains all four column numbers exactly once. Every displayed mask is therefore a permutation. Inspect the white squares rather than confusing the black background with selected blocks.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "pyq-april-2025-et-q22",
+      "num": "Q27",
+      "title": "Fourth head query-key pairing (MCQ)",
+      "type": "single_choice",
+      "context": "**Source Q25, PDF p. 10 (0 marks).** The diagram below shows a few possible permutation blocks (for four attention heads) to be used in the masking matrix $M$ in the block-wise attention mechanism.\n\n![Original four block masks, from left to right a, b, c, d](assets/april-2025-et-block-permutations.png)\n\nRows and columns run from 0 to 7. Each block contains two consecutive tokens. The isolated **white** blocks represent the selected pairings in this source figure; this is the opposite of the August paper's explicitly stated color convention. Based on the above data, answer the given subquestions.",
+      "questionText": "Let $q_1,q_2,q_3,q_4$ denote the 4 query blocks and $k_1,k_2,k_3,k_4$ denote the 4 key blocks. Select which of the following denotes the computation of pre-attention score for $q_4$ in the 4-th attention head.",
+      "bodyMd": "Let $q_1,q_2,q_3,q_4$ denote the 4 query blocks and $k_1,k_2,k_3,k_4$ denote the 4 key blocks. Select which of the following denotes the computation of pre-attention score for $q_4$ in the 4-th attention head.\n\n\n> **Source:** PDF p. 10-11 | **Marks:** 2",
+      "options": [
+        {
+          "id": "A",
+          "text": "$q_4^Tk_4$"
+        },
+        {
+          "id": "B",
+          "text": "$q_4^Tk_1$"
+        },
+        {
+          "id": "C",
+          "text": "$q_4^Tk_2$"
+        },
+        {
+          "id": "D",
+          "text": "$q_4^Tk_3$"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "solutionMd": "**Answer:** B\n\n#### Step-by-step solution\n\n1. The fourth attention head is the rightmost diagram, d.\n2. Its fourth query block occupies rows 6 and 7. The selected white square is at columns 0 and 1, which form key block $k_1$.\n3. Thus $q_4$ attends to $k_1$. With the source's vector orientation, its unnormalized score is $q_4^Tk_1$, option B.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "marks": {
+        "correct": 2,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

@@ -59,6 +59,18 @@ Interactive, TCS-iON CBT-style exam portal and practice platform for the **IIT M
 
 ---
 
+## Previous Year End-Term Papers
+
+Each paper preserves the source question numbers, options, shared contexts and original marks, with visually checked extraction and step-by-step solutions. Source ambiguities and answer assumptions are identified in the solutions; the saved PDFs do not show official answer keys.
+
+| Paper | Questions | Original marks | Source PDF |
+|---|---:|---:|---|
+| [April-2025-ET](pyq/April-2025-ET.md) | 22 | 50 | [PDF](pyq/April-2025-ET.pdf) |
+| [August-2025-ET](pyq/August-2025-ET.md) | 17 | 40 | [PDF](pyq/August-2025-ET.pdf) |
+| [December-2025-ET](pyq/December-2025-ET.md) | 25 | 50 | [PDF](pyq/December-2025-ET.pdf) |
+
+---
+
 ## 📁 Repository Structure
 
 ```

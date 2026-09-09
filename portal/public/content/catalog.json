@@ -153,6 +153,63 @@
     "durationMinutes": 30
   },
   {
+    "id": "pyq-april-2025-et",
+    "week": 0,
+    "title": "April-2025-ET",
+    "category": "PYQ",
+    "label": "April-2025-ET",
+    "topics": [
+      "Scaling Laws",
+      "Positional Encoding",
+      "WordPiece",
+      "Sparse Attention",
+      "Decoding"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 22,
+    "durationMinutes": 66
+  },
+  {
+    "id": "pyq-august-2025-et",
+    "week": 0,
+    "title": "August-2025-ET",
+    "category": "PYQ",
+    "label": "August-2025-ET",
+    "topics": [
+      "Tokenization",
+      "Attention Computation",
+      "Block Attention",
+      "Relative Positions",
+      "ALiBi"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 17,
+    "durationMinutes": 51
+  },
+  {
+    "id": "pyq-december-2025-et",
+    "week": 0,
+    "title": "December-2025-ET",
+    "category": "PYQ",
+    "label": "December-2025-ET",
+    "topics": [
+      "BERT",
+      "Positional Encoding",
+      "Sparse Attention",
+      "KV Cache",
+      "Causal Language Modeling"
+    ],
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 25,
+    "durationMinutes": 75
+  },
+  {
     "id": "pyq-may-2026-quiz-1",
     "week": 0,
     "title": "May-2026-Quiz-1",

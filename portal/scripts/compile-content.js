@@ -58,6 +58,30 @@ const GA_META = {
 };
 
 const PYQ_META = {
+  'pyq-april-2025-et': {
+    sourceFile: 'April-2025-ET.md',
+    category: 'PYQ',
+    week: 0,
+    title: 'April-2025-ET',
+    topics: ['Scaling Laws', 'Positional Encoding', 'WordPiece', 'Sparse Attention', 'Decoding'],
+    notesFile: null,
+  },
+  'pyq-august-2025-et': {
+    sourceFile: 'August-2025-ET.md',
+    category: 'PYQ',
+    week: 0,
+    title: 'August-2025-ET',
+    topics: ['Tokenization', 'Attention Computation', 'Block Attention', 'Relative Positions', 'ALiBi'],
+    notesFile: null,
+  },
+  'pyq-december-2025-et': {
+    sourceFile: 'December-2025-ET.md',
+    category: 'PYQ',
+    week: 0,
+    title: 'December-2025-ET',
+    topics: ['BERT', 'Positional Encoding', 'Sparse Attention', 'KV Cache', 'Causal Language Modeling'],
+    notesFile: null,
+  },
   'pyq-may-2026-quiz-1': {
     sourceFile: 'May-2026-Quiz-1.md',
     category: 'PYQ',
@@ -402,6 +426,9 @@ function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
       const solutionText = solutionLines.join('\n').trim();
 
       const answer = extractAnswer(detailsLines, options);
+      // Source papers can specify their original per-question marks. Existing
+      // packs without an explicit Marks field retain the one-point default.
+      const sourceMarks = bodyText.match(/\*\*Marks:\*\*\s*(\d+(?:\.\d+)?)/);
 
       qIndex++;
       questions.push({
@@ -415,7 +442,7 @@ function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
         options,
         answer,
         solutionMd: inlineKrokiDiagrams(solutionText),
-        marks: { correct: 1, incorrect: 0, unanswered: 0 },
+        marks: { correct: sourceMarks ? Number(sourceMarks[1]) : 1, incorrect: 0, unanswered: 0 },
       });
       continue;
     }
