@@ -12,7 +12,33 @@ Attempt each question before opening the solution. The explanations emphasize th
 
 The reference diagram below is a faithful rendering of the lettered architecture in the source `.tex` for one ($N=1$) Transformer encoder-decoder block. The component letters are intentionally left as letters; infer each function from its position and connections.
 
-![Lettered Transformer encoder-decoder architecture from the source paper](assets/transformer-lettered-architecture.mmd)
+```mermaid
+flowchart LR
+    subgraph ENC["Encoder block (N times)"]
+        direction BT
+        IN[Inputs] --> A[A] --> AddE((+)) --> E[E] --> F[F] --> G[G] --> H[H]
+        B[B] --> AddE
+        AddE -. residual .-> F
+        F -. residual .-> H
+    end
+
+    subgraph DEC["Decoder block (N times)"]
+        direction BT
+        OUTIN[Outputs shifted right] --> C[C] --> AddD((+)) --> L[L] --> M[M] --> O[O] --> P[P] --> Q[Q] --> R[R]
+        D[D] --> AddD
+        AddD -. residual .-> M
+        M -. residual .-> P
+        P -. residual .-> R
+    end
+
+    H --> O
+    R --> S[S] --> T[T] --> U[U]
+
+    classDef letter fill:#ffffff,stroke:#334155,color:#0f172a;
+    classDef plus fill:#fff4e5,stroke:#d97706,color:#5b3500;
+    class A,B,C,D,E,F,G,H,L,M,O,P,Q,R,S,T,U letter;
+    class AddE,AddD plus;
+```
 
 ### Q2 — Identify every Add & Norm layer (Short Answer)
 
@@ -127,7 +153,7 @@ $$\boxed{\text{A, B, F}}.$$
 
 A binary lower-triangular mask $M$ has $M_{ij}=1$ for $j\leq i$ and $0$ otherwise. It is applied **after** softmax as
 
-$$\operatorname{softmax}(A)\odot M.$$
+$$\mathrm{softmax}(A)\odot M.$$
 
 **Identify the correct statements. (Select all that apply.)**
 
@@ -143,7 +169,21 @@ $$\operatorname{softmax}(A)\odot M.$$
 
 #### Step-by-step solution
 
-![Causal masking flow](assets/causal-mask.mmd)
+```mermaid
+flowchart LR
+    Scores[Raw scores S] --> Mask[Add causal mask M]
+    Mask --> Softmax[Row-wise softmax]
+    Softmax --> Weights[Attention weights A]
+
+    Allowed["Keys j ≤ i: keep score M_ij = 0"] --> Mask
+    Future["Keys j > i: future token, M_ij = −∞"] --> Mask
+    Weights --> Result["Only j ≤ i have nonzero weight; each row sums to 1"]
+
+    classDef op fill:#fff4e5,stroke:#d97706,color:#5b3500;
+    classDef result fill:#ecfdf5,stroke:#15803d,color:#14532d;
+    class Scores,Mask,Softmax op;
+    class Weights,Result,Allowed,Future result;
+```
 
 **Step 1 — Compare the two masking locations.**
 
@@ -334,7 +374,7 @@ $$\boxed{\text{D}}$$
 
 If logits are $z_i$, temperature produces
 
-$$p_i=\operatorname{softmax}(z_i/\tau).$$
+$$p_i=\mathrm{softmax}(z_i/\tau).$$
 
 For $\tau>1$, logit differences are compressed and the probability distribution becomes flatter.
 
@@ -368,7 +408,7 @@ $$\boxed{\text{A}}.$$
 
 A common WordPiece score for a pair $(x,y)$ is proportional to
 
-$$\operatorname{score}(x,y)=\frac{\operatorname{count}(xy)}{\operatorname{count}(x)\operatorname{count}(y)}.$$
+$$\mathrm{score}(x,y)=\frac{\mathrm{count}(xy)}{\mathrm{count}(x)\mathrm{count}(y)}.$$
 
 The numerator rewards frequent co-occurrence. The denominator reduces the score for tokens that are individually common, so the algorithm favors pairs whose joint occurrence is especially informative relative to their independent frequencies.
 
@@ -644,7 +684,7 @@ There are 4 whole-word occurrences and 14 character occurrences, so the combined
 | `s` | 2 |
 | `e` | 2 |
 
-Thus $P(w)=\operatorname{count}(w)/18$ and the probability of a segmentation is the product of its token probabilities.
+Thus $P(w)=\mathrm{count}(w)/18$ and the probability of a segmentation is the product of its token probabilities.
 
 **Step 2 — Compare the valid candidates.**
 

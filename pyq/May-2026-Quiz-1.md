@@ -28,7 +28,7 @@ This paper is presented in the same learning-oriented format as the graded assig
 
 The encoder produces hidden states $h_1,h_2,\ldots,h_T$. At decoder step $t$, the decoder state supplies a query that scores how relevant each encoder state is:
 
-$$e_{t,j} = \operatorname{score}(s_{t-1},h_j),\qquad a_{t,j}=\operatorname{softmax}(e_{t,j}).$$
+$$e_{t,j} = \mathrm{score}(s_{t-1},h_j),\qquad a_{t,j}=\mathrm{softmax}(e_{t,j}).$$
 
 **Step 2 — Form the context vector.**
 
@@ -38,7 +38,22 @@ $$c_t=\sum_{j=1}^{T}a_{t,j}h_j.$$
 
 So the decoder does decide which encoder states matter, and the context vector is a weighted sum of them.
 
-![Attention pipeline](assets/attention-pipeline.mmd)
+```mermaid
+flowchart LR
+    X[Token states X] --> Q[Q = X W_Q]
+    X --> K[K = X W_K]
+    X --> V[V = X W_V]
+    Q --> S[Scores S = Q K^T / sqrt d_k]
+    K --> S
+    S --> A[Attention weights A = softmax S]
+    A --> Z[Context states Z = A V]
+    V --> Z
+
+    classDef tensor fill:#e8f1ff,stroke:#1355a6,color:#102a43;
+    classDef op fill:#fff4e5,stroke:#d97706,color:#5b3500;
+    class X,Q,K,V,Z tensor;
+    class S,A op;
+```
 
 **Step 3 — Eliminate the false statements.**
 
@@ -63,7 +78,7 @@ $$W_Q=\begin{bmatrix}1&0\\0&1\end{bmatrix},\qquad W_K=\begin{bmatrix}1&0\\0&1\en
 
 The scaled dot-product attention is
 
-$$\operatorname{Attention}(Q,K,V)=\operatorname{softmax}\left(\frac{Q^{T}K}{\sqrt{d_k}}\right)V^{T}.$$
+$$\mathrm{Attention}(Q,K,V)=\mathrm{softmax}\left(\frac{Q^{T}K}{\sqrt{d_k}}\right)V^{T}.$$
 
 Based on these data, answer Q3 and Q4.
 
@@ -101,7 +116,7 @@ $$Q^TK=X^TX
 
 **Step 3 — Add the diagonal entries.**
 
-$$\operatorname{tr}(Q^TK)=1+1+2=\boxed{4}.$$
+$$\mathrm{tr}(Q^TK)=1+1+2=\boxed{4}.$$
 
 The factor $1/\sqrt{d_k}$ is applied later to scale the scores; it does not change the requested unscaled $Q^TK$ matrix.
 
@@ -342,7 +357,31 @@ The language model generates three word tokens after `<START>`. The table shows 
 | you eat | apples | 0.9 |
 | you eat | bananas | 0.1 |
 
-![Language-model probability tree](assets/decoder-search.mmd)
+```mermaid
+flowchart TD
+    START[START]
+    START -->|0.5| I[i]
+    START -->|0.4| YOU[you]
+    I -->|0.6| IL[like]
+    I -->|0.3| IE[eat]
+    YOU -->|0.4| YL[like]
+    YOU -->|0.5| YE[eat]
+    IL -->|0.7| ILA[apples]
+    IL -->|0.2| ILB[bananas]
+    IE -->|0.4| IEA[apples]
+    IE -->|0.6| IEB[bananas]
+    YL -->|0.4| YLA[apples]
+    YL -->|0.5| YLB[bananas]
+    YE -->|0.9| YEA[apples]
+    YE -->|0.1| YEB[bananas]
+
+    classDef root fill:#e8f1ff,stroke:#1355a6,color:#102a43;
+    classDef branch fill:#fff4e5,stroke:#d97706,color:#5b3500;
+    classDef leaf fill:#ecfdf5,stroke:#15803d,color:#14532d;
+    class START root;
+    class I,YOU,IL,IE,YL,YE branch;
+    class ILA,ILB,IEA,IEB,YLA,YLB,YEA,YEB leaf;
+```
 
 ### Q10 — Probability of “you eat apples” (Short Answer)
 

@@ -269,7 +269,7 @@ Words are indexed in the order shown above: tea (index 0), you (1), enjoy (2), a
 
 $$W_Q=\begin{bmatrix}0.5&1\\1&0.5\end{bmatrix},\quad W_K=\begin{bmatrix}1&0.5\\-0.5&1\end{bmatrix},\quad W_V=\begin{bmatrix}1&0.2\\0.5&1\end{bmatrix},\quad W_O=\begin{bmatrix}0.5&0.5\\1&-1\end{bmatrix}.$$
 
-For the input sequence “you enjoy tea often”, the computed attention matrix $A=\operatorname{softmax}(QK^T/\sqrt{d_k})$ is given as:
+For the input sequence “you enjoy tea often”, the computed attention matrix $A=\mathrm{softmax}(QK^T/\sqrt{d_k})$ is given as:
 
 $$A=\begin{bmatrix}0.55&0.32&0.11&0.02\\0.43&0.25&0.21&0.1\\0.39&0.39&0.16&0.07\\0.24&0.4&0.2&0.17\end{bmatrix}.$$
 

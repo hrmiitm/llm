@@ -242,13 +242,22 @@ function readDiagramSource(file) {
  */
 function inlineKrokiDiagrams(markdown) {
   if (!markdown) return markdown;
-  return markdown.replace(
+  const encodeDiagram = (source, alt) => {
+    const encodedSource = Buffer.from(source, 'utf-8').toString('base64');
+    return `<div class="kroki-diagram" data-kroki-source="${encodedSource}" role="img" aria-label="${escapeHtmlAttribute(alt)}"></div>`;
+  };
+
+  const withAssetDiagrams = markdown.replace(
     /!\[([^\]]*)\]\((?:\.?\/)?assets\/([^\s)]+\.mmd)\)/g,
-    (_match, alt, file) => {
-      const source = readDiagramSource(file);
-      const encodedSource = Buffer.from(source, 'utf-8').toString('base64');
-      return `<div class="kroki-diagram" data-kroki-source="${encodedSource}" role="img" aria-label="${escapeHtmlAttribute(alt)}"></div>`;
-    },
+    (_match, alt, file) => encodeDiagram(readDiagramSource(file), alt),
+  );
+
+  // Fenced Mermaid blocks render natively on GitHub. Convert them to the same
+  // compiled placeholder used by asset-backed diagrams so the portal also
+  // renders the source without depending on a .mmd MIME type.
+  return withAssetDiagrams.replace(
+    /```mermaid\s*\n([\s\S]*?)```/g,
+    (_match, source) => encodeDiagram(source.trim(), 'Mermaid diagram'),
   );
 }
 

@@ -99,7 +99,7 @@ Attention mixes information **between tokens**. A feed-forward network (FFN) tra
 
 An FFN commonly has the form
 
-$$\operatorname{FFN}(x)=\phi(xW_1+b_1)W_2+b_2.$$
+$$\mathrm{FFN}(x)=\phi(xW_1+b_1)W_2+b_2.$$
 
 The activation $\phi$ adds nonlinearity. With no nonlinearity, two linear transformations would collapse into one. Dataset, activation, positional method, and attention pattern are all design choices: this answers the principle behind April Q12.
 
@@ -221,7 +221,7 @@ Imagine looking up an item in a catalogue. The **query** describes what a positi
 
 $$Q=XW_Q,\qquad K=XW_K,\qquad V=XW_V.$$
 
-$$S=QK^T/\sqrt{d_k},\qquad A=\operatorname{softmax}_{\text{row}}(S+M),\qquad Y=AVW_O.$$
+$$S=QK^T/\sqrt{d_k},\qquad A=\mathrm{softmax}_{\text{row}}(S+M),\qquad Y=AVW_O.$$
 
 The mask $M$ blocks forbidden interactions. Omit scaling, masking, or output projection only when the question's specified operation omits them.
 
@@ -837,8 +837,8 @@ Use this after deriving the formulas at least once. An equation is useful only w
 |---|---|---|
 | WordPiece pair score | $f(a,b)/(f(a)f(b))$ | Current, frequency-weighted segmentation |
 | Best unigram segmentation | Maximize $\sum\log P(t)$ | Whole string covered by valid tokens |
-| Attention output | $\operatorname{softmax}(QK^T/\sqrt{d_k}+M)VW_O$ | Requested stage; supplied $A$; row order |
-| Temperature distribution | $\operatorname{softmax}(z/\tau)$ | $\tau>0$ |
+| Attention output | $\mathrm{softmax}(QK^T/\sqrt{d_k}+M)VW_O$ | Requested stage; supplied $A$; row order |
+| Temperature distribution | $\mathrm{softmax}(z/\tau)$ | $\tau>0$ |
 | Nucleus size | First rank $r$ with $C_r\ge p$ | Sort first; include crossing token |
 | Eligibility of rank $r$ | $p>C_{r-1}$ | Stated threshold convention |
 | Relative offset | $j-i$ in August | Other minus current; zero-based indices |
