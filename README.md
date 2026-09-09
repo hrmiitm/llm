@@ -61,6 +61,8 @@ Interactive, TCS-iON CBT-style exam portal and practice platform for the **IIT M
 
 ## Previous Year End-Term Papers
 
+Start with the [2025 End-Term Learning Notes](pyq/2025-ET-learning-notes.md): a beginner guide to all three papers with worked examples, diagrams, a formula sheet, transfer exercises, and a complete question-to-lesson map.
+
 Each paper preserves the source question numbers, options, shared contexts and original marks, with visually checked extraction and step-by-step solutions. Source ambiguities and answer assumptions are identified in the solutions; the saved PDFs do not show official answer keys.
 
 | Paper | Questions | Original marks | Source PDF |

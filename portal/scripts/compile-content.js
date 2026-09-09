@@ -64,7 +64,7 @@ const PYQ_META = {
     week: 0,
     title: 'April-2025-ET',
     topics: ['Scaling Laws', 'Positional Encoding', 'WordPiece', 'Sparse Attention', 'Decoding'],
-    notesFile: null,
+    notesFile: 'pyq/2025-ET-learning-notes.md',
   },
   'pyq-august-2025-et': {
     sourceFile: 'August-2025-ET.md',
@@ -72,7 +72,7 @@ const PYQ_META = {
     week: 0,
     title: 'August-2025-ET',
     topics: ['Tokenization', 'Attention Computation', 'Block Attention', 'Relative Positions', 'ALiBi'],
-    notesFile: null,
+    notesFile: 'pyq/2025-ET-learning-notes.md',
   },
   'pyq-december-2025-et': {
     sourceFile: 'December-2025-ET.md',
@@ -80,7 +80,7 @@ const PYQ_META = {
     week: 0,
     title: 'December-2025-ET',
     topics: ['BERT', 'Positional Encoding', 'Sparse Attention', 'KV Cache', 'Causal Language Modeling'],
-    notesFile: null,
+    notesFile: 'pyq/2025-ET-learning-notes.md',
   },
   'pyq-may-2026-quiz-1': {
     sourceFile: 'May-2026-Quiz-1.md',

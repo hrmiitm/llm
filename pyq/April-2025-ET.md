@@ -1,5 +1,7 @@
 # April-2025-ET - Previous Year Question Paper
 
+**Learn before practicing:** [2025 End-Term Learning Notes](2025-ET-learning-notes.md) — concepts, worked examples, diagrams, formulas, and practice for all three end-term papers.
+
 > **Exam:** End Term, Large Language Models | **Date:** 13 April 2025
 > **Source:** [April-2025-ET.pdf](April-2025-ET.pdf), saved QuizPractice question paper.
 > **Original total:** 50 marks | **Scored questions:** 22
