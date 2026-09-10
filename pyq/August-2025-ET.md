@@ -294,11 +294,11 @@ For the input “you enjoy tea often”, compute the final representation of the
 
 1. Arrange input embeddings in **sentence order**, not vocabulary order:
 
-$$X=\begin{bmatrix}1&1\\\\1&0\\\\0&1\\\\-1&1\end{bmatrix}.$$
+$X=[(1,1);\,(1,0);\,(0,1);\,(-1,1)]$.
 
 2. Compute the projected values:
 
-$$V=XW_V=\begin{bmatrix}1.5&1.2\\\\1&0.2\\\\0.5&1\\\\-0.5&0.8\end{bmatrix}.$$
+$V=XW_V=[(1.5,1.2);\,(1,0.2);\,(0.5,1);\,(-0.5,0.8)]$.
 
 The supplied attention matrix already incorporates $W_Q$ and $W_K$; do not apply them to $V$ again.
 
@@ -352,7 +352,7 @@ Suppose the input sentence is “tea you enjoy often”. Using the same matrices
 
 **Source Q12, PDF pp. 6-7 (0 marks).** Suppose we have context length $T=30$ and the number of blocks $n=5$ for the block attention mechanism. The masking matrix $M$ is defined as:
 
-$$M_{ij}=\begin{cases}1&\text{if }\pi(\lfloor in/T\rfloor)=\lfloor jn/T\rfloor,\\0&\text{otherwise.}\end{cases}$$
+$$M_{ij}=\begin{cases}1&\text{if }\pi(\lfloor in/T\rfloor)=\lfloor jn/T\rfloor,\\\\0&\text{otherwise.}\end{cases}$$
 
 Here $i$ is the row index and $j$ the column index, both starting from 0; $\pi$ is a permutation of $\{0,1,\ldots,n-1\}$. If query token $i$ lies in block $r=\lfloor in/T\rfloor$, it attends only to key tokens in block $\pi(r)$. Equivalently, partitioning queries and keys into blocks,
 

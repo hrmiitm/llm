@@ -5,12 +5,19 @@ import DOMPurify from 'dompurify';
 // Configure marked
 marked.setOptions({ breaks: true });
 
+// GitHub Markdown consumes one backslash from a literal row separator in a
+// matrix. PYQ files therefore use four source backslashes so GitHub receives
+// two; collapse that source-only doubling before KaTeX renders the portal.
+function normalizeLatex(expr: string): string {
+  return expr.trim().replace(/\\\\\\\\/g, '\\\\');
+}
+
 // Process LaTeX blocks before markdown
 function processLatex(src: string): string {
   // Display math: $$...$$ or ```math\n...\n```
   src = src.replace(/```math\s*\n([\s\S]*?)```/g, (_match, expr) => {
     try {
-      return '<div class="math-display">' + katex.renderToString(expr.trim(), { displayMode: true, throwOnError: false }) + '</div>';
+      return '<div class="math-display">' + katex.renderToString(normalizeLatex(expr), { displayMode: true, throwOnError: false }) + '</div>';
     } catch {
       return `<div class="math-display"><code>${expr}</code></div>`;
     }
@@ -19,7 +26,7 @@ function processLatex(src: string): string {
   // $`...`$ (inline display math used in the GAs)
   src = src.replace(/\$`([\s\S]*?)`\$/g, (_match, expr) => {
     try {
-      return '<span class="math-inline">' + katex.renderToString(expr.trim(), { displayMode: false, throwOnError: false }) + '</span>';
+      return '<span class="math-inline">' + katex.renderToString(normalizeLatex(expr), { displayMode: false, throwOnError: false }) + '</span>';
     } catch {
       return `<code>${expr}</code>`;
     }
@@ -28,7 +35,7 @@ function processLatex(src: string): string {
   // $$...$$
   src = src.replace(/\$\$([\s\S]*?)\$\$/g, (_match, expr) => {
     try {
-      return '<span class="math-display">' + katex.renderToString(expr.trim(), { displayMode: true, throwOnError: false }) + '</span>';
+      return '<span class="math-display">' + katex.renderToString(normalizeLatex(expr), { displayMode: true, throwOnError: false }) + '</span>';
     } catch {
       return `<code>${expr}</code>`;
     }
@@ -37,7 +44,7 @@ function processLatex(src: string): string {
   // $...$ (inline)
   src = src.replace(/\$([^$\n]{1,200}?)\$/g, (_match, expr) => {
     try {
-      return '<span class="math-inline">' + katex.renderToString(expr.trim(), { displayMode: false, throwOnError: false }) + '</span>';
+      return '<span class="math-inline">' + katex.renderToString(normalizeLatex(expr), { displayMode: false, throwOnError: false }) + '</span>';
     } catch {
       return `<code>${expr}</code>`;
     }

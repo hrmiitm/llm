@@ -434,7 +434,7 @@ The omitted tail still has mass 0.105. Do not renormalize only the displayed tok
 
 To make a token of rank $r$ eligible under this definition, the threshold must exceed the mass **before** it:
 
-$$p>C_{r-1},\qquad C_{r-1}=\sum_{j<r}P_j.$$
+$$p>C_{r-1},\qquad C_{r-1}=\sum_{j\lt r}P_j.$$
 
 For hilly, **any $p>0.75$** includes it, including 0.76 and 0.80. At 0.75 the first two tokens suffice. There is no smallest real number strictly above 0.75: between 0.75 and any proposed answer lies a smaller eligible value.
 

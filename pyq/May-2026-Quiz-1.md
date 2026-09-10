@@ -103,16 +103,13 @@ $$Q=W_QX=X,\qquad K=W_KX=X.$$
 
 Written token-by-token, the vectors are
 
-$$q_{\text{learn}}=k_{\text{learn}}=\begin{bmatrix}1\\\\0\end{bmatrix},\quad
-q_{\text{easy}}=k_{\text{easy}}=\begin{bmatrix}0\\\\1\end{bmatrix},\quad
-q_{\text{math}}=k_{\text{math}}=\begin{bmatrix}1\\\\1\end{bmatrix}.$$
+$q_{\text{learn}}=k_{\text{learn}}=(1,0)$, $q_{\text{easy}}=k_{\text{easy}}=(0,1)$, and $q_{\text{math}}=k_{\text{math}}=(1,1)$.
 
 **Step 2 — Take all query-key dot products.**
 
 The entry in row $i$, column $j$ is $q_i^Tk_j$:
 
-$$Q^TK=X^TX
-=\begin{bmatrix}1&0&1\\\\0&1&1\\\\1&1&2\end{bmatrix}.$$
+The dot-product matrix is $Q^TK=X^TX=[(1,0,1);\,(0,1,1);\,(1,1,2)]$.
 
 **Step 3 — Add the diagonal entries.**
 
@@ -143,7 +140,7 @@ The factor $1/\sqrt{d_k}$ is applied later to scale the scores; it does not chan
 
 From
 
-$$Q^TK=\begin{bmatrix}1&0&1\\\\0&1&1\\\\1&1&2\end{bmatrix},$$
+From $Q^TK=[(1,0,1);\,(0,1,1);\,(1,1,2)]$,
 
 the candidate pair scores are:
 
