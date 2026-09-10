@@ -281,7 +281,7 @@ A 2D vector $[4,0]$ is rotated by $90^\circ$ using RoPE. What is the resulting v
 
 1. Use the standard positive-angle (counterclockwise) rotation:
 
-$$R(\theta)=\begin{bmatrix}\cos\theta&-\sin\theta\\\sin\theta&\cos\theta\end{bmatrix}.$$
+$$R(\theta)[x,y]^T=[x\cos\theta-y\sin\theta,\ x\sin\theta+y\cos\theta]^T.$$
 
 2. At $90^\circ$, $\cos\theta=0$ and $\sin\theta=1$, so $R[4,0]^T=[0,4]^T$.
 3. The norm stays 4, as rotations preserve length. Option C would describe a clockwise rotation, while D would be a half-turn.

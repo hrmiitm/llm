@@ -323,7 +323,7 @@
           "A"
         ]
       },
-      "solutionMd": "**Answer:** A\n\n#### Step-by-step solution\n\n1. Use the standard positive-angle (counterclockwise) rotation:\n\n$$R(\\theta)=\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}.$$\n\n2. At $90^\\circ$, $\\cos\\theta=0$ and $\\sin\\theta=1$, so $R[4,0]^T=[0,4]^T$.\n3. The norm stays 4, as rotations preserve length. Option C would describe a clockwise rotation, while D would be a half-turn.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
+      "solutionMd": "**Answer:** A\n\n#### Step-by-step solution\n\n1. Use the standard positive-angle (counterclockwise) rotation:\n\n$$R(\\theta)[x,y]^T=[x\\cos\\theta-y\\sin\\theta,\\ x\\sin\\theta+y\\cos\\theta]^T.$$\n\n2. At $90^\\circ$, $\\cos\\theta=0$ and $\\sin\\theta=1$, so $R[4,0]^T=[0,4]^T$.\n3. The norm stays 4, as rotations preserve length. Option C would describe a clockwise rotation, while D would be a half-turn.\n\n**Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.",
       "marks": {
         "correct": 2,
         "incorrect": 0,

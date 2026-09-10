@@ -86,10 +86,10 @@ Using the Viterbi algorithm (as used in the SentencePiece tokenizer), determine 
 
 A GPT model is trained using **causal language modeling**. During training, for a sequence of $T=4$ tokens, which of the following correctly represents the **attention mask matrix** applied to the attention logits?
 
-- ( ) $\begin{bmatrix}0&-\infty&-\infty&-\infty\\0&0&-\infty&-\infty\\0&0&0&-\infty\\0&0&0&0\end{bmatrix}$
-- ( ) $\begin{bmatrix}0&\infty&\infty&\infty\\0&0&\infty&\infty\\0&0&0&\infty\\0&0&0&0\end{bmatrix}$
-- ( ) $\begin{bmatrix}1&0&0&0\\1&1&0&0\\1&1&1&0\\1&1&1&1\end{bmatrix}$
-- ( ) $\begin{bmatrix}0&1&1&1\\0&0&1&1\\0&0&0&1\\0&0&0&0\end{bmatrix}$
+- ( ) `[[0, −∞, −∞, −∞], [0, 0, −∞, −∞], [0, 0, 0, −∞], [0, 0, 0, 0]]`
+- ( ) `[[0, ∞, ∞, ∞], [0, 0, ∞, ∞], [0, 0, 0, ∞], [0, 0, 0, 0]]`
+- ( ) `[[1, 0, 0, 0], [1, 1, 0, 0], [1, 1, 1, 0], [1, 1, 1, 1]]`
+- ( ) `[[0, 1, 1, 1], [0, 0, 1, 1], [0, 0, 0, 1], [0, 0, 0, 0]]`
 
 > **Source:** PDF p. 3 | **Marks:** 2
 
@@ -263,15 +263,15 @@ You apply top-p (nucleus) sampling with $p=0.7$. How many tokens are included in
 
 **Source Q9, PDF p. 5 (0 marks).** A vocabulary $\mathcal V=\{\text{tea, you, enjoy, often}\}$ is associated with the following embedding matrix:
 
-$$E=\begin{bmatrix}0&1\\1&1\\1&0\\-1&1\end{bmatrix}.$$
+$$E=\begin{bmatrix}0&1\\\\1&1\\\\1&0\\\\-1&1\end{bmatrix}.$$
 
 Words are indexed in the order shown above: tea (index 0), you (1), enjoy (2), and often (3). **No positional encodings are used.** The parameters of the attention layer are:
 
-$$W_Q=\begin{bmatrix}0.5&1\\1&0.5\end{bmatrix},\quad W_K=\begin{bmatrix}1&0.5\\-0.5&1\end{bmatrix},\quad W_V=\begin{bmatrix}1&0.2\\0.5&1\end{bmatrix},\quad W_O=\begin{bmatrix}0.5&0.5\\1&-1\end{bmatrix}.$$
+$$W_Q=\begin{bmatrix}0.5&1\\\\1&0.5\end{bmatrix},\quad W_K=\begin{bmatrix}1&0.5\\\\-0.5&1\end{bmatrix},\quad W_V=\begin{bmatrix}1&0.2\\\\0.5&1\end{bmatrix},\quad W_O=\begin{bmatrix}0.5&0.5\\\\1&-1\end{bmatrix}.$$
 
 For the input sequence “you enjoy tea often”, the computed attention matrix $A=\mathrm{softmax}(QK^T/\sqrt{d_k})$ is given as:
 
-$$A=\begin{bmatrix}0.55&0.32&0.11&0.02\\0.43&0.25&0.21&0.1\\0.39&0.39&0.16&0.07\\0.24&0.4&0.2&0.17\end{bmatrix}.$$
+$$A=\begin{bmatrix}0.55&0.32&0.11&0.02\\\\0.43&0.25&0.21&0.1\\\\0.39&0.39&0.16&0.07\\\\0.24&0.4&0.2&0.17\end{bmatrix}.$$
 
 Answer the given subquestions. If you believe the information is insufficient, enter -1 as your answer. The supplied values are rounded; their rows need not sum to exactly 1.
 
@@ -294,11 +294,11 @@ For the input “you enjoy tea often”, compute the final representation of the
 
 1. Arrange input embeddings in **sentence order**, not vocabulary order:
 
-$$X=\begin{bmatrix}1&1\\1&0\\0&1\\-1&1\end{bmatrix}.$$
+$$X=\begin{bmatrix}1&1\\\\1&0\\\\0&1\\\\-1&1\end{bmatrix}.$$
 
 2. Compute the projected values:
 
-$$V=XW_V=\begin{bmatrix}1.5&1.2\\1&0.2\\0.5&1\\-0.5&0.8\end{bmatrix}.$$
+$$V=XW_V=\begin{bmatrix}1.5&1.2\\\\1&0.2\\\\0.5&1\\\\-0.5&0.8\end{bmatrix}.$$
 
 The supplied attention matrix already incorporates $W_Q$ and $W_K$; do not apply them to $V$ again.
 
@@ -366,7 +366,7 @@ Answer using the following source mask: **black squares equal 1 and white square
 
 For accessibility, the same mask at block resolution (one entry represents a $6\times6$ token block) is:
 
-$$\begin{bmatrix}1&0&0&0&0\\0&0&0&1&0\\0&0&0&0&1\\0&0&1&0&0\\0&1&0&0&0\end{bmatrix}.$$
+$$\begin{bmatrix}1&0&0&0&0\\\\0&0&0&1&0\\\\0&0&0&0&1\\\\0&0&1&0&0\\\\0&1&0&0&0\end{bmatrix}.$$
 
 ### Q13 - Read the block permutation (MCQ)
 
@@ -443,7 +443,7 @@ What percentage of entries in the attention matrix are zero (i.e., the sparsity)
 
 1. The complete token matrix has $30^2=900$ entries.
 2. There are 5 selected blocks, each $6\times6$, so $5\cdot36=180$ entries are allowed.
-3. The remaining $900-180=720$ entries are zero after masking and softmax. The zero percentage is $100\cdot720/900=80\%$. Enter 80, not 0.8 or the 20% nonzero density.
+3. The remaining $900-180=720$ entries are zero after masking and softmax. The zero percentage is $100\cdot720/900=80\text{ percent}$. Enter 80, not 0.8 or the 20% nonzero density.
 
 **Memory hook:** Name the governing rule first, write its formula or table, substitute only the given values, and then check the result against the wording and units.
 
@@ -463,7 +463,7 @@ Relative position is **$j-i$**, with rows representing the current token $i$ and
 
 1. Token embeddings (rows correspond to tokens in order):
 
-$$X=\begin{bmatrix}1&1&1&1\\2&2&2&2\\3&3&3&3\\4&4&4&4\\5&5&5&5\\6&6&6&6\end{bmatrix}.$$
+$$X=\begin{bmatrix}1&1&1&1\\\\2&2&2&2\\\\3&3&3&3\\\\4&4&4&4\\\\5&5&5&5\\\\6&6&6&6\end{bmatrix}.$$
 
 Denote row $i$ by $x_i$.
 

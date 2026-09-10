@@ -76,7 +76,7 @@ Their Add & Norm components are **M**, **P**, and **R**, respectively.
 
 $$\{F,H,M,P,R\}\longrightarrow\boxed{\texttt{FHMPR}}.$$
 
-The residual “$+$” nodes themselves are operations, but the question asks for the labeled Add & Norm components, which are the blocks after each sublayer.
+The residual “+” nodes themselves are operations, but the question asks for the labeled Add & Norm components, which are the blocks after each sublayer.
 
 </details>
 
@@ -354,13 +354,13 @@ $$\boxed{\text{D}}$$
 
 ---
 
-### Q10 — Temperature before top-$p$ sampling (MCQ)
+### Q10 — Temperature before top-p sampling (MCQ)
 
 **With temperature $\tau=5$ applied to logits before top-$p$ sampling, what is the impact on the subsequent sampling step?**
 
 - ( ) It increases the required number of candidate tokens and expands the nucleus.
 - ( ) It decreases the required number of candidate tokens and shrinks the nucleus.
-- ( ) It truncates the tail, making sampling similar to top-$k$.
+- ( ) It truncates the tail, making sampling similar to top-k.
 - ( ) Nucleus size is unaffected because temperature changes only token order.
 
 <details>
@@ -378,7 +378,7 @@ $$p_i=\mathrm{softmax}(z_i/\tau).$$
 
 For $\tau>1$, logit differences are compressed and the probability distribution becomes flatter.
 
-**Step 2 — Apply the top-$p$ rule.**
+**Step 2 — Apply the top-p rule.**
 
 Top-$p$ chooses the smallest set of highest-probability tokens whose cumulative probability reaches $p$. A flatter distribution needs more tokens to collect the same cumulative mass.
 

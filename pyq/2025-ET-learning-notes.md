@@ -73,9 +73,13 @@ $$[2,3]\cdot[4,1]=2\cdot4+3\cdot1=11.$$
 
 **Matrix multiplication:** every output entry is a row-column dot product:
 
-$$[a,b]\begin{bmatrix}u&v\\w&z\end{bmatrix}=[au+bw,\ av+bz].$$
+$$[a,b]\begin{bmatrix}u&v\\\\w&z\end{bmatrix}=[au+bw,\ av+bz].$$
 
-Example: $[2,3]\begin{bmatrix}1&0\\2&1\end{bmatrix}=[8,3]$. The order matters: matrix multiplication usually cannot be reversed.
+Example:
+
+$$[2,3]\begin{bmatrix}1&0\\\\2&1\end{bmatrix}=[8,3].$$
+
+The order matters: matrix multiplication usually cannot be reversed.
 
 **Transpose:** $K^T$ exchanges rows and columns. The shape rule is
 
@@ -254,13 +258,13 @@ flowchart LR
 
 The vocabulary order is tea, you, enjoy, often, but the input is **you enjoy tea often**. Reorder the embedding rows first:
 
-$$X=\begin{bmatrix}1&1\\1&0\\0&1\\-1&1\end{bmatrix},\quad
-W_V=\begin{bmatrix}1&0.2\\0.5&1\end{bmatrix},\quad
-W_O=\begin{bmatrix}0.5&0.5\\1&-1\end{bmatrix}.$$
+$$X=\begin{bmatrix}1&1\\\\1&0\\\\0&1\\\\-1&1\end{bmatrix},\quad
+W_V=\begin{bmatrix}1&0.2\\\\0.5&1\end{bmatrix},\quad
+W_O=\begin{bmatrix}0.5&0.5\\\\1&-1\end{bmatrix}.$$
 
 1. Multiply each row by $W_V$. For example, $[1,1]W_V=[1.5,1.2]$:
 
-$$V=\begin{bmatrix}1.5&1.2\\1&0.2\\0.5&1\\-0.5&0.8\end{bmatrix}.$$
+$$V=\begin{bmatrix}1.5&1.2\\\\1&0.2\\\\0.5&1\\\\-0.5&0.8\end{bmatrix}.$$
 
 2. Enjoy is the second sentence token, so use the second supplied attention row $[0.43,0.25,0.21,0.10]$. It already accounts for query/key projections and softmax.
 3. Form a weighted sum of **value rows**:
@@ -350,7 +354,7 @@ query position 0  1 0 0 0
 
 For a mask **added to logits**, translate allowed → 0 and blocked → $-\infty$:
 
-$$M=\begin{bmatrix}0&-\infty&-\infty&-\infty\\0&0&-\infty&-\infty\\0&0&0&-\infty\\0&0&0&0\end{bmatrix}.$$
+$$M=\begin{bmatrix}0&-\infty&-\infty&-\infty\\\\0&0&-\infty&-\infty\\\\0&0&0&-\infty\\\\0&0&0&0\end{bmatrix}.$$
 
 Since $e^{-\infty}=0$, blocked positions receive zero probability. Adding 0 to a score preserves it; adding 1 merely increases it and does not mask anything. The masked self-attention layer enforces causality, not the FFN or positional encoding.
 
@@ -562,7 +566,7 @@ $$R(\theta)=\begin{bmatrix}\cos\theta&-\sin\theta\\\sin\theta&\cos\theta\end{bma
 
 At $90^\circ$, $\cos\theta=0$, $\sin\theta=1$, so
 
-$$R(90^\circ)\begin{bmatrix}4\\0\end{bmatrix}=\begin{bmatrix}0\\4\end{bmatrix}.$$
+$$R(90^\circ)\begin{bmatrix}4\\\\0\end{bmatrix}=\begin{bmatrix}0\\\\4\end{bmatrix}.$$
 
 ```text
           y
@@ -683,7 +687,7 @@ For one selected block per query block:
 $$\text{density}=\frac{T^2/n}{T^2}=\frac1n,\qquad
 \text{sparsity}=1-\frac1n.$$
 
-At $T=30,n=5$, the full matrix has 900 entries; selected entries are $5\cdot6^2=180$; zeros in the binary mask are $900-180=720$. The zero percentage is $720/900\cdot100=\boxed{80\%}$.
+At $T=30,n=5$, the full matrix has 900 entries; selected entries are $5\cdot6^2=180$; zeros in the binary mask are $900-180=720$. The zero percentage is $720/900\cdot100=\boxed{80\text{ percent}}$.
 
 The additive logit mask has $-\infty$ at blocked entries; it is the **binary mask or masked attention weights** that have zeros there. Read which representation is being counted.
 
@@ -854,7 +858,7 @@ Use this after deriving the formulas at least once. An equation is useful only w
 | Equal-block score entries | $T^2/n$ | One selected key block per query block |
 | Block interaction cost | $O(T^2d/n)$ | Projection cost excluded |
 | Block-permutation count | $n!$ | Each key block used exactly once |
-| Block-mask sparsity | $100(1-1/n)\%$ | One selected block per block-row |
+| Block-mask sparsity | $100(1-1/n)\text{ percent}$ | One selected block per block-row |
 | QKV sets / matrices | $LH$ / $3LH$ | Conceptual independent heads |
 | Affine normalization parameters | $2d$ | Scale and shift both enabled |
 | KV cache bytes | $2BTLH_{KV}d_{head}s$ | Query heads may differ from KV heads |
@@ -968,7 +972,7 @@ $T=24,n=4$, with one selected block per query-block row. Find block size, select
 <details>
 <summary><b>Worked answer</b></summary>
 
-Block size $b=24/4=6$. Selected entries $4\cdot6^2=\boxed{144}$. Full entries $24^2=576$, so sparsity $(576-144)/576=\boxed{75\%}$. There are $4!=\boxed{24}$ permutations.
+Block size $b=24/4=6$. Selected entries $4\cdot6^2=\boxed{144}$. Full entries $24^2=576$, so sparsity $(576-144)/576=\boxed{75\text{ percent}}$. There are $4!=\boxed{24}$ permutations.
 
 </details>
 

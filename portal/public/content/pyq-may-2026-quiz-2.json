@@ -30,7 +30,7 @@
         "type": "text",
         "value": "FHMPR"
       },
-      "solutionMd": "**Answer:** `FHMPR`\n\n#### Step-by-step solution\n\n**Step 1 — Recall the encoder pattern.**\n\nAn encoder block has two sublayers:\n\n1. self-attention;\n2. feed-forward network.\n\nEach sublayer is followed by a residual addition and layer normalization. In the diagram, those two Add & Norm components are **F** and **H**.\n\n**Step 2 — Recall the decoder pattern.**\n\nA decoder block has three sublayers:\n\n1. masked self-attention;\n2. encoder-decoder cross-attention;\n3. feed-forward network.\n\nTheir Add & Norm components are **M**, **P**, and **R**, respectively.\n\n**Step 3 — Sort the letters.**\n\n$$\\{F,H,M,P,R\\}\\longrightarrow\\boxed{\\texttt{FHMPR}}.$$\n\nThe residual “$+$” nodes themselves are operations, but the question asks for the labeled Add & Norm components, which are the blocks after each sublayer.",
+      "solutionMd": "**Answer:** `FHMPR`\n\n#### Step-by-step solution\n\n**Step 1 — Recall the encoder pattern.**\n\nAn encoder block has two sublayers:\n\n1. self-attention;\n2. feed-forward network.\n\nEach sublayer is followed by a residual addition and layer normalization. In the diagram, those two Add & Norm components are **F** and **H**.\n\n**Step 2 — Recall the decoder pattern.**\n\nA decoder block has three sublayers:\n\n1. masked self-attention;\n2. encoder-decoder cross-attention;\n3. feed-forward network.\n\nTheir Add & Norm components are **M**, **P**, and **R**, respectively.\n\n**Step 3 — Sort the letters.**\n\n$$\\{F,H,M,P,R\\}\\longrightarrow\\boxed{\\texttt{FHMPR}}.$$\n\nThe residual “+” nodes themselves are operations, but the question asks for the labeled Add & Norm components, which are the blocks after each sublayer.",
       "marks": {
         "correct": 1,
         "incorrect": 0,
@@ -331,7 +331,7 @@
     {
       "id": "pyq-may-2026-quiz-2-q9",
       "num": "Q10",
-      "title": "Temperature before top-$p$ sampling (MCQ)",
+      "title": "Temperature before top-p sampling (MCQ)",
       "type": "single_choice",
       "context": null,
       "questionText": "With temperature $\\tau=5$ applied to logits before top-$p$ sampling, what is the impact on the subsequent sampling step?",
@@ -347,7 +347,7 @@
         },
         {
           "id": "C",
-          "text": "It truncates the tail, making sampling similar to top-$k$."
+          "text": "It truncates the tail, making sampling similar to top-k."
         },
         {
           "id": "D",
@@ -360,7 +360,7 @@
           "A"
         ]
       },
-      "solutionMd": "**Answer:** A\n\n#### Step-by-step solution\n\n**Step 1 — Recall temperature scaling.**\n\nIf logits are $z_i$, temperature produces\n\n$$p_i=\\mathrm{softmax}(z_i/\\tau).$$\n\nFor $\\tau>1$, logit differences are compressed and the probability distribution becomes flatter.\n\n**Step 2 — Apply the top-$p$ rule.**\n\nTop-$p$ chooses the smallest set of highest-probability tokens whose cumulative probability reaches $p$. A flatter distribution needs more tokens to collect the same cumulative mass.\n\nThus the nucleus expands, so\n\n$$\\boxed{\\text{A}}.$$",
+      "solutionMd": "**Answer:** A\n\n#### Step-by-step solution\n\n**Step 1 — Recall temperature scaling.**\n\nIf logits are $z_i$, temperature produces\n\n$$p_i=\\mathrm{softmax}(z_i/\\tau).$$\n\nFor $\\tau>1$, logit differences are compressed and the probability distribution becomes flatter.\n\n**Step 2 — Apply the top-p rule.**\n\nTop-$p$ chooses the smallest set of highest-probability tokens whose cumulative probability reaches $p$. A flatter distribution needs more tokens to collect the same cumulative mass.\n\nThus the nucleus expands, so\n\n$$\\boxed{\\text{A}}.$$",
       "marks": {
         "correct": 1,
         "incorrect": 0,

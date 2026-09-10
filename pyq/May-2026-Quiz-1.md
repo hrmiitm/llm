@@ -70,11 +70,11 @@ Therefore, the correct selections are $\boxed{\text{A, C}}$.
 
 Consider the text **“learn easy math”**, consisting of three tokens: `{learn, easy, math}`. The token embeddings are columns of
 
-$$X=\begin{bmatrix}1&0&1\\0&1&1\end{bmatrix}.$$
+$$X=\begin{bmatrix}1&0&1\\\\0&1&1\end{bmatrix}.$$
 
 The projection matrices are
 
-$$W_Q=\begin{bmatrix}1&0\\0&1\end{bmatrix},\qquad W_K=\begin{bmatrix}1&0\\0&1\end{bmatrix},\qquad W_V=\begin{bmatrix}0&1\\1&0\end{bmatrix}.$$
+$$W_Q=\begin{bmatrix}1&0\\\\0&1\end{bmatrix},\qquad W_K=\begin{bmatrix}1&0\\\\0&1\end{bmatrix},\qquad W_V=\begin{bmatrix}0&1\\\\1&0\end{bmatrix}.$$
 
 The scaled dot-product attention is
 
@@ -103,16 +103,16 @@ $$Q=W_QX=X,\qquad K=W_KX=X.$$
 
 Written token-by-token, the vectors are
 
-$$q_{\text{learn}}=k_{\text{learn}}=\begin{bmatrix}1\\0\end{bmatrix},\quad
-q_{\text{easy}}=k_{\text{easy}}=\begin{bmatrix}0\\1\end{bmatrix},\quad
-q_{\text{math}}=k_{\text{math}}=\begin{bmatrix}1\\1\end{bmatrix}.$$
+$$q_{\text{learn}}=k_{\text{learn}}=\begin{bmatrix}1\\\\0\end{bmatrix},\quad
+q_{\text{easy}}=k_{\text{easy}}=\begin{bmatrix}0\\\\1\end{bmatrix},\quad
+q_{\text{math}}=k_{\text{math}}=\begin{bmatrix}1\\\\1\end{bmatrix}.$$
 
 **Step 2 — Take all query-key dot products.**
 
 The entry in row $i$, column $j$ is $q_i^Tk_j$:
 
 $$Q^TK=X^TX
-=\begin{bmatrix}1&0&1\\0&1&1\\1&1&2\end{bmatrix}.$$
+=\begin{bmatrix}1&0&1\\\\0&1&1\\\\1&1&2\end{bmatrix}.$$
 
 **Step 3 — Add the diagonal entries.**
 
@@ -143,7 +143,7 @@ The factor $1/\sqrt{d_k}$ is applied later to scale the scores; it does not chan
 
 From
 
-$$Q^TK=\begin{bmatrix}1&0&1\\0&1&1\\1&1&2\end{bmatrix},$$
+$$Q^TK=\begin{bmatrix}1&0&1\\\\0&1&1\\\\1&1&2\end{bmatrix},$$
 
 the candidate pair scores are:
 
@@ -663,14 +663,7 @@ Beam search keeps complete *prefixes* by their joint probability. Looking only a
 
 The target prefix probabilities are
 
-$$
-P(\texttt{the})=0.30,\quad
-P(\texttt{the castle})=0.30(0.40)=0.12,
-$$
-$$
-P(\texttt{the castle was})=0.12(0.50)=0.06,\quad
-P(\texttt{the castle was abandoned})=0.06(0.30)=0.018.
-$$
+$$P(\texttt{the})=0.30,\quad P(\texttt{the castle})=0.30(0.40)=0.12,\quad P(\texttt{the castle was})=0.12(0.50)=0.06,\quad P(\texttt{the castle was abandoned})=0.06(0.30)=0.018.$$ 
 
 **Step 2 — Check the target prefix's rank at every depth.**
 
