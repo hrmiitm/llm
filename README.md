@@ -153,3 +153,7 @@ Every push to `main`:
 ## 📄 License
 
 Educational materials and learning notes for IIT Madras NPTEL course on Large Language Models.
+
+## Computer System Design
+
+The [CSD section](csd-pyq/README.md) contains two previous-year papers with all original questions, options, diagrams, marks, and step-by-step solutions. Printed-key disagreements and ambiguous wording are documented beside each solution. Both papers are available in the portal under **Computer System Design**.

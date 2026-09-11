@@ -32,7 +32,8 @@ export function HomePage() {
   const totalMax   = scoredCatalog.reduce((s, c) => s + (c.maxScore ?? 0), 0);
   const avgScore   = totalMax > 0 ? Math.round((totalScore / totalMax) * 100) : 0;
   const learningCatalog = catalog.filter(item => item.category === 'LEARNING');
-  const gaCatalog = catalog.filter(item => item.category !== 'PYQ' && item.category !== 'LEARNING');
+  const gaCatalog = catalog.filter(item => item.category !== 'PYQ' && item.category !== 'LEARNING' && item.category !== 'CSD');
+  const csdCatalog = catalog.filter(item => item.category === 'CSD');
   const pyqCatalog = catalog.filter(item => item.category === 'PYQ');
 
   if (loading) return (
@@ -59,7 +60,7 @@ export function HomePage() {
     <div className="page-home">
       {/* Hero */}
       <div className="home-hero">
-        <div className="hero-kicker">Candidate dashboard <span>•</span> Large Language Models</div>
+        <div className="hero-kicker">Candidate dashboard <span>•</span> LLM & Computer System Design</div>
         <h2>Prepare like the real test.</h2>
         <p>NPTEL · IIT Madras — take timed computer-based exams, practise with instant feedback, or create a custom test from any available assignment.</p>
         <div className="hero-actions">
@@ -140,6 +141,15 @@ export function HomePage() {
         activeAttempts={activeAttempts}
       />
 
+      {csdCatalog.length > 0 && <CatalogSection
+        id="csd"
+        eyebrow="CSD · Previous year questions"
+        title="Computer System Design"
+        note="Two papers with worked solutions and source-key corrections"
+        items={csdCatalog}
+        activeAttempts={activeAttempts}
+      />}
+
       {/* PYQ Grid */}
       {pyqCatalog.length > 0 && <CatalogSection
         id="pyq"
@@ -189,6 +199,7 @@ function CatalogSection({
 }
 
 function GaCard({ ga, hasActiveAttempt }: { ga: GACatalogItem; hasActiveAttempt?: boolean }) {
+  const isCsd = ga.category === 'CSD';
   const isPyq = ga.category === 'PYQ';
   const isLearning = ga.category === 'LEARNING';
   const isPerfect = ga.score !== null && ga.score === ga.maxScore;
@@ -199,7 +210,7 @@ function GaCard({ ga, hasActiveAttempt }: { ga: GACatalogItem; hasActiveAttempt?
       <div className="ga-card-header">
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap', marginBottom: '0.3rem' }}>
-            <span className="ga-week-badge">{isLearning ? 'LEARNING' : isPyq ? 'PYQ' : `Week ${ga.week}`}</span>
+            <span className="ga-week-badge">{isCsd ? 'CSD · PYQ' : isLearning ? 'LEARNING' : isPyq ? 'PYQ' : `Week ${ga.week}`}</span>
             {scoreText && (
               <span className="ga-score-badge" style={{ background: isPerfect ? '#15803d' : 'var(--accent)' }}>
                 {isPerfect ? '✓ ' : ''}{scoreText}
@@ -209,7 +220,7 @@ function GaCard({ ga, hasActiveAttempt }: { ga: GACatalogItem; hasActiveAttempt?
               <span className="ga-score-badge" style={{ background: '#f59e0b' }}>⏸ In Progress</span>
             )}
           </div>
-          <div className="ga-card-title">{isLearning || isPyq ? (ga.label || ga.title) : `GA ${ga.week} — ${ga.title.split('—')[1]?.trim() || 'Graded Assignment'}`}</div>
+          <div className="ga-card-title">{isCsd || isLearning || isPyq ? (ga.label || ga.title) : `GA ${ga.week} — ${ga.title.split('—')[1]?.trim() || 'Graded Assignment'}`}</div>
         </div>
       </div>
 

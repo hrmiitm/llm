@@ -17,6 +17,7 @@ function isCorrectAnswer(pack: GAPack, questionId: string, selected: Answer) {
   if (!question?.answer || !hasAnswer(selected)) return false;
   const correct = (Array.isArray(question.answer.value) ? question.answer.value : [question.answer.value]).map(String).map(value => value.toUpperCase());
   const submitted = (Array.isArray(selected) ? selected : [selected]).map(String).map(value => value.toUpperCase());
+  if (question.answerMatch === 'exact') return JSON.stringify(correct.map(value => value.trim()).sort()) === JSON.stringify(submitted.map(value => value.trim()).sort());
   if (question.type === 'multiple_select') return correct.sort().join(',') === submitted.sort().join(',');
   if (question.type === 'numeric') {
     const answer = Number(submitted[0]);

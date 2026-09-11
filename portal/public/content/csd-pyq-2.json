@@ -1,0 +1,593 @@
+{
+  "id": "csd-pyq-2",
+  "week": 0,
+  "title": "Computer System Design — PYQ 2",
+  "category": "CSD",
+  "label": "CSD — PYQ 2",
+  "topics": [
+    "Digital Logic",
+    "Number Systems",
+    "Sequential Circuits",
+    "Instruction Encoding"
+  ],
+  "notesFile": null,
+  "score": null,
+  "maxScore": null,
+  "submittedDate": null,
+  "questionCount": 21,
+  "durationMinutes": 63,
+  "questions": [
+    {
+      "id": "csd-pyq-2-q1",
+      "num": "Q1",
+      "title": "Subject confirmation (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "THIS IS QUESTION PAPER FOR THE SUBJECT \"DEGREE LEVEL : COMPUTER SYSTEM DESIGN (COMPUTER BASED EXAM)\" ARE YOU SURE YOU HAVE TO WRITE EXAM FOR THIS SUBJECT? CROSS CHECK YOUR HALL TICKET TO CONFIRM THE SUBJECTS TO BE WRITTEN. (IF IT IS NOT THE CORRECT SUBJECT, PLS CHECK THE SECTION AT THE TOP FOR THE SUBJECTS REGISTERED BY YOU)",
+      "bodyMd": "THIS IS QUESTION PAPER FOR THE SUBJECT \"DEGREE LEVEL : COMPUTER SYSTEM DESIGN (COMPUTER BASED EXAM)\" ARE YOU SURE YOU HAVE TO WRITE EXAM FOR THIS SUBJECT? CROSS CHECK YOUR HALL TICKET TO CONFIRM THE SUBJECTS TO BE WRITTEN. (IF IT IS NOT THE CORRECT SUBJECT, PLS CHECK THE SECTION AT THE TOP FOR THE SUBJECTS REGISTERED BY YOU)\n\n**Paper details:** 21 original entries, 50 marks; this subject confirmation carries zero marks. Exam date and duration are not supplied in the PDF. The portal timer is a 63-minute practice default. Solutions explicitly identify any disagreement with the printed key and explain ambiguous source wording.\n\n**Marks:** 0\n\n**Source question ID:** 6406531863459 · **Source type:** MCQ\n**PDF page(s):** 1\n\n\n**Source option IDs (A onward):** 6406536036616, 6406536036617.",
+      "options": [
+        {
+          "id": "A",
+          "text": "YES"
+        },
+        {
+          "id": "B",
+          "text": "NO"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** A\n\n**Printed PDF key:** `A`.\n\n#### Step-by-step solution\n\n1. Confirm that the subject on the hall ticket is Computer System Design.\n2. Select YES only for that subject. This is an administrative confirmation, not a knowledge question, and carries zero marks.\n\n**Quick learning tip:** Check the subject name first; an administrative confirmation should never be treated as a technical question.",
+      "marks": {
+        "correct": 0,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q2",
+      "num": "Q2",
+      "title": "Multiplexer (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "A multiplexer is a combinational circuit that selects one input from multiple inputs and forwards it to a single output.",
+      "bodyMd": "A multiplexer is a combinational circuit that selects one input from multiple inputs and forwards it to a single output.\n\n**Marks:** 1\n\n**Source question ID:** 6406531863460 · **Source type:** MCQ\n**PDF page(s):** 2\n\n\n**Source option IDs (A onward):** 6406536036618, 6406536036619.",
+      "options": [
+        {
+          "id": "A",
+          "text": "True"
+        },
+        {
+          "id": "B",
+          "text": "False"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** A\n\n**Printed PDF key:** `A`.\n\n#### Step-by-step solution\n\n1. A multiplexer has several data inputs, selection inputs, and one output.\n2. The selection bits choose which data input reaches the output.\n3. No stored state is needed for this selection, so it is combinational. The statement is true.\n\n**Quick learning tip:** MUX mnemonic: many inputs become one output; the select bits choose the single path.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q3",
+      "num": "Q3",
+      "title": "JK flip-flop storage (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "A JK flip-flop cannot store information without a continuous clock input.",
+      "bodyMd": "A JK flip-flop cannot store information without a continuous clock input.\n\n**Marks:** 1\n\n**Source question ID:** 6406531863461 · **Source type:** MCQ\n**PDF page(s):** 2\n\n\n**Source option IDs (A onward):** 6406536036620, 6406536036621.",
+      "options": [
+        {
+          "id": "A",
+          "text": "True"
+        },
+        {
+          "id": "B",
+          "text": "False"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** B\n\n**Printed PDF key:** `B`.\n\n#### Step-by-step solution\n\n1. A flip-flop stores one bit in a bistable circuit.\n2. An active clock edge updates the stored state according to J and K.\n3. Between edges it retains that state while powered (assuming no asynchronous set/reset). A continuous clock is not required to retain information, so the statement is false.\n\n**Quick learning tip:** A flip-flop updates on a clock edge and remembers its bit between edges; it does not need a continuous clock level.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q4",
+      "num": "Q4",
+      "title": "Two’s-complement interpretation (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "In a 4-bit system, the two's complement of a binary number 1010 can be represented as -6.",
+      "bodyMd": "In a 4-bit system, the two's complement of a binary number 1010 can be represented as -6.\n\n**Marks:** 1\n\n**Source question ID:** 6406531863462 · **Source type:** MCQ\n**PDF page(s):** 2\n\n\n**Source option IDs (A onward):** 6406536036622, 6406536036623.",
+      "options": [
+        {
+          "id": "A",
+          "text": "True"
+        },
+        {
+          "id": "B",
+          "text": "False"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "A"
+        ]
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** A\n\n**Printed PDF key:** `A`.\n\n#### Step-by-step solution\n\n1. Interpret the four bits as a signed two's-complement representation. Their weights are $-8,4,2,1$.\n2. Thus $1010_2=-8+0+2+0=-6$.\n3. Under this intended interpretation the statement is true.\n\n**Wording ambiguity:** Taking the two's-complement *operation* on `1010` instead gives `0101 + 1 = 0110`, or +6. The PDF says “the two's complement of” where “the value of 1010 in two's-complement representation” is intended. The portal follows that intended interpretation, and preserves the original wording.\n\n**Quick learning tip:** For a 4-bit signed pattern, use weights $-8,4,2,1$; the leading 1 contributes $-8$.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q5",
+      "num": "Q5",
+      "title": "Decoder versus multiplexer (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "A decoder performs the inverse operation of a multiplexer.",
+      "bodyMd": "A decoder performs the inverse operation of a multiplexer.\n\n**Marks:** 1\n\n**Source question ID:** 6406531863463 · **Source type:** MCQ\n**PDF page(s):** 2\n\n\n**Source option IDs (A onward):** 6406536036624, 6406536036625.",
+      "options": [
+        {
+          "id": "A",
+          "text": "True"
+        },
+        {
+          "id": "B",
+          "text": "False"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** B\n\n**Printed PDF key:** `A`.\n\n#### Step-by-step solution\n\n1. A multiplexer selects one of several data inputs for a single output.\n2. A demultiplexer routes a single data input to a selected output; this is the complementary routing operation.\n3. A decoder maps an input code to an asserted output line. It is conventionally paired with an encoder, not a multiplexer.\n4. Therefore the statement, as a general definition, is false.\n\n**PDF key correction:** The PDF marks True. A decoder with an enable input can be used as a demultiplexer, but that special implementation does not make the two definitions identical. [TI's decoder/demultiplexer family](https://www.ti.com/product-category/switches-multiplexers/digital-demultiplexers-decoders/overview.html) illustrates the related devices.\n\n**Quick learning tip:** Keep the pair straight: decoder = code to one-hot line; demultiplexer = one data input to one selected output.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q6",
+      "num": "Q6",
+      "title": "Moore’s Law (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "According to Moore's Law, the size of transistors on an integrated circuit doubles approximately every two years.",
+      "bodyMd": "According to Moore's Law, the size of transistors on an integrated circuit doubles approximately every two years.\n\n**Marks:** 1\n\n**Source question ID:** 6406531863464 · **Source type:** MCQ\n**PDF page(s):** 3\n\n\n**Source option IDs (A onward):** 6406536036626, 6406536036627.",
+      "options": [
+        {
+          "id": "A",
+          "text": "True"
+        },
+        {
+          "id": "B",
+          "text": "False"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** B\n\n**Printed PDF key:** `B`.\n\n#### Step-by-step solution\n\n1. Identify the quantity in the claim: transistor **size**.\n2. Moore's Law concerns the **number of transistors** integrated on a chip, approximately doubling every two years.\n3. It does not predict a doubling in individual transistor size. The statement is false. See [Intel's description of Moore's Law](https://www.intel.com/content/www/us/en/newsroom/resources/moores-law.html).\n\n**Quick learning tip:** Moore means “more transistors,” approximately doubling every two years; it is not a statement that each transistor doubles in size.",
+      "marks": {
+        "correct": 1,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q7",
+      "num": "Q7",
+      "title": "Subtraction using two’s complement (Short Answer)",
+      "type": "text",
+      "context": null,
+      "questionText": "Using 2's complement method, evaluate $A-B$ where $A=180$ and $B=50$. Give the answer in 8-bit binary format.",
+      "bodyMd": "Using 2's complement method, evaluate $A-B$ where $A=180$ and $B=50$. Give the answer in 8-bit binary format.\n\n**Marks:** 3\n\n**Source question ID:** 6406531863465 · **Source type:** SA · **Source response:** Numeric\n**PDF page(s):** 3\n**Source response settings:** Numeric · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "10000010"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 10000010\n\n**Printed PDF key:** `01100010`.\n\n#### Step-by-step solution\n\n1. Express the operands as eight-bit unsigned patterns: A = `10110100`, B = `00110010`.\n2. Complement B and add 1: `11001101 + 1 = 11001110`.\n3. Add to A: `10110100 + 11001110 = 110000010`. Retain the low eight bits, `10000010`.\n4. The arithmetic result is $180-50=130$, whose unsigned eight-bit representation is `10000010`.\n5. As a **signed** eight-bit two's-complement integer, +130 is not representable (range -128 to +127); the same bits would mean -126. A signed result needs at least nine bits, `010000010`.\n\n**PDF key correction:** `01100010` means 98 and is not the subtraction result. The portal accepts the requested eight-bit pattern `10000010`, with this signed-range limitation made explicit.\n\n**Quick learning tip:** Two's-complement subtraction shortcut: $A-B=A+\\overline{B}+1$; preserve all eight bits and check whether the signed range overflows.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q8",
+      "num": "Q8",
+      "title": "Identify GT1 and GT2 (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "The circuit diagram requires the output",
+      "bodyMd": "The circuit diagram requires the output\n\n$$f=(\\overline{x}+\\overline{y})zw.$$\n\nThe gates GT1 and GT2 should be (in that order).\n\n![Original gate circuit and target expression](assets/csd-2-gates.png)\n\n**Marks:** 3\n\n**Source question ID:** 6406531863466 · **Source type:** MCQ\n**PDF page(s):** 4\n\n\n**Source option IDs (A onward):** 6406536036629, 6406536036630, 6406536036631, 6406536036632, 6406536036633.",
+      "options": [
+        {
+          "id": "A",
+          "text": "OR, NAND"
+        },
+        {
+          "id": "B",
+          "text": "OR, NOR"
+        },
+        {
+          "id": "C",
+          "text": "AND, NOR"
+        },
+        {
+          "id": "D",
+          "text": "AND, NAND"
+        },
+        {
+          "id": "E",
+          "text": "None of these"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "E"
+        ]
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** E\n\n**Printed PDF key:** `D`.\n\n#### Step-by-step solution\n\n1. Read the actual wires: GT2 receives $\\overline{x}$ and $yz$; GT1 receives $z,w$. The final gate is AND.\n2. Consequently NAND at GT2 gives $\\overline{\\overline{x}\\,yz}=x+\\overline{y}+\\overline{z}$, whereas NOR gives $\\overline{\\overline{x}+yz}=x(\\overline{y}+\\overline{z})$.\n3. GT1 gives either $z+w$ (OR) or $zw$ (AND). Multiply that result by the GT2 result and compare with the requested function.\n4. At $(x,y,z,w)=(1,1,0,1)$, the requested function is 0, but OR/NAND and OR/NOR both output 1. Eliminate A and B.\n5. At $(x,y,z,w)=(0,1,1,1)$, the requested function is 1, but AND/NOR and AND/NAND both output 0. Eliminate C and D.\n6. Choose E, None of these.\n\n**PDF key correction:** D produces $(x+\\overline{y})zw$. The printed target has $\\overline{x}$, and the pictured inverter on x cannot be ignored.\n\n**Quick learning tip:** Translate each gate from the wires first, then disprove a candidate with one input combination; one mismatch is enough.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q9",
+      "num": "Q9",
+      "title": "Number base from quadratic roots (Numeric input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "The solutions of the quadratic equation $x^2-11_bx+21_b=0$ are $x=3$ and $x=5$. What is the base $b$ of the numbers?",
+      "bodyMd": "The solutions of the quadratic equation $x^2-11_bx+21_b=0$ are $x=3$ and $x=5$. What is the base $b$ of the numbers?\n\n**Marks:** 3\n\n**Source question ID:** 6406531863467 · **Source type:** SA · **Source response:** Numeric\n**PDF page(s):** 4\n**Source response settings:** Numeric · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "7"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 7\n\n**Printed PDF key:** `7`.\n\n#### Step-by-step solution\n\n1. For a monic quadratic, the sum of the roots equals the coefficient of the subtracted linear term: $11_b=3+5=8$.\n2. A positional number $11_b$ equals $b+1$, so $b=7$.\n3. Check the product: $21_b=2b+1=15=3\\times 5$.\n4. Both conditions agree and the base exceeds every digit appearing in the coefficients.\n\n**Quick learning tip:** For $x^2-Sx+P=0$, use $S=r_1+r_2$ and $P=r_1r_2$; in base $b$, $11_b=b+1$ and $21_b=2b+1$.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q10",
+      "num": "Q10",
+      "title": "Minimum NAND gates (Numeric input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "What is the minimum number of 2-input NAND gates required to implement the circuit for minimized SOP expression of the function",
+      "bodyMd": "What is the minimum number of 2-input NAND gates required to implement the circuit for minimized SOP expression of the function\n\n$$f(x,y,z)=\\sum m(0,2,5,7)?$$\n\n**Marks:** 3\n\n**Source question ID:** 6406531863468 · **Source type:** SA · **Source response:** Numeric\n**PDF page(s):** 5\n**Source response settings:** Numeric · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "5"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 5\n\n**Printed PDF key:** `5`.\n\n#### Step-by-step solution\n\n1. Use the usual minterm order xyz, with x most significant: 0 = 000, 2 = 010, 5 = 101, 7 = 111.\n2. Pair minterms 0 and 2 to eliminate y, giving $\\overline{x}\\,\\overline{z}$. Pair 5 and 7 to give $xz$.\n3. The minimized SOP is $f=\\overline{x}\\,\\overline{z}+xz$, which is XNOR of x and z; y is irrelevant.\n4. With NAND only and no free complemented inputs, form $n_1=\\mathrm{NAND}(x,x)=\\overline{x}$ and $n_2=\\mathrm{NAND}(z,z)=\\overline{z}$.\n5. Form $n_3=\\mathrm{NAND}(n_1,n_2)$ and $n_4=\\mathrm{NAND}(x,z)$, then $f=\\mathrm{NAND}(n_3,n_4)$. This uses five gates.\n6. The SOP realization needs both input inversions, two complemented product terms, and a final combining NAND. An exhaustive truth-table circuit search also rules out any network of at most four two-input NAND gates with uncomplemented primary inputs (including tied inputs and shared intermediates). Thus the minimum is 5.\n\n**Quick learning tip:** NAND-only XNOR normally costs five 2-input gates without free complemented inputs: two inversions, two product NANDs, and one final NAND.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q11",
+      "num": "Q11",
+      "title": "Multiplexer propagation delay (Numeric input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Given that NOT, 2-input AND/OR gates have delays of 1 ns, what will be the maximum delay of a 2x1 multiplexer circuit? Note: if the answer is 1 ns, write 1.",
+      "bodyMd": "Given that NOT, 2-input AND/OR gates have delays of 1 ns, what will be the maximum delay of a 2x1 multiplexer circuit? Note: if the answer is 1 ns, write 1.\n\n**Marks:** 3\n\n**Source question ID:** 6406531863469 · **Source type:** SA · **Source response:** Numeric\n**PDF page(s):** 5\n**Source response settings:** Numeric · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "3"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 3\n\n**Printed PDF key:** `3`.\n\n#### Step-by-step solution\n\n1. The standard two-to-one multiplexer is $Y=\\overline{S}I_0+SI_1$.\n2. A data-input path traverses one AND and one OR gate: 2 ns.\n3. The select path through the complemented branch traverses NOT, AND, then OR: $1+1+1=3$ ns.\n4. The maximum propagation delay is therefore 3 ns. This assumes the standard minimal AND/OR/NOT implementation, not arbitrary extra gates.\n\n**Quick learning tip:** For propagation delay, add the gate delays along each input-to-output path and take the largest sum.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q12",
+      "num": "Q12",
+      "title": "Three D flip-flops with NAND feedback (Short Answer)",
+      "type": "text",
+      "context": null,
+      "questionText": "Consider the circuit consisting of three D flipflops and one NAND gate as shown below. The initial states are Q1=1, Q2=0, and Q3=1. What is the output after (Q1,Q2,Q3) after 5 clock pulse? Note: If answer is Q1=0, Q2=0, Q3=0, then write 000",
+      "bodyMd": "Consider the circuit consisting of three D flipflops and one NAND gate as shown below. The initial states are Q1=1, Q2=0, and Q3=1. What is the output after (Q1,Q2,Q3) after 5 clock pulse? Note: If answer is Q1=0, Q2=0, Q3=0, then write 000\n\n![Three common-clock D flip-flops; Q3 feeds D1 and NAND(Q3,Q1) feeds D2](assets/csd-2-dff.png)\n\n\n**Marks:** 3\n\n**Source question ID:** 6406531863470 · **Source type:** SA · **Source response:** Numeric\n**PDF page(s):** 6\n**Source response settings:** Numeric · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "101"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 101\n\n**Printed PDF key:** `101`.\n\n#### Step-by-step solution\n\n1. Read each D input from the diagram: $Q_1^+=Q_3$, $Q_2^+=\\overline{Q_1Q_3}$, and $Q_3^+=Q_2$.\n2. All three flip-flops sample their **old** input values on the same edge; do not update them sequentially in place.\n3. Starting at 101, evaluate every edge:\n\n| Clock pulses | Q1 | Q2 | Q3 |\n| --- | --- | --- | --- |\n| 0 | 1 | 0 | 1 |\n| 1 | 1 | 0 | 0 |\n| 2 | 0 | 1 | 0 |\n| 3 | 0 | 1 | 1 |\n| 4 | 1 | 1 | 1 |\n| 5 | 1 | 0 | 1 |\n\n4. After 5 pulses the ordered state is 101.\n\n**Quick learning tip:** For synchronous D flip-flops, write all next-state equations and evaluate them from the same old state.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q13",
+      "num": "Q13",
+      "title": "Register-bank address width (Numeric input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "A processor uses the following control word format:",
+      "bodyMd": "A processor uses the following control word format:\n\n| Opcode | Src1 | Src2 | Dest |\n| --- | --- | --- | --- |\n| 10 | 1011 | 1110 | 0001 |\n\nHow many registers can be addressed in the register bank?\n\n**Marks:** 3\n\n**Source question ID:** 6406531863471 · **Source type:** SA · **Source response:** Numeric\n**PDF page(s):** 6\n**Source response settings:** Numeric · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "16"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 16\n\n**Printed PDF key:** `16`.\n\n#### Step-by-step solution\n\n1. Each register selector has 4 bits; the opcode is a separate field.\n2. A 4-bit selector has $2^4=16$ distinct bit patterns.\n3. Therefore the bank can address 16 registers. Do not add the widths of Src1, Src2, and Dest: they independently select from the same bank.\n\n**Quick learning tip:** A register selector with $k$ bits names $2^k$ registers; do not add independent selector fields.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q14",
+      "num": "Q14",
+      "title": "Common-bus control word (Short Answer)",
+      "type": "text",
+      "context": null,
+      "questionText": "Consider a common bus architecture containing memory and three registers: A, B, and C. The control word format is shown below.",
+      "bodyMd": "Consider a common bus architecture containing memory and three registers: A, B, and C. The control word format is shown below.\n\n| Memory Read | Memory Write | A Input | A Output | B Input | B Output | C Input | C Output |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| bit 7 | bit 6 | bit 5 | bit 4 | bit 3 | bit 2 | bit 1 | bit 0 |\n\nWhat would be the control word if you intend to perform a register transfer from register B to register C?\n\nNote: Provide your answer in hexadecimal format (e.g., 0x3A).\n\nThe bit numbers are an explanatory annotation: use the printed left-to-right order as MSB to LSB and active-high controls.\n\n**Marks:** 3\n\n**Source question ID:** 6406531863472 · **Source type:** SA · **Source response:** Alphanumeric (case insensitive)\n**PDF page(s):** 7\n**Source response settings:** Alphanumeric (case insensitive) · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText · Case sensitive: No",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "0x06"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 0x06\n\n**Printed PDF key:** `0x06`.\n\n#### Step-by-step solution\n\n1. Enable register B Output so the source drives the bus.\n2. Enable register C Input so the destination loads the bus. Disable all other controls, including memory read/write.\n3. In the specified order the bits are `00000110`.\n4. Group into nibbles: `0000 0110`, giving `0x06`.\n\n**Quick learning tip:** For a bus transfer, assert exactly two controls: source Output and destination Input; then write the fields as one binary word.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q15",
+      "num": "Q15",
+      "title": "JK flip-flop with complementary feedback (Short Answer)",
+      "type": "text",
+      "context": null,
+      "questionText": "Consider the circuit diagram as shown below. Assuming it was initially cleared to 0, state the output(Y) for the next 4 clock pulses.",
+      "bodyMd": "Consider the circuit diagram as shown below. Assuming it was initially cleared to 0, state the output(Y) for the next 4 clock pulses.\n\n![Q and complemented Q feed XOR; XOR drives J and its inversion drives K](assets/csd-2-jk.png)\n\n**Marks:** 3\n\n**Source question ID:** 6406531863473 · **Source type:** SA · **Source response:** Numeric\n**PDF page(s):** 8\n**Source response settings:** Numeric · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "1111"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 1111\n\n**Printed PDF key:** `1111`.\n\n#### Step-by-step solution\n\n1. The feedback signals are Q and its complement, so their XOR is always 1: $Q\\oplus\\overline{Q}=1$.\n2. Therefore J = 1 and, through the inverter, K = 0.\n3. For a JK flip-flop, J = 1 and K = 0 sets Q to 1 at each active clock edge. It does not toggle; toggling would require J = K = 1.\n4. From the initial Q = 0, the next four outputs are 1, 1, 1, 1. Enter 1111.\n\n**Quick learning tip:** JK reminder: 10 sets, 01 resets, 11 toggles, and 00 holds. Derive J and K before iterating clock pulses.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q16",
+      "num": "Q16",
+      "title": "Truth table and overbar scope (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "Choose the correct truth table according to the given Boolean expression:",
+      "bodyMd": "Choose the correct truth table according to the given Boolean expression:\n\n$$F(x,y,z)=\\overline{xyz}+\\overline{x}y+x\\overline{z}.$$\n\nThe first overbar spans the entire product xyz, as printed. Each table retains the original row order.\n\n**Marks:** 3\n\n**Source question ID:** 6406531863474 · **Source type:** MCQ\n**PDF page(s):** 9\n\n\n**Source option IDs (A onward):** 6406536036641, 6406536036642, 6406536036643, 6406536036644.",
+      "options": [
+        {
+          "id": "A",
+          "text": "![Option A truth table: F rows 11101010](assets/csd-2-truth-a.png)"
+        },
+        {
+          "id": "B",
+          "text": "None of these"
+        },
+        {
+          "id": "C",
+          "text": "![Option C truth table: F rows 10111010](assets/csd-2-truth-c.png)"
+        },
+        {
+          "id": "D",
+          "text": "![Option D truth table: F rows 10011110](assets/csd-2-truth-d.png)"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "B"
+        ]
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** B\n\n**Printed PDF key:** `C`.\n\n#### Step-by-step solution\n\n1. The first term is the complement of the entire product: $\\overline{xyz}$, not $\\overline{x}\\,\\overline{y}\\,\\overline{z}$.\n2. It is 1 in every row except xyz = 111. The other two terms cannot turn any of those 1s into 0.\n3. At 111 the remaining terms $\\overline{x}y$ and $x\\overline{z}$ both equal 0, so F = 0.\n4. The full truth table is:\n\n| x | y | z | F |\n| --- | --- | --- | --- |\n| 0 | 0 | 0 | 1 |\n| 0 | 0 | 1 | 1 |\n| 0 | 1 | 0 | 1 |\n| 0 | 1 | 1 | 1 |\n| 1 | 0 | 0 | 1 |\n| 1 | 0 | 1 | 1 |\n| 1 | 1 | 0 | 1 |\n| 1 | 1 | 1 | 0 |\n\n5. No offered table matches; choose B, None of these.\n\n**PDF key correction:** C is marked in the source, but it outputs 0 at 001 and 101, where the printed $\\overline{xyz}$ is 1. C would match $\\overline{x}\\,\\overline{y}\\,\\overline{z}+\\overline{x}y+x\\overline{z}$, a different expression. The continuous source overbar has been preserved.\n\n**Quick learning tip:** Always check the scope of an overbar. A bar over the whole product $xyz$ is 1 everywhere except $xyz=111$.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q17",
+      "num": "Q17",
+      "title": "Three-address instruction length (Numeric input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "A modern RISC processor contains 32 registers in its general-purpose register file. The Arithmetic Logic Unit (ALU) of the processor is capable of executing 8 distinct operations, which include standard arithmetic and logical functions.",
+      "bodyMd": "A modern RISC processor contains 32 registers in its general-purpose register file. The Arithmetic Logic Unit (ALU) of the processor is capable of executing 8 distinct operations, which include standard arithmetic and logical functions.\n\nWhat is the **minimum** number of bits required by a **three-address** instruction to perform a bitwise **OR** operation between two source operands located in the register file, and store the computational result back into a designated destination register?\n\n**Marks:** 3\n\n**Source question ID:** 6406531863475 · **Source type:** SA · **Source response:** Numeric\n**PDF page(s):** 10\n**Source response settings:** Numeric · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "18"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 18\n\n**Printed PDF key:** `18`.\n\n#### Step-by-step solution\n\n1. Each register address requires $\\log_2 32=5$ bits.\n2. Three addresses identify source 1, source 2, and destination: $3\\times 5=15$ bits.\n3. Selecting one of 8 ALU operations requires $\\log_2 8=3$ opcode bits.\n4. The minimum total is $15+3=18$ bits, assuming no additional mode, immediate, or alignment fields.\n\n**Quick learning tip:** Three-address width formula: $3\\log_2(R)+\\log_2(O)$, where $R$ is the register count and $O$ the ALU-operation count.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q18",
+      "num": "Q18",
+      "title": "Interleaved MOV encoding (Short Answer)",
+      "type": "text",
+      "context": null,
+      "questionText": "Suppose we want to execute a data movement instruction, where we move the data present in register $R_{20}$ to register $R_{15}$.",
+      "bodyMd": "Suppose we want to execute a data movement instruction, where we move the data present in register $R_{20}$ to register $R_{15}$.\n\nInstruction: $\\mathrm{MOV}\\ R_d,R_r$\n\n$R_d$: Destination register; $R_r$: Source register. Operands: $0\\le d\\le31$, $0\\le r\\le31$.\n\nInstruction Format (16-bit):\n\n| Nibble 1 | Nibble 2 | Nibble 3 | Nibble 4 |\n| --- | --- | --- | --- |\n| `0010` | `11rd` | `drdr` | `rrdd` |\n\nWhat will be the hexadecimal machine code for the instruction? Note: Enter the value in hexadecimal format (e.g. 0x24E8).\n\n**Marks:** 3\n\n**Source question ID:** 6406531863476 · **Source type:** SA · **Source response:** Alphanumeric (case insensitive)\n**PDF page(s):** 11\n**Source response settings:** Alphanumeric (case insensitive) · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText · Case sensitive: No",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "0x2EB3"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 0x2EB3\n\n**Printed PDF key:** `0x2EB3`.\n\n#### Step-by-step solution\n\n1. The source is r = 20 = `10100` and the destination is d = 15 = `01111`.\n2. Read each operand from most significant bit to least significant bit as its letter appears from left to right in the format.\n3. The expanded layout is `0010 | 11 r4 d4 | d3 r3 d2 r2 | r1 r0 d1 d0`.\n4. Substitution gives `0010 | 1110 | 1011 | 0011`, which is `0x2EB3`.\n\n**Encoding assumption:** The source uses repeated r/d placeholders without subscripts. The conventional MSB-first consumption above is used explicitly; do not substitute an unrelated processor’s MOV layout.\n\n**Quick learning tip:** When a format repeats r and d, consume their bits in the displayed left-to-right order, group into nibbles, and only then convert to hex.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q19",
+      "num": "Q19",
+      "title": "Clocked XNOR timing (MCQ)",
+      "type": "single_choice",
+      "context": null,
+      "questionText": "In the circuit shown below, D1 and D2 are positive triggered D flipflops, x1 and x2 are inputs of D1 and D2 flipflop. Choose the correct timing diagram of the output Y.",
+      "bodyMd": "In the circuit shown below, D1 and D2 are positive triggered D flipflops, x1 and x2 are inputs of D1 and D2 flipflop. Choose the correct timing diagram of the output Y.\n\n![Two initially cleared positive-edge D flip-flops drive an XNOR gate](assets/csd-2-timing-circuit.png)\n\nEach option includes the source CLK, x1, x2 and candidate Y waveforms.\n\n**Marks:** 3\n\n**Source question ID:** 6406531863477 · **Source type:** MCQ\n**PDF page(s):** 12\n\n\n**Source option IDs (A onward):** 6406536036647, 6406536036648, 6406536036649, 6406536036650, 6406536036651.",
+      "options": [
+        {
+          "id": "A",
+          "text": "![Option A: original CLK, x1, x2 and Y timing diagram](assets/csd-2-timing-a.png)"
+        },
+        {
+          "id": "B",
+          "text": "![Option B: original CLK, x1, x2 and Y timing diagram](assets/csd-2-timing-b.png)"
+        },
+        {
+          "id": "C",
+          "text": "![Option C: original CLK, x1, x2 and Y timing diagram](assets/csd-2-timing-c.png)"
+        },
+        {
+          "id": "D",
+          "text": "![Option D: original CLK, x1, x2 and Y timing diagram](assets/csd-2-timing-d.png)"
+        },
+        {
+          "id": "E",
+          "text": "None of these"
+        }
+      ],
+      "answer": {
+        "type": "option",
+        "value": [
+          "E"
+        ]
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** E\n\n**Printed PDF key:** `C`.\n\n#### Step-by-step solution\n\n1. The output gate is XNOR (XOR shape with an output bubble), so $Y=\\overline{Q_1\\oplus Q_2}$. Initially $Q_1=Q_2=0$, hence Y = 1.\n2. The flip-flops sample only the **rising** clock edges. Input transitions between these edges do not immediately change Q or Y.\n3. Read the inputs immediately before each of the six subsequent rising edges. The input transitions are visibly offset from the clock edges:\n\n| Rising edge | Sampled x1 | Sampled x2 | Y after edge |\n| --- | --- | --- | --- |\n| 1 | 0 | 1 | 0 |\n| 2 | 1 | 1 | 1 |\n| 3 | 1 | 0 | 0 |\n| 4 | 1 | 1 | 1 |\n| 5 | 0 | 1 | 0 |\n| 6 | 0 | 0 | 1 |\n\n4. The output starts high and then has the successive levels 0, 1, 0, 1, 0, 1, changing only at rising clock edges. None of A-D shows this sequence, so choose E.\n\n**PDF key correction:** C is marked, but it does not even fall at the first rising edge, when the sampled pair is 01. Its transitions occur near input/falling-edge events rather than the required rising-edge sampling sequence. Do not replace the printed positive-edge trigger with another convention to force that key.\n\n**Quick learning tip:** D flip-flop timing rule: sample inputs just before each rising edge; output changes only after that edge, then apply XNOR.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q20",
+      "num": "Q20",
+      "title": "Minimized four-variable NAND network (Numeric input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Consider the function given below:",
+      "bodyMd": "Consider the function given below:\n\n$$F(A,B,C,D)=\\sum m(1,2,3,5,6,7,9,10,11).$$\n\nIf we want to implement the minimized expression using only 2-input NAND gates, what is the minimum number of NAND gates required?\n\n**Marks:** 3\n\n**Source question ID:** 6406531863478 · **Source type:** SA · **Source response:** Numeric\n**PDF page(s):** 13\n**Source response settings:** Numeric · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "4"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 4\n\n**Printed PDF key:** `4`.\n\n#### Step-by-step solution\n\n1. Using ABCD order (A most significant), the included minterms have AB equal to 00, 01, or 10, and CD equal to 01, 10, or 11. Thus $F=\\overline{AB}(C+D)$.\n2. Let $n_1=\\mathrm{NAND}(A,B)=\\overline{AB}$ (gate 1). Distribute to obtain $F=n_1C+n_1D$.\n3. Produce $n_2=\\mathrm{NAND}(n_1,C)$ and $n_3=\\mathrm{NAND}(n_1,D)$ (gates 2 and 3).\n4. Gate 4 produces $\\mathrm{NAND}(n_2,n_3)=n_1C+n_1D=F$. No separate OR gate or final inverter is needed.\n5. For minimality, a network depending on four distinct inputs with at most three two-input gates must be a tree with four input leaves (sharing a gate would reduce the number of distinct inputs). A balanced three-NAND tree gives $uv+st$ (7 true rows), while a chain gives a permutation of $\\overline{((uv)+\\overline{w})t}$ (11 true rows). This function has 9 true rows, so neither tree shape works. Fewer gates cannot depend on all four inputs. Four is therefore minimal.\n\n**Quick learning tip:** NAND-only pattern: make the shared complement once, form complemented product terms, and use a final NAND as the OR by De Morgan.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    },
+    {
+      "id": "csd-pyq-2-q21",
+      "num": "Q21",
+      "title": "Gated D-latch timing (Numeric input)",
+      "type": "numeric",
+      "context": null,
+      "questionText": "Consider a gated D-Latch constructed using NAND gates. The initial input (at 0 ns) is D = 1, and the write enable is high. The write enable toggles between high and low every 5 ns. The input D changes from 0 to 1 and from 1 to 0 every 6 seconds. What will be the output Q after 22 ns?",
+      "bodyMd": "Consider a gated D-Latch constructed using NAND gates. The initial input (at 0 ns) is D = 1, and the write enable is high. The write enable toggles between high and low every 5 ns. The input D changes from 0 to 1 and from 1 to 0 every 6 seconds. What will be the output Q after 22 ns?\n\nThe source says “6 seconds,” but all other timing values are in nanoseconds and the printed key is 0. The worked answer below therefore uses the clearly intended 6 ns toggle interval and also records the literal 6-second result.\n\n**Marks:** 3\n\n**Source question ID:** 6406531863479 · **Source type:** SA · **Source response:** Numeric\n**PDF page(s):** 13\n**Source response settings:** Numeric · Evaluation required: Yes · Show word count: Yes · Answers type: Equal · Text area: PlainText",
+      "options": [],
+      "answer": {
+        "type": "text",
+        "value": "0"
+      },
+      "answerMatch": "exact",
+      "solutionMd": "**Answer:** 0\n\n**Printed PDF key:** `0`.\n\n#### Step-by-step solution\n\n1. With write enable high initially, the D latch is transparent and takes D = 1.\n2. Interpret the inconsistent “6 seconds” as the intended **6 ns** toggle interval, because the timeline is in ns and the printed answer is 0.\n3. Track the latch at each event:\n\n| Time (ns) | Event | Q after event |\n| --- | --- | --- |\n| 0 | Enable high; D=1 | 1 |\n| 5 | Enable low; hold | 1 |\n| 6 | D=0 while disabled | 1 |\n| 10 | Enable high; D=0 | 0 |\n| 12 | D=1 while enabled | 1 |\n| 15 | Enable low; hold | 1 |\n| 18 | D=0 while disabled | 1 |\n| 20 | Enable high; D=0 | 0 |\n| 22 | No new transition | 0 |\n\nAt 22 ns, the intended 6-ns interpretation gives Q = 0, matching the PDF key. If the words “6 seconds” are taken literally, no D transition occurs by 22 ns and Q would instead be 1. The portal grades the intended nanosecond interpretation as 0.\n\n**Quick learning tip:** A gated latch is transparent while enable is high and holds while low; first resolve the unit mismatch, then compare each data transition with the enable window.",
+      "marks": {
+        "correct": 3,
+        "incorrect": 0,
+        "unanswered": 0
+      }
+    }
+  ]
+}

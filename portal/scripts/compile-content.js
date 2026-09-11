@@ -13,8 +13,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 const GA_DIR = join(ROOT, '..', 'GA');
 const PYQ_DIR = join(ROOT, '..', 'pyq');
+const CSD_DIR = join(ROOT, '..', 'csd-pyq');
 const LEARNING_DIR = join(ROOT, '..', 'learning');
 const OUT_DIR = join(ROOT, 'public', 'content');
+const CSD_ASSETS = join(CSD_DIR, 'assets');
 const GA_ASSETS = join(GA_DIR, 'assets');
 const PYQ_ASSETS = join(PYQ_DIR, 'assets');
 const LEARNING_ASSETS = join(LEARNING_DIR, 'assets');
@@ -40,6 +42,11 @@ if (existsSync(LEARNING_ASSETS)) {
   if (!existsSync(OUT_ASSETS)) mkdirSync(OUT_ASSETS, { recursive: true });
   cpSync(LEARNING_ASSETS, OUT_ASSETS, { recursive: true });
   console.log(`✓ Synchronized assets from ${LEARNING_ASSETS} to ${OUT_ASSETS}`);
+}
+
+if (existsSync(CSD_ASSETS)) {
+  mkdirSync(OUT_ASSETS, { recursive: true });
+  cpSync(CSD_ASSETS, OUT_ASSETS, { recursive: true });
 }
 
 // ──────────────────────────────────────────────
@@ -99,6 +106,19 @@ const PYQ_META = {
     notesFile: null,
   },
 };
+
+const CSD_META = Object.fromEntries([1, 2].map(number => [
+  `csd-pyq-${number}`, {
+    sourceFile: `CSD-PYQ-${number}.md`,
+    category: 'CSD',
+    week: 0,
+    title: `Computer System Design — PYQ ${number}`,
+    label: `CSD — PYQ ${number}`,
+    topics: ['Digital Logic', 'Number Systems', 'Sequential Circuits', 'Instruction Encoding'],
+    notesFile: null,
+    answerMatch: 'exact',
+  },
+]));
 
 const LEARNING_META = {
   'learning-01-foundations': {
@@ -450,6 +470,7 @@ function parsePackFile(packId, sourceDir, meta, sourceFile = `${packId}.md`) {
         bodyMd: inlineKrokiDiagrams(bodyText),
         options,
         answer,
+        ...(meta.answerMatch ? { answerMatch: meta.answerMatch } : {}),
         solutionMd: inlineKrokiDiagrams(solutionText),
         marks: { correct: sourceMarks ? Number(sourceMarks[1]) : 1, incorrect: 0, unanswered: 0 },
       });
@@ -549,6 +570,15 @@ for (const learningId of Object.keys(LEARNING_META)) {
     questionCount: data.questionCount,
     durationMinutes: data.durationMinutes,
   });
+}
+
+for (const [id, meta] of Object.entries(CSD_META)) {
+  const data = parsePackFile(id, CSD_DIR, meta, meta.sourceFile);
+  if (!data) throw new Error(`Missing CSD source: ${meta.sourceFile}`);
+  writeFileSync(join(OUT_DIR, `${id}.json`), JSON.stringify(data, null, 2));
+  const { questions, ...item } = data;
+  catalog.push(item);
+  console.log(`✓ ${id}: ${questions.length} questions`);
 }
 
 const catalogPath = join(OUT_DIR, 'catalog.json');

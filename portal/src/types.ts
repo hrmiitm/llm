@@ -22,6 +22,7 @@ export interface Question {
   bodyMd: string;
   options: QuestionOption[];
   answer: QuestionAnswer | null;
+  answerMatch?: 'exact';
   solutionMd: string;
   marks: { correct: number; incorrect: number; unanswered: number };
 }
@@ -30,7 +31,7 @@ export interface GACatalogItem {
   id: string;
   week: number;
   title: string;
-  category?: 'GA' | 'PYQ' | 'LEARNING';
+  category?: 'GA' | 'PYQ' | 'LEARNING' | 'CSD';
   label?: string;
   topics: string[];
   score: number | null;

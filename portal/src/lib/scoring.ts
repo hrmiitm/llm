@@ -16,7 +16,11 @@ export function scoreAttempt(attempt: AttemptState, pack: GAPack): AttemptResult
     if (!hasAnswer) {
       unattempted++;
     } else if (q.answer) {
-      if (q.type === 'single_choice') {
+      if (q.answerMatch === 'exact') {
+        const submitted = (Array.isArray(submittedAnswer) ? submittedAnswer : [submittedAnswer]).map(value => String(value).trim().toLowerCase()).sort();
+        const expected = (Array.isArray(q.answer.value) ? q.answer.value : [q.answer.value]).map(value => value.trim().toLowerCase()).sort();
+        isCorrect = JSON.stringify(submitted) === JSON.stringify(expected);
+      } else if (q.type === 'single_choice') {
         const submitted = Array.isArray(submittedAnswer) ? submittedAnswer[0] : submittedAnswer;
         const correct_ = Array.isArray(q.answer.value) ? q.answer.value[0] : q.answer.value;
         isCorrect = submitted?.toUpperCase() === correct_?.toUpperCase();

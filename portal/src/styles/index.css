@@ -539,7 +539,7 @@ code, pre {
 }
 
 .question-text p { margin-bottom: 0.75rem; }
-.question-text table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; }
+.question-text table { display: block; max-width: 100%; overflow-x: auto; width: 100%; border-collapse: collapse; margin: 0.75rem 0; }
 .question-text th, .question-text td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; font-size: 0.875rem; }
 .question-text th { background: #f8fafc; font-weight: 600; }
 .question-text img { max-width: 100%; border-radius: var(--radius-sm); margin: 0.5rem 0; }
@@ -614,7 +614,10 @@ code, pre {
   min-width: 20px;
 }
 
+.option-text img { display: block; max-width: 100%; height: auto; background: white; }
+
 .option-text {
+  min-width: 0;
   font-size: 0.9rem;
   line-height: 1.5;
   flex: 1;

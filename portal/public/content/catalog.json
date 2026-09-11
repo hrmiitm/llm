@@ -406,5 +406,43 @@
     "submittedDate": null,
     "questionCount": 15,
     "durationMinutes": 45
+  },
+  {
+    "id": "csd-pyq-1",
+    "week": 0,
+    "title": "Computer System Design — PYQ 1",
+    "category": "CSD",
+    "label": "CSD — PYQ 1",
+    "topics": [
+      "Digital Logic",
+      "Number Systems",
+      "Sequential Circuits",
+      "Instruction Encoding"
+    ],
+    "notesFile": null,
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 21,
+    "durationMinutes": 63
+  },
+  {
+    "id": "csd-pyq-2",
+    "week": 0,
+    "title": "Computer System Design — PYQ 2",
+    "category": "CSD",
+    "label": "CSD — PYQ 2",
+    "topics": [
+      "Digital Logic",
+      "Number Systems",
+      "Sequential Circuits",
+      "Instruction Encoding"
+    ],
+    "notesFile": null,
+    "score": null,
+    "maxScore": null,
+    "submittedDate": null,
+    "questionCount": 21,
+    "durationMinutes": 63
   }
 ]
