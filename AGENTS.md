@@ -104,7 +104,7 @@ This repository serves two core purposes:
 
 4. **Base URL and Asset Paths**:
    - Vite is configured with `base: process.env.BASE_URL || (process.env.NODE_ENV === 'production' ? '/llm/' : '/')`.
-   - Image assets in Markdown should be referenced as `assets/filename.png` or `assets/filename.mmd`.
+   - Image assets in Markdown should be referenced as `assets/filename.png` (or another browser-renderable image format). For GitHub-readable diagrams, use fenced Mermaid blocks; `.mmd` image links work through the portal compiler but are broken images in GitHub preview.
    - `portal/src/lib/renderer.ts` rewrites asset paths using `import.meta.env.BASE_URL` to ensure diagrams and images load correctly across both local development and GitHub Pages.
 
 5. **Existing Libraries Over Reinventing Wheels**:
@@ -156,7 +156,7 @@ When creating or modifying question banks in `GA/*.md`, `pyq/*.md`, or `learning
 ## Context for Q1–Q3 (Optional shared context)
 
 Diagram or common problem statement shared across questions.
-![Diagram Caption](assets/example-diagram.mmd)
+![Diagram Caption](assets/example-diagram.png)
 
 ---
 
@@ -178,12 +178,39 @@ Diagram or common problem statement shared across questions.
 
 1. Explanation step 1 with derivation.
 2. Explanation step 2 with formula:
-   $$\text{Attention}(Q,K,V) = \operatorname{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+   $$\text{Attention}(Q,K,V) = \mathrm{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
 **Memory hook:** Short one-sentence retention tip. $\boxed{\text{C}}$
 
 </details>
 ```
+
+### Rendering lessons and required verification
+
+Content is read in **two different renderers**: GitHub Markdown preview and the portal's Markdown/KaTeX pipeline. A successful build or a direct KaTeX parse does not prove that GitHub displays the same formula correctly. Previous checks missed red tokens, raw formulas, and errors inside collapsed solutions; do not repeat those checks as evidence of full success.
+
+#### Authoring rules
+
+- Use `\mathrm{softmax}`, `\mathrm{FFN}`, and similar simple labels instead of `\operatorname{...}` in GitHub-facing content. GitHub rejected the latter in this repository even though KaTeX accepted it.
+- Preserve matrix rows and columns. In the existing PYQ dollar-delimited math convention, GitHub consumes backslashes before math rendering: four literal source backslashes (`\\\\`) are used for a row break, and `normalizeLatex` in `portal/src/lib/renderer.ts` converts them to the two required by KaTeX. Do not blindly double all backslashes or extend this convention to fenced math; commands and different delimiters need separate verification. Check actual matrix dimensions, including accidental empty rows, in both renderers.
+- Prefer a separate display block for a matrix instead of an inline matrix in prose. For matrix options, preserve the original entries, row order, option order, and readable two-dimensional layout. If using row tuples as a fallback, explicitly explain that semicolons separate rows and retain column-vector orientation with a transpose where required. Do not sacrifice mathematical meaning to remove a rendering error.
+- Avoid literal `<` in sensitive math contexts such as summation subscripts: use `\lt`, for example `\sum_{j\lt r}P_j`. GitHub previously produced a brace error for `\sum_{j<r}`.
+- Escaped percent signs have also lost their escape during GitHub parsing. Prefer a percentage written outside math, such as `$720/900=0.8$`, hence **80%**, or use `\text{ percent}` inside math. Do not add backslashes without checking the portal too.
+- Protect expressions that resemble Markdown links, such as `[1,1,1,1](2I)`, using the supported inline form ``$`...`$`` or unambiguous mathematical notation. Verify that no part becomes an unintended link. Plain terms such as “top-p”, “top-k”, and “+” do not need dollar delimiters.
+- Put blank lines around display equations, fenced diagrams, and the Markdown body following `<summary>`. Separate consecutive display blocks with a blank line. Split long derivations into readable equations rather than joining them into one overflowing line.
+- Use fenced `mermaid` blocks for diagrams that must appear on GitHub. The compiler supports these fences for the portal. Do not introduce `![...](assets/diagram.mmd)` into GitHub-facing notes or questions. Retain source assets if other content still references them.
+- Do not assume all math inside `<details>` is unsupported. Inspect the specific failing block and try a supported math fence or corrected block spacing before changing notation. Preserve explanations and avoid artifacts such as duplicate “From” paragraphs.
+
+#### Verification and completion criteria
+
+1. Audit all files in the requested scope for the same failure pattern, including question options, shared contexts, tables, headings, and solutions. Preserve question counts, option counts/order, answer keys, and mathematical values when changing formatting.
+2. Run `npm run compile` for content changes. Run the appropriate build and lint checks when changing the compiler or renderer. Verify generated question packs still contain all questions/options and the intended answer keys.
+3. Exercise the **actual portal renderer**, including its normalization and sanitization. A standalone script that bypasses those steps is only a syntax check. For changed matrices, verify row/column counts and absence of empty rows; inspect long formulas at desktop and mobile widths.
+4. Inspect GitHub preview as well. Expand **every** solution `<details>` in affected pages and wait for math and diagrams to finish rendering. Check `.markdown-body math-renderer`, `.flash-error`, `[mathcolor="red"]`, `merror`, and raw dollar-delimited text outside rendered math/code. Previous selectors `.math-inline` and `.math-display` were portal selectors and missed GitHub's `math-renderer` elements. Do not restrict detection to one error-message string or only visible text.
+5. Inspect images for `complete` and nonzero `naturalWidth`, and confirm Mermaid diagrams actually render. Take readable screenshots of affected sections in light/dark themes and at narrow widths where relevant. A whole-document screenshot shrunk to a few hundred pixels is not sufficient visual verification.
+6. Inspect each tool result and ensure long-running audits actually finish; partial output is not a pass for files that were never reported. If publication is already authorized, verify the pushed revision on GitHub after local checks. Otherwise report the limits of local verification without publishing merely to test.
+7. Report exactly what passed and what remains unverified. Build success, absence of one known error, or a KaTeX expression count must never be described as proof that every page renders correctly. Distinguish existing lint warnings from a warning-free run.
 
 ---
 
