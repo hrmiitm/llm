@@ -77,4 +77,4 @@ A-D/E denote the original option order. Pages are one-based; a continued option 
 - Production `/llm/` smoke check passes for both catalog cards, both exam routes, and all 22 extracted visual assets.
 - `npm run build` passes with the existing large-bundle warning. `npm run lint` completes with five existing warnings in `ExamPage.tsx`; it is not warning-free.
 - GitHub Markdown previews for both pushed files were checked on the `main` revision: all 21 solution `<details>` blocks are present, math is rendered without raw dollar delimiters, and every referenced image loads.
-- **Unverified:** the live GitHub Pages deployed revision; deployment may still be pending its workflow run.
+- The live GitHub Pages smoke check at `https://hrmiitm.github.io/llm/` also finds both CSD catalog cards and both practice routes; the deployed Paper 2 pack has 21 questions, 50 marks, and Q21 answer `0`.
