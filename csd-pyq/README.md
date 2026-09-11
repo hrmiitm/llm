@@ -76,4 +76,5 @@ A-D/E denote the original option order. Pages are one-based; a continued option 
 - Binary/hex rejection and acceptance exercised in the practice UI at both widths with light and dark OS color-scheme preferences. The portal currently retains its existing light content theme under both preferences; this is not a separate dark-theme implementation.
 - Production `/llm/` smoke check passes for both catalog cards, both exam routes, and all 22 extracted visual assets.
 - `npm run build` passes with the existing large-bundle warning. `npm run lint` completes with five existing warnings in `ExamPage.tsx`; it is not warning-free.
-- **Unverified:** GitHub's Markdown preview and the live deployed revision. These files have not been pushed or published, so local rendering results are not evidence of GitHub rendering correctness.
+- GitHub Markdown previews for both pushed files were checked on the `main` revision: all 21 solution `<details>` blocks are present, math is rendered without raw dollar delimiters, and every referenced image loads.
+- **Unverified:** the live GitHub Pages deployed revision; deployment may still be pending its workflow run.
